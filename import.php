@@ -6,8 +6,6 @@ $consulUrl = $_POST['consulUrl'];
 $manage = json_decode($list);
 $directory = './tmp/consul/';
 
-$fixedTree = [];
-
 foreach ($manage as $item){
     $path = $directory . $item;
     $lastChar = substr($path, -1);
@@ -34,29 +32,6 @@ function putInConsul($post, $value) {
     curl_close($ch);
     return ($result);
 }
-function getKeysFromConsul($url){
-    $url = $url . '?keys';
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$url);
-    $result=curl_exec($ch);
-    curl_close($ch);
-    return($result);
-}
-function getValuesFromConsul($url){
-    $url = $url . '?raw';
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$url);
-    $result=curl_exec($ch);
-    curl_close($ch);
-    return($result);
-}
-
-
-$allKeys = getKeysFromConsul($consulUrl);
 
 if(substr($consulUrl, -1) == '/') {
     $consulUrlModified = substr($consulUrl, 0, -1);
@@ -72,16 +47,6 @@ foreach($objects as $name => $object){
         $name = str_replace("\\","/",$name);
         $name = $consulUrlModified . $name .'/';
         putInConsul($name, false);
-    }
-}
-
-foreach (json_decode($allKeys) as $item){
-    if(substr($item, -1) != '/') {
-        $path = $consulUrl . $item;
-
-        //var_dump($path);
-        //var_dump(getValuesFromConsul($path));
-        //putInConsul($path,getValuesFromConsul($path) );
     }
 }
 
