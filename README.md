@@ -15,15 +15,19 @@ The config line should look like this
 
 `consulUrl = "http://192.168.220.145:8500/v1/kv/";`
 
+you can also check my docker repo for a ready made container to run it next to the consul container, just make sure you have the `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
+
+`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 vagharsh/consul-tree`
+
+
+Troubleshooting 
+---------------
+
 On the first run, you might get this exception,
 
 `Uncaught TypeError: Cannot read property 'children' of undefined`
 
 If so then click on the `Fix Tree` RED button to fix the issue
-
-you can also check my docker repo for a ready made container to run it next to the consul container, just make sure you have the `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
-
-`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 vagharsh/consul-tree`
 
 
 Bug tracker
