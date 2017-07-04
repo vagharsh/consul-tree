@@ -416,8 +416,8 @@
         $('#lazy').on("select_node.jstree", function (e, data) {
             if (data.node.id.substr(-1) != '/') {
                 getValue(data.node.id, $('#cKeyValue'));
-                $('#selectedNodeID').text(data.node.id);
             }
+            $('#selectedNodeID').text(data.node.id);
         });
     });
 
