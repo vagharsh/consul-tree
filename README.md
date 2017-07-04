@@ -11,7 +11,8 @@ Quick Start
 
 Configure the config.php file, modify the consul url with it's port and stanck and kv store
 do not change the syntax of the line inside the php since it is goind to be echoed into the JS.
-The config line should look like this 
+The config line should look like this
+
 `consulUrl = "http://192.168.220.145:8500/v1/kv/";`
 
 On the first run, you might get this exception,
