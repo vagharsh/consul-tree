@@ -17,7 +17,7 @@ The config line should look like this
 
 you can also check my docker repo for a ready made container to run it next to the consul container, just make sure you have the `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
 
-`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 vagharsh/consul-tree`
+`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 vagharsh/consul-tree:1.0`
 
 
 Troubleshooting 
