@@ -32,6 +32,9 @@ On the first run, you might get this exception,
 
 If so then click on the `Fix Tree` RED button to fix the issue
 
+-- an issue when deleting a node, sometimes when deleteing you might get the same above mentioned eroor in the console at first but after clicking the `Fix Tree` and delete the node again everything works fine.
+//TODO : still working on it to see where is the problem.
+
 
 Bug tracker
 -----------
