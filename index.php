@@ -82,7 +82,6 @@
                 <textarea class="form-control" id="inputKeyValueId"></textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" id="createKeyBtnId" class="btn btn-info">Yes</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -233,10 +232,10 @@
                     "_disabled"			: false, //(this.check("create_node", data.reference, {}, "last")),
                     "label"				: "Create",
                     "action"			: function (data) {
-                        workingInst = $.jstree.reference(data.reference);
-                        workingObj = workingInst.get_node(data.reference);
+                        var inst = $.jstree.reference(data.reference);
+                        var obj = inst.get_node(data.reference);
 
-                        $('#basic-addon1').text(workingObj.id);
+                        $('#basic-addon1').text(obj.id);
                         $('#createNodeModalId').modal('show');
                     }
                 },
@@ -379,23 +378,6 @@
             }).done(function (data) {
                 location.reload();
             })
-        });
-
-        $('#createKeyBtnId').on('click', function (){
-            workingInst.create_node(workingObj, {}, "last", function (new_node) {
-                new_node = $('#keyInputId').val();
-                var nodeName = workingObj.id + new_node;
-
-                var nodeValue = $('#inputKeyValueId').val(),
-                    splittedPath =  nodeName.split("/"),
-                    toBeCreatedPath = '';
-
-                for (i = 0; i < splittedPath.length -1 ; i++) {
-                    toBeCreatedPath = toBeCreatedPath + splittedPath[i] + "/";
-                    sendToConsul(toBeCreatedPath, nodeValue, false);
-                }
-                sendToConsul(nodeName, nodeValue, true);
-            });
         });
 
         var to = false, jsTreeObj;
