@@ -57,7 +57,6 @@
             <div class="col-md-6 border-left">
                 <textarea class="form-control" id="cKeyValue" rows="8"></textarea>
                 <br>
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createNodeModalId" data-backdrop="static">Create</button>
                 <button type="button" id="valueUpdateBtnId" class="btn btn-primary" >Update</button>
             </div>
         </div>
@@ -82,6 +81,7 @@
                 <textarea class="form-control" id="inputKeyValueId"></textarea>
             </div>
             <div class="modal-footer">
+                <button type="button" id="createKeyBtnId" class="btn btn-info">Yes</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
