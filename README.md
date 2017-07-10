@@ -5,8 +5,7 @@ Its a Tree for Consul https://github.com/hashicorp/consul KV section, which supp
 The applicaiton is based on: 
 JQuery, Twitter Bootstrap, JStree, PHP
 
-Current Working Version is 2.0 which corresponds to the Image on Docker hub vagharsh/consul-tree:2.0
-----------------------------------------
+**Current Working Version is 2.0 which corresponds to the Image on Docker hub vagharsh/consul-tree:2.0**
 
 Quick Start
 -----------
