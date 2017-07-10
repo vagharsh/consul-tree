@@ -14,12 +14,12 @@ Quick Start
 -----------
 
 Configure the config.php file, modify the consul url with it's port and stanck and kv store
-do not change the syntax of the line inside the php since it is goind to be echoed into the JS.
+do not change the syntax of the line inside the php since it is going to be echo-ed into the JS.
 The config line should look like this
 
 `consulUrl = "http://192.168.220.145:8500/v1/kv/";`
 
-you can also check my docker repo for a ready made container at https://hub.docker.com/r/vagharsh/consul-tree/ to run it next to the consul container, just make sure you have the `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
+you can also check my docker repo for a ready made container at https://hub.docker.com/r/vagharsh/consul-tree/ to run it next to the consul container, just make sure you create a `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
 
 `docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree`
 
