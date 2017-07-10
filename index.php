@@ -57,6 +57,7 @@
             <div class="col-md-6 border-left">
                 <textarea class="form-control" id="cKeyValue" rows="8"></textarea>
                 <br>
+                <!--<button type="button" class="btn btn-info" data-toggle="modal" data-target="#createNodeModalId" data-backdrop="static">Create</button>-->
                 <button type="button" id="valueUpdateBtnId" class="btn btn-primary" >Update</button>
             </div>
         </div>
@@ -187,7 +188,6 @@
             });
         }
         function sendToConsul(path, value, reload) {
-            path = path.replace(/\//g, '');
             path = path.replace(/\\/g, '/');
 
             var fullPath = consulUrl + path;
@@ -413,6 +413,8 @@
         getTree(tree, true, false);
 
         $('#lazy').on("select_node.jstree", function (e, data) {
+            workingInst = $.jstree.reference(data.reference);
+
             if (data.node.id.substr(-1) != '/') {
                 getValue(data.node.id, $('#cKeyValue'));
             }
