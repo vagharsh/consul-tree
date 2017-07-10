@@ -207,12 +207,12 @@
             })
         }
         function deleteNode(path){
-            getTree(false, false, path);
+            var getPath = consulUrl + path;
+            getTree(tree, false, getPath);
             var srcPath = JSON.parse($('#ajaxReturnFieldID').text());
 
             $.each( srcPath, function( key, item ) {
                 var fullPath = consulUrl + item;
-
                 $.ajax({
                     method: "POST",
                     url: "requests.php",
@@ -312,7 +312,8 @@
                         });
 
                         if (ccType == 'cut') {
-                            deleteNode(srcPath.slice(-1)[0]);
+                            srcPath = srcPath.sort();
+                            deleteNode(srcPath[0]);
                         }
                     }
                 },
