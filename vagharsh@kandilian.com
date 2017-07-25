@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tree for Consul</title>
+    <title><?php echo "Consul Tree | " . $_SERVER['HTTP_HOST'] ?></title>
     <style>
         html {
             margin: 0;
@@ -38,13 +38,14 @@
         }
     </style>
     <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
-    <link rel="shortcut icon" type="image/png" href="favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="_favicon.png"/>
     <link href="lib/css/bootstrap.min.css" rel="stylesheet">
     <script src="lib/jquery-3.2.1.min.js"></script>
     <script src="lib/js/bootstrap.min.js"></script>
     <script src="lib/jstree.js"></script>
 </head>
 <body>
+
 <div class="container">
     <div class="col-md-offset-1 col-md-12">
         <div class="row">
@@ -57,11 +58,9 @@
             <div class="col-md-6 border-left">
                 <textarea class="form-control" id="cKeyValue" rows="8"></textarea>
                 <br>
-                <!--<button type="button" class="btn btn-info" data-toggle="modal" data-target="#createNodeModalId" data-backdrop="static">Create</button>-->
                 <button type="button" id="valueUpdateBtnId" class="btn btn-primary" >Update</button>
             </div>
         </div>
-        <button type="button" id="fixJsonDataBtnID" class="btn btn-danger" >Fix Tree</button>
     </div>
 </div>
 
@@ -74,10 +73,19 @@
                 <h4 class="modal-title"><strong>Create Folder / Key</strong></h4>
             </div>
             <div class="modal-body">
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1">@</span>
-                    <input type="text" class="form-control" id="keyInputId" aria-describedby="basic-addon1" value="">
-                </div>
+                <form class="">
+                    <div class="form-group">
+                        <span for="keyInputId" class="control-label">Folder / Key Name : </span>
+                        <input type="text" class="form-control" id="keyInputId" aria-describedby="basic-addon1" value="">
+                        <input type="hidden" class="form-control" id="pathInputId" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <span for="basic-addon1" class=" control-label">Path : </span>
+                        <textarea class="form-control" id="basic-addon1" readonly >@</textarea>
+                    </div>
+                </form>
+
                 <h5>To create a folder, end the key with /</h5>
                 <textarea class="form-control" id="inputKeyValueId"></textarea>
             </div>
@@ -87,6 +95,8 @@
             </div>
         </div>
     </div>
+    <p id="demo"></p>
+
 </div>
 <p class="hidden" id="ajaxReturnFieldID"></p>
 <p class="hidden" id="ajaxReturnVFieldID"></p>
@@ -143,7 +153,6 @@
                     tree.core.data.push({"id": name, "parent": parent, "text": filename, 'icon': 'jstree-file'})
                 }
             }
-
             return tree;
         }
         function getTree(tree, generateTree, path){
@@ -209,6 +218,7 @@
         function deleteNode(path){
             var getPath = consulUrl + path;
             getTree(tree, false, getPath);
+
             var srcPath = JSON.parse($('#ajaxReturnFieldID').text());
 
             $.each( srcPath, function( key, item ) {
@@ -343,8 +353,21 @@
             return items;
         }
 
+        function check4Key (){
+            var inputLength = $('#keyInputId').val().length;
+            if (inputLength > 0 ){
+                $('#inputKeyValueId').attr('disabled', false);
+                $('#createKeyBtnId').attr('disabled', false);
+            } else {
+                $('#inputKeyValueId').attr('disabled', true);
+                $('#createKeyBtnId').attr('disabled', true);
+            }
+        }
+
         $('#createNodeModalId').on('shown.bs.modal', function (){
             $('#basic-addon1').text($('#selectedNodeID').text());
+            $('#pathInputId').val($('#selectedNodeID').text());
+            check4Key();
         });
 
         $('#valueUpdateBtnId').on('click', function (){
@@ -354,31 +377,21 @@
             sendToConsul(path, value, true )
         });
 
-        $('#keyInputId').on('keyup', function (){
-           if ($(this).val().slice(-1) == "/"){
-               $('#inputKeyValueId').toggleClass('hidden');
-           } else {
-               if ($('#inputKeyValueId').hasClass('hidden')){
-                   $('#inputKeyValueId').removeClass('hidden');
-               }
-           }
+        $('#keyInputId').on('click', function (){
+            check4Key();
         });
 
-        $('#fixJsonDataBtnID').on ('click', function (){
-            getTree(tree, false, false);
-            var srcPath = $('#ajaxReturnFieldID').text();
+        $('#keyInputId').on('keyup', function (){
+            check4Key();
 
-            $.ajax({
-                method: "POST",
-                url: "import.php",
-                async : false,
-                data: {
-                    consulUrl : consulUrl,
-                    urls: srcPath
+            if ($(this).val().slice(-1) == "/"){
+                $('#inputKeyValueId').toggleClass('hidden');
+            } else {
+                if ($('#inputKeyValueId').hasClass('hidden')){
+                   $('#inputKeyValueId').removeClass('hidden');
                 }
-            }).done(function (data) {
-                location.reload();
-            })
+            }
+           $('#basic-addon1').text($('#pathInputId').val() + $('#keyInputId').val());
         });
 
         $('#createKeyBtnId').on('click', function (){
@@ -411,7 +424,26 @@
 
         var allKeys = consulUrl + "?keys";
 
-        getTree(tree, true, false);
+        // fixing the tree in this stage if it contains any errors
+        // after fixing the tree call and get the fixed tree
+
+        getTree(tree, false, false);
+        var srcPath = $('#ajaxReturnFieldID').text();
+
+        $.ajax({
+            method: "POST",
+            url: "import.php",
+            async : false,
+            data: {
+                consulUrl : consulUrl,
+                urls: srcPath
+            }
+        }).done(function (data) {
+            getTree(tree, true, false);
+        });
+
+        // fixing ends here
+        //getTree(tree, true, false);
 
         $('#lazy').on("select_node.jstree", function (e, data) {
             workingInst = $.jstree.reference(data.reference);
