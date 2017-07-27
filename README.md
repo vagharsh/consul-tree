@@ -6,7 +6,7 @@ The applicaiton is based on:
 JQuery, Twitter Bootstrap, JStree, PHP
 
 -------------------
-**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.5 or vagharsh/consul-tree:latest**
+**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.6 or vagharsh/consul-tree:latest**
 ----------------------
 
 Quick Start
