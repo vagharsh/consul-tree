@@ -37,7 +37,7 @@
             margin-right: 20px;
         }
     </style>
-    <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
+    <link rel="stylesheet" href="lib/themes/default/style.css"/>
     <link rel="shortcut icon" type="image/png" href="_favicon.png"/>
     <link href="lib/css/bootstrap.min.css" rel="stylesheet">
     <script src="lib/jquery-3.2.1.min.js"></script>
