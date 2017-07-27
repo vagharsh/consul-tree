@@ -113,7 +113,7 @@
 <p class="hidden" id="selectedNodeID"></p>
 
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 2.5 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
+    <h6 style="text-align:center">Application version: 2.6 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
 </div>
 <script>
     $(document).ready(function () {
