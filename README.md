@@ -1,4 +1,4 @@
-# consul-tree v 2.5
+# consul-tree v 2.6
 
 Its a Tree for Consul https://github.com/hashicorp/consul KV section, which supports, Cut, Copy, Paste, Create, Delete methods.
 
