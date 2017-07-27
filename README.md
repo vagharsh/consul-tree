@@ -1,4 +1,4 @@
-# consul-tree v 2.4
+# consul-tree v 2.5
 
 Its a Tree for Consul https://github.com/hashicorp/consul KV section, which supports, Cut, Copy, Paste, Create, Delete methods.
 
@@ -6,7 +6,7 @@ The applicaiton is based on:
 JQuery, Twitter Bootstrap, JStree, PHP
 
 -------------------
-**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.4 or vagharsh/consul-tree:latest**
+**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.5 or vagharsh/consul-tree:latest**
 ----------------------
 
 Quick Start
