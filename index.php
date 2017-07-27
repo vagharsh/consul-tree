@@ -50,15 +50,23 @@
     <div class="col-md-offset-1 col-md-12">
         <div class="row">
             <h2>Consul Tree</h2>
-            <input type="text" id="plugins4_q" value="" class="input form-control"
-                   style="margin:0em auto 1em auto;  padding:4px; border-radius:4px; border:1px solid silver;">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-1 control-label">Search  : </label>
+                    <div class="col-sm-10">
+                        <input type="text" id="plugins4_q" value="" class="input form-control" style="margin:0em auto 1em auto;  padding:4px; border-radius:4px; border:1px solid silver;">
+                    </div>
+                </div>
+            </form>
+
         </div>
         <div class="row">
             <div id="lazy" class="well col-md-5 padded-right-middle"></div>
-            <div class="col-md-6 border-left">
-                <textarea class="form-control" id="cKeyValue" rows="8"></textarea>
+            <div class="col-md-6 border-left" style="position: fixed; left: 610px; width: 568px;">
+                <textarea class="form-control" id="cKeyValue"  rows="8"></textarea>
                 <br>
                 <button type="button" id="valueUpdateBtnId" class="btn btn-primary" >Update</button>
+                <span style="color: #9f9f9f">&nbsp;|&nbsp;To create an element, right click on the tree.</span>
             </div>
         </div>
     </div>
@@ -104,6 +112,9 @@
 <p class="hidden" id="ccParentFieldID"></p>
 <p class="hidden" id="selectedNodeID"></p>
 
+<div class="page-footer">
+    <h6 style="text-align:center">Application version: 2.5 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
+</div>
 <script>
     $(document).ready(function () {
         <?php
