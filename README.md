@@ -5,6 +5,12 @@ Its a Tree for Consul https://github.com/hashicorp/consul KV section, which supp
 The applicaiton is based on: 
 JQuery, Twitter Bootstrap, JStree, PHP
 
+Version 2.6 details: 
+
+- New icons
+- fixed value box position
+- last updated date in the footer
+
 -------------------
 **Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.6 or vagharsh/consul-tree:latest**
 ----------------------
