@@ -237,6 +237,7 @@
                 $.ajax({
                     method: "POST",
                     url: "requests.php",
+                    async : false,
                     data: {
                         method: "DELETE",
                         url: fullPath
