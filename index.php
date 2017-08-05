@@ -63,10 +63,10 @@
         <div class="row">
             <div id="lazy" class="well col-md-5 padded-right-middle"></div>
             <div class="col-md-6 border-left" style="position: fixed; left: 610px; width: 568px;">
-                <textarea class="form-control update-control" id="cKeyValue"  rows="8"></textarea>
+                <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
                 <br>
-                <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control" >Update</button>
-                <span style="color: #9f9f9f">&nbsp;|&nbsp;To create an element, right click on the tree.</span>
+                <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden" >Update</button>
+                <span class="update-control hidden" style="color: #9f9f9f">&nbsp;|&nbsp;To create an element, right click on the tree.</span>
             </div>
         </div>
     </div>
@@ -463,8 +463,10 @@
 
             if (data.node.id.substr(-1) != '/') {
                 updateControl.attr('disabled', false);
+                updateControl.removeClass('hidden');
                 getValue(data.node.id, $('#cKeyValue'));
             } else {
+                updateControl.addClass('hidden');
                 updateControl.attr('disabled', true);
             }
             $('#selectedNodeID').text(data.node.id);
