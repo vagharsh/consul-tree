@@ -5,6 +5,10 @@ Its a Tree for Consul https://github.com/hashicorp/consul KV section, which supp
 The applicaiton is based on: 
 JQuery, Twitter Bootstrap, JStree, PHP
 
+DEMO
+------
+Screeenshots of the application are here https://github.com/vagharsh/consul-tree/blob/master/demo.md
+
 Quick Start
 -----------
 To use the Consul-tree you need PHP and a web server.
@@ -33,6 +37,7 @@ Release Notes
 v2.7 :
 - fixed the delete node issue 
 - update fields are disabled and hidden when the selected item is a folder and not a key
+
 v2.6 : 
 - New icons
 - fixed value box position
