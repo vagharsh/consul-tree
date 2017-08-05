@@ -5,20 +5,12 @@ Its a Tree for Consul https://github.com/hashicorp/consul KV section, which supp
 The applicaiton is based on: 
 JQuery, Twitter Bootstrap, JStree, PHP
 
-Version 2.6 details: 
-
-- New icons
-- fixed value box position
-- last updated date in the footer
-
--------------------
-**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.6 or vagharsh/consul-tree:latest**
-----------------------
-
 Quick Start
 -----------
+To use the Consul-tree you need PHP server and a web server.
 
-Configure the config.php file, modify the consul url with it's port and stanck and kv store
+- Clone the repo into your web directory 
+- Configure the config.php file, modify the consul url with it's port and IP address of the consul and kv store section
 do not change the syntax of the line inside the php since it is going to be echo-ed into the JS.
 The config line should look like this
 
@@ -27,6 +19,19 @@ The config line should look like this
 you can also check my docker repo for a ready made container at https://hub.docker.com/r/vagharsh/consul-tree/ to run it next to the consul container, just make sure you create a `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
 
 `docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree`
+
+----------------------
+**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.6 or vagharsh/consul-tree:latest**
+----------------------
+
+Version
+---------
+
+2.6 details: 
+
+- New icons
+- fixed value box position
+- last updated date in the footer
 
 Bug tracker
 -----------
