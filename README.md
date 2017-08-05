@@ -1,4 +1,4 @@
-# consul-tree v 2.6
+# consul-tree v 2.7
 
 Its a Tree for Consul https://github.com/hashicorp/consul KV section, which supports, Cut, Copy, Paste, Create, Delete methods.
 
@@ -22,19 +22,22 @@ Consul-tree on Docker
 Check my docker repo for a ready made container at https://hub.docker.com/r/vagharsh/consul-tree/ .
 run it next to the consul container, just make sure you to create a `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
 
-`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree`
+`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:2.7`
 
 ----------------------
-**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.6 or vagharsh/consul-tree:latest**
+**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.7**
 ----------------------
 
 Release Notes 
 ---------
-
+v2.7 :
+- fixed the delete node issue 
+- update fields are disabled and hidden when the selected item is a folder and not a key
 v2.6 : 
 - New icons
 - fixed value box position
 - last updated date in the footer
+
 
 Bug tracker
 -----------
