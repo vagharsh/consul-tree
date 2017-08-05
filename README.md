@@ -7,7 +7,7 @@ JQuery, Twitter Bootstrap, JStree, PHP
 
 DEMO
 ------
-Screeenshots of the application are here https://github.com/vagharsh/consul-tree/blob/master/demo.md
+Screenshots of the application are here https://github.com/vagharsh/consul-tree/blob/master/demo.md
 
 Quick Start
 -----------
