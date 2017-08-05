@@ -28,9 +28,8 @@ run it next to the consul container, just make sure you to create a `config.php`
 
 `docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:2.7`
 
-----------------------
-**Current Working Version corresponds to the Image on Docker hub vagharsh/consul-tree:2.7**
-----------------------
+**Current working version corresponds to the Image on Docker hub vagharsh/consul-tree:2.7**
+
 
 Release Notes 
 ---------
