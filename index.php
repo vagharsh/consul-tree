@@ -37,7 +37,7 @@
             margin-right: 20px;
         }
     </style>
-    <link rel="stylesheet" href="lib/themes/default/style.css"/>
+    <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
     <link rel="shortcut icon" type="image/png" href="_favicon.png"/>
     <link href="lib/css/bootstrap.min.css" rel="stylesheet">
     <script src="lib/jquery-3.2.1.min.js"></script>
@@ -63,9 +63,9 @@
         <div class="row">
             <div id="lazy" class="well col-md-5 padded-right-middle"></div>
             <div class="col-md-6 border-left" style="position: fixed; left: 610px; width: 568px;">
-                <textarea class="form-control" id="cKeyValue"  rows="8"></textarea>
+                <textarea class="form-control update-control" id="cKeyValue"  rows="8"></textarea>
                 <br>
-                <button type="button" id="valueUpdateBtnId" class="btn btn-primary" >Update</button>
+                <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control" >Update</button>
                 <span style="color: #9f9f9f">&nbsp;|&nbsp;To create an element, right click on the tree.</span>
             </div>
         </div>
@@ -459,9 +459,13 @@
 
         $('#lazy').on("select_node.jstree", function (e, data) {
             workingInst = $.jstree.reference(data.reference);
+            var updateControl = $('.update-control');
 
             if (data.node.id.substr(-1) != '/') {
+                updateControl.attr('disabled', false);
                 getValue(data.node.id, $('#cKeyValue'));
+            } else {
+                updateControl.attr('disabled', true);
             }
             $('#selectedNodeID').text(data.node.id);
         });
