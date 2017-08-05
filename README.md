@@ -17,9 +17,8 @@ To use the Consul-tree you need PHP and a web server.
 - Configure the config.php file, modify the consul url with it's port and IP address of the consul and kv store section
 do not change the syntax of the line inside the php since it is going to be echo-ed into the JS.
 The config line should look like this
-
 `consulUrl = "http://192.168.220.145:8500/v1/kv/";`
-
+- access the consul-tree e.g. http://yourserver/consuldirectory
 
 Consul-tree on Docker
 -----------
