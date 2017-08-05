@@ -13,3 +13,7 @@ Create Key
 Create Folder
 --------
 ![Create Folder](https://image.ibb.co/igTJWa/create_folder.png "Create Folder")
+
+Search 
+-------
+![Search][https://image.ibb.co/mO3DxF/search.png "Search"]
