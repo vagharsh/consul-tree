@@ -4,7 +4,7 @@ Dashboard
 
 Right click
 --------
-![Right click](https://image.ibb.co/mU6ixF/rightclick.png "Right click")
+![Right click](https://image.ibb.co/cRwu4v/rightclick.png "Right click")
 
 Create Key
 --------
