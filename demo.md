@@ -1,3 +1,7 @@
+**Below Screen shots are for version 2.7**
+
+**Version 3.0 screenshots will be coming soon**
+
 Dashboard
 --------
 ![Dashboard](https://image.ibb.co/eofXra/tree.png "Dashboard")
