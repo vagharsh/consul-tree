@@ -242,6 +242,7 @@
             fr.readAsText(files.item(0));
         }
         function exportConsul(){
+            getTree(tree, false, false);
             var srcPath = JSON.parse($('#ajaxReturnFieldID').text()),
                 arr = [], type, value,dataStr, dlAnchorElem;
 
