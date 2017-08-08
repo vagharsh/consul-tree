@@ -19,4 +19,3 @@ foreach ($decodedJson as $item) {
     $result=curl_exec($ch);
     curl_close($ch);
 }
-

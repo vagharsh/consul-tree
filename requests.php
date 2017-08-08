@@ -8,10 +8,6 @@ if (isset($_POST['value'])) {
     $value = $_POST['value'];
 }
 
-if (isset($_POST['recurse'])) {
-    $recurse = $_POST['recurse'];
-}
-
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
