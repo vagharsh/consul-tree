@@ -1,4 +1,4 @@
-# consul-tree v 3.1
+# consul-tree v 3.2
 
 Its a Tree for Consul https://github.com/hashicorp/consul KV section.
 
@@ -29,13 +29,16 @@ Consul-tree on Docker
 Check my docker repo for a ready made container at https://hub.docker.com/r/vagharsh/consul-tree/ .
 run it next to the consul container, just make sure you to create a `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
 
-`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:3.1`
+`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:3.2`
 
-**Current working version corresponds to the Image on Docker hub vagharsh/consul-tree:3.1**
+**Current working version corresponds to the Image on Docker hub vagharsh/consul-tree:3.2**
 
 
 Release Notes 
 ---------
+[v3.2](https://github.com/vagharsh/consul-tree/commit/4222c38e52beb7c176f7a1bad94bf868bd3cac97) :
+- Fixed not export issue
+
 [v3.1](https://github.com/vagharsh/consul-tree/commit/c670b093a54306fa5d2a952ce4e5447b09a59066) :
 - Disabled force fix tree on page load
 - Waiting and loading modals were added to improve the UX
