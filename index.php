@@ -59,6 +59,9 @@
                     <div class="col-sm-2">
                         <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal" data-target="#importExportModalId">Import / Export</button>
                     </div>
+                    <div>
+                        <button type="button" id="fixTreeBtnId" class="btn btn-warning hidden">Fix Tree</button>
+                    </div>
                 </div>
             </form>
 
@@ -154,6 +157,36 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="processingMdlID" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 0px">
+                <h5 class="modal-title text-center">Processing your request, please wait...</h5>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                         aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="loadingTreeMdlID" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header" style="border-bottom: 0px">
+                <h5 class="modal-title text-center">Fixing the tree, please wait...</h5>
+            </div>
+            <div class="modal-body">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100"
+                         aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <p class="hidden" id="ajaxReturnFieldID"></p>
 <p class="hidden" id="ajaxReturnVFieldID"></p>
 <p class="hidden" id="ccTypeFieldID"></p>
@@ -163,23 +196,26 @@
 <a id="downloadAnchorElem" style="display:none"></a>
 
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 3.0 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
+    <h6 style="text-align:center">Application version: 3.1 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
 </div>
 <script>
     $(document).ready(function () {
         <?php
             require './config.php';
         ?>
+
         var tree = {
-            'contextmenu' : {'items' : customMenu},
-            'plugins': ['contextmenu', 'types', 'state', 'search'],
-            'core': {
-                "animation" : 0,
-                "check_callback": true,
-                "themes": {"stripes": true},
-                'data': []
-            }
-        };
+                'contextmenu' : {'items' : customMenu},
+                'plugins': ['contextmenu', 'types', 'state', 'search'],
+                'core': {
+                    "animation" : 0,
+                    "check_callback": true,
+                    "themes": {"stripes": true},
+                    'data': []
+                }
+           };
+        var allKeys = consulUrl + "?keys";
+
         function importConsul(){
             var files = document.getElementById('jsonInputFile').files;
             if (files.length <= 0) {
@@ -190,12 +226,18 @@
             var fr = new FileReader();
 
             fr.onload = function(e) {
-                var result = JSON.parse(e.target.result);
-                var formatted = JSON.stringify(result, null, 2);
-
-                $.each( result, function( key, item ) {
-                    sendToConsul(item.key, item.value, false);
-                })
+                var result = JSON.parse(e.target.result), decodedValue;
+                $('#processingMdlID').modal('show');
+                $.ajax({
+                    method: "POST",
+                    url: "bulkImport.php",
+                    data: {
+                        url: consulUrl,
+                        value : JSON.stringify(result)
+                    }
+                }).done(function (data) {
+                    location.reload();
+                });
             };
             fr.readAsText(files.item(0));
         }
@@ -209,7 +251,7 @@
                 if (fullPath.substr(fullPath.length - 1) !== '/'){
                     type = 'key';
                     getValue(item);
-                    value = encodeURIComponent($('#gotNodeValue').text());
+                    value = $('#gotNodeValue').text();
                 } else {
                     value = null;
                     type = 'folder';
@@ -261,7 +303,16 @@
             }
             return tree;
         }
-        function getTree(tree, generateTree, path){
+        function cleanArray(actual) {
+            var newArray = new Array();
+            for (var i = 0; i < actual.length; i++) {
+                if (actual[i]) {
+                    newArray.push(actual[i]);
+                }
+            }
+            return newArray;
+        }
+        function getTree(tree, generateTree, path, firstRun){
             if (path == undefined || path == false){
                 path = allKeys;
             } else {
@@ -278,20 +329,25 @@
                     url: path
                 }
             }).done(function (data) {
-                if (data.length === 0){
+                if (firstRun === true && checkIfDataIsValid(data) !== true){
+                    $("#fixTreeBtnId").click()
+                }
+
+                if (data.length === 0) {
                     $('#noTreeModalId').modal('show');
                     $('#searchInputId').attr('disabled', true);
                 } else {
                     $('#searchInputId').attr('disabled', false);
                     data = data.sort();
-                    if (generateTree == true){
+                    if (generateTree == true) {
                         tree = parseCustomJson(data, tree);
                         $('#ConsulTree').jstree(tree);
+
                     } else {
                         $('#ajaxReturnFieldID').text(JSON.stringify(data));
                     }
                 }
-            })
+            });
         }
         function getValue(path, obj){
             path = consulUrl + path + "?raw";
@@ -314,7 +370,6 @@
         }
         function sendToConsul(path, value, reload) {
             path = path.replace(/\\/g, '/');
-
             var fullPath = consulUrl + path;
 
             $.ajax({
@@ -479,6 +534,79 @@
                 $('#createKeyBtnId').attr('disabled', true);
             }
         }
+        function fixTree(){
+            getTree(tree, false, false);
+            var srcPath = $('#ajaxReturnFieldID').text();
+
+            $.ajax({
+                method: "POST",
+                url: "import.php",
+                async : false,
+                data: {
+                    consulUrl : consulUrl,
+                    urls: srcPath
+                }
+            }).done(function () {
+                location.reload();
+            });
+        }
+        function checkIfDataIsValid(data){
+            var newArray = [], lastItem, arrayedpath, newPath, array2 = [];
+            $.each( data, function( key, item ) {
+                if (item.substr(item.length - 1) !== '/') {
+                    item = item.substr(0, item.lastIndexOf("/") + 1);
+                }
+                item = item.substr(0, item.lastIndexOf("/") + 1);
+                newArray.push(item);
+            });
+
+            newArray = cleanArray(newArray.sort());
+
+            for (var i = 0; i < newArray.length; i++) {
+                var newArray1 = [];
+                if (i === 0){
+                    lastItem = newArray[0];
+                } else {
+                    lastItem = newArray[i-1];
+                }
+                arrayedpath = newArray[i].split("/");
+                $.each( arrayedpath, function( key, item ) {
+                    if (item.length !== 0){
+                        newArray1.push(item);
+                    }
+                });
+                newArray1.splice(-1,1);
+                newPath = newArray1.join('/');
+                array2.push(newPath);
+            }
+
+            array2 = cleanArray(array2.sort());
+
+            var uniqueNames1 = [];
+            var uniqueNames2 = [];
+            var uniqueNames3 = [];
+
+            $.each(array2, function(i, el){
+                if($.inArray(el, uniqueNames1) === -1) uniqueNames1.push(el);
+            });
+
+            $.each(uniqueNames1, function(i, el) {
+                uniqueNames3.push(el + '/');
+            });
+
+            $.each(newArray, function(i, el){
+                if($.inArray(el, uniqueNames2) === -1) uniqueNames2.push(el);
+            });
+
+            var valid = true;
+            for (var i = 0; i < uniqueNames3.length; i++) {
+                if (uniqueNames2.indexOf(uniqueNames3[i]) == -1) {
+                    valid = false;
+                    break;
+                }
+            }
+            return valid;
+        }
 
         $('#createNodeModalId').on('shown.bs.modal', function (){
             var selectedNodePath = $('#selectedNodeID').text(), splittedArray, newPath;
@@ -489,13 +617,18 @@
                 newPath = splittedArray.join('/');
                 selectedNodePath = newPath + '/';
             }
-            
+
             $('#pathDescribeID').text(selectedNodePath);
             $('#pathInputId').val(selectedNodePath);
 
             check4Key();
         });
-
+        $('#fixTreeBtnId').on ('click', function (){
+            $('#loadingTreeMdlID').modal('show');
+            setTimeout(function () {
+                fixTree();
+            }, 2000);
+        });
         $('#valueUpdateBtnId').on('click', function (){
             var path = $('#selectedNodeID').text();
             var value = $('#cKeyValue').val();
@@ -504,7 +637,20 @@
         });
         $('#exportConsulBtnId').on('click', exportConsul);
         $('#importConsulBtnId').on('click', importConsul);
+        $('#ConsulTree').on("select_node.jstree", function (e, data) {
+            workingInst = $.jstree.reference(data.reference);
+            var updateControl = $('.update-control');
 
+            if (data.node.id.substr(-1) != '/') {
+                updateControl.attr('disabled', false);
+                updateControl.removeClass('hidden');
+                getValue(data.node.id, $('#cKeyValue'));
+            } else {
+                updateControl.addClass('hidden');
+                updateControl.attr('disabled', true);
+            }
+            $('#selectedNodeID').text(data.node.id);
+        });
         $('#keyInputId').on('click', check4Key);
         $('#keyInputId').on('keyup', function (){
             check4Key();
@@ -547,45 +693,8 @@
             }, 250);
         });
 
-        var allKeys = consulUrl + "?keys";
-
-        // fixing the tree in this stage if it contains any errors
-        // after fixing the tree call and get the fixed tree
-
-        getTree(tree, false, false);
-        var srcPath = $('#ajaxReturnFieldID').text();
-
-        $.ajax({
-            method: "POST",
-            url: "import.php",
-            async : false,
-            data: {
-                consulUrl : consulUrl,
-                urls: srcPath
-            }
-        }).done(function (data) {
-            getTree(tree, true, false);
-        });
-
-        // fixing ends here
-        //getTree(tree, true, false);
-
-        $('#ConsulTree').on("select_node.jstree", function (e, data) {
-            workingInst = $.jstree.reference(data.reference);
-            var updateControl = $('.update-control');
-
-            if (data.node.id.substr(-1) != '/') {
-                updateControl.attr('disabled', false);
-                updateControl.removeClass('hidden');
-                getValue(data.node.id, $('#cKeyValue'));
-            } else {
-                updateControl.addClass('hidden');
-                updateControl.attr('disabled', true);
-            }
-            $('#selectedNodeID').text(data.node.id);
-        });
+        getTree(tree, true, false, true);
     });
-
 </script>
 </body>
 </html>
