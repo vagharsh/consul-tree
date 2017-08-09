@@ -1,6 +1,9 @@
 Release Notes
 ---------
 
+[v3.4](https://github.com/vagharsh/consul-tree/commit/79095d36bd12d1eb80b5d22db78803821fb4f910) :
+- Horizontal scrolling of the tree enabled
+
 v3.3
 - Re-arranging files and folders.
 
