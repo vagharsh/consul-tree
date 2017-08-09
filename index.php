@@ -196,7 +196,7 @@
 <a id="downloadAnchorElem" style="display:none"></a>
 
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 3.2 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
+    <h6 style="text-align:center">Application version: 3.3 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
 </div>
 <script>
     $(document).ready(function () {
