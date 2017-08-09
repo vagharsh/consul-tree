@@ -1,6 +1,6 @@
 # consul-tree v 3.3
 
-Its a Tree for Consul https://github.com/hashicorp/consul KV section.
+It's a Tree for Consul https://github.com/hashicorp/consul KV section.
 
 **Supported Methods:** Cut, Copy, Paste, Create, Delete.
 
