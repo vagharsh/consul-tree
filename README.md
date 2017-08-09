@@ -9,7 +9,7 @@ Its a Tree for Consul https://github.com/hashicorp/consul KV section.
 The applicaiton is based on: 
 JQuery, Twitter Bootstrap, JStree.
 
-DEMO
+Demo
 ------
 Screenshots of the application are [Here](https://github.com/vagharsh/consul-tree/blob/master/demo.md).
 
