@@ -1,23 +1,25 @@
-**Below Screen shots are for version 2.7**
-
-**Version 3.0 screenshots will be coming soon**
+**Below screenshots are for version 3.4**
 
 Dashboard
 --------
-![Dashboard](https://image.ibb.co/eofXra/tree.png "Dashboard")
+![Dashboard](https://image.ibb.co/dVUkzv/dashboard.png "Dashboard")
 
 Right click
 --------
-![Right click](https://image.ibb.co/cRwu4v/rightclick.png "Right click")
+![Right click](https://image.ibb.co/eR25zv/right_click.png "Right click")
 
 Create Key
 --------
-![Create Key](https://image.ibb.co/cLikBa/create.png "Create Key")
+![Create Key](https://image.ibb.co/iYMR6a/create_key.png "Create Key")
 
 Create Folder
 --------
-![Create Folder](https://image.ibb.co/igTJWa/create_folder.png "Create Folder")
+![Create Folder](https://image.ibb.co/kG3TKv/create_folder.png "Create Folder")
 
 Search 
 -------
-![Search](https://image.ibb.co/mO3DxF/search.png "Search")
+![Search](https://image.ibb.co/iWqYKv/search.png "Search")
+
+Import & Export 
+-------
+![Import & Export](https://image.ibb.co/cE5Qzv/export_import.png "Import & Export ")
