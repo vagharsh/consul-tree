@@ -38,7 +38,7 @@
         }
     </style>
     <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
-    <link rel="shortcut icon" type="image/png" href="_favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="lib/_favicon.png"/>
     <link href="lib/css/bootstrap.min.css" rel="stylesheet">
     <script src="lib/jquery-3.2.1.min.js"></script>
     <script src="lib/js/bootstrap.min.js"></script>
@@ -230,7 +230,7 @@
                 $('#processingMdlID').modal('show');
                 $.ajax({
                     method: "POST",
-                    url: "bulkImport.php",
+                    url: "api/bulkImport.php",
                     data: {
                         url: consulUrl,
                         value : JSON.stringify(result)
@@ -243,6 +243,7 @@
         }
         function exportConsul(){
             getTree(tree, false, false);
+
             var srcPath = JSON.parse($('#ajaxReturnFieldID').text()),
                 arr = [], type, value,dataStr, dlAnchorElem;
 
@@ -322,7 +323,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "requests.php",
+                url: "api/requests.php",
                 dataType: 'json',
                 async: false,
                 data: {
@@ -355,7 +356,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "requests.php",
+                url: "api/requests.php",
                 async: false,
                 data: {
                     method: "GET",
@@ -375,7 +376,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "requests.php",
+                url: "api/requests.php",
                 data: {
                     method: "PUT",
                     url: fullPath,
@@ -397,7 +398,7 @@
                 var fullPath = consulUrl + item;
                 $.ajax({
                     method: "POST",
-                    url: "requests.php",
+                    url: "api/requests.php",
                     async : false,
                     data: {
                         method: "DELETE",
@@ -541,7 +542,7 @@
 
             $.ajax({
                 method: "POST",
-                url: "import.php",
+                url: "api/import.php",
                 async : false,
                 data: {
                     consulUrl : consulUrl,
