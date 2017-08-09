@@ -36,6 +36,14 @@
         .padded-right-middle {
             margin-right: 20px;
         }
+        
+        #ConsulTree {
+            overflow-x: auto;
+        }
+
+        .jstree-container-ul {
+            margin-right: 15px !important;
+        }
     </style>
     <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
     <link rel="shortcut icon" type="image/png" href="lib/_favicon.png"/>
@@ -196,7 +204,7 @@
 <a id="downloadAnchorElem" style="display:none"></a>
 
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 3.3 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
+    <h6 style="text-align:center">Application version: 3.4 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
 </div>
 <script>
     $(document).ready(function () {
