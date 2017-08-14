@@ -36,7 +36,7 @@
         .padded-right-middle {
             margin-right: 20px;
         }
-        
+
         #ConsulTree {
             overflow-x: auto;
         }
@@ -60,26 +60,34 @@
             <h2>Consul Tree</h2>
             <form class="form-horizontal">
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-1 control-label">Search  : </label>
-                    <div class="col-sm-8">
-                        <input type="text" id="searchInputId" value="" class="input form-control" data-toggle="tooltip" data-placement="left" title="Tooltip on left" style="margin:0em auto 1em auto;  padding:4px; border-radius:4px; border:1px solid silver;">
+                    <label for="searchInputId" class="col-sm-1 control-label">Search : </label>
+                    <div class="col-sm-5">
+                        <input type="text" id="searchInputId" value="" class="input form-control"
+                               style="margin:0 auto 1em auto;  padding:4px; border-radius:4px; border:1px solid silver;">
                     </div>
-                    <div class="col-sm-2">
-                        <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal" data-target="#importExportModalId">Import / Export</button>
+                    <div class="btn-group">
+                        <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal"
+                                data-target="#importExportModalId">Import / Export
+                        </button>
                     </div>
+                    <button type="button" class="btn btn-warning" id="enableManualExport">Enable Manual Export</button>
+                    <button type="button" class="btn btn-info hidden" id="disableManualExport">Disable Manual Export
+                    </button>
+                    <button type="button" class="btn btn-success hidden" id="exportSelection">Export Selection</button>
                     <div>
                         <button type="button" id="fixTreeBtnId" class="btn btn-warning hidden">Fix Tree</button>
                     </div>
                 </div>
             </form>
-
         </div>
+
         <div class="row">
             <div id="ConsulTree" class="well col-md-5 padded-right-middle"></div>
             <div class="col-md-6 border-left" style="position: fixed; left: 610px; width: 568px;">
                 <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
                 <br>
-                <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden" >Update</button>
+                <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
+                </button>
                 <span class="update-control hidden" style="color: #737373">&nbsp;|&nbsp;To create an element, right click on the tree.</span>
             </div>
         </div>
@@ -91,7 +99,7 @@
         <div class="modal-content">
             <div class="modal-header modal-header-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><strong>Create Folder / Key</strong></h4>
             </div>
             <div class="modal-body">
@@ -104,7 +112,7 @@
 
                     <div class="form-group">
                         <span for="pathDescribeID" class=" control-label">Path : </span>
-                        <textarea class="form-control" id="pathDescribeID" readonly >@</textarea>
+                        <textarea class="form-control" id="pathDescribeID" readonly>@</textarea>
                     </div>
                 </form>
 
@@ -125,17 +133,17 @@
         <div class="modal-content">
             <div class="modal-header modal-header-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><strong>Import / Export Consul Data</strong></h4>
             </div>
             <div class="modal-body">
                 <form class="">
                     <div class="form-group">
-                        <label>Export Consul Data : </label>
-                        <button type="button" id="exportConsulBtnId" class="btn btn-warning" >Export</button>
+                        <label>Export all consul data : </label>
+                        <button type="button" id="exportConsulBtnId" class="btn btn-warning">Export</button>
                     </div>
                     <div class="form-group">
-                        <label>Import Consul Data : </label>
+                        <label>Import consul data : </label>
                         <input type="file" id="jsonInputFile">
                     </div>
                     <button type="button" id="importConsulBtnId" class="btn btn-info">Import</button>
@@ -153,7 +161,7 @@
         <div class="modal-content">
             <div class="modal-header modal-header-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                            aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><strong>No Data</strong></h4>
             </div>
             <div class="modal-body">
@@ -204,27 +212,27 @@
 <a id="downloadAnchorElem" style="display:none"></a>
 
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 3.5 | Updated on: <?php echo date("F d Y", filemtime('index.php'));?></h6>
+    <h6 style="text-align:center">Application version: 3.6 | Updated
+        on: <?php echo date("F d Y", filemtime('index.php')); ?></h6>
 </div>
 <script>
     $(document).ready(function () {
         <?php
-            require './config.php';
+        require './config.php';
         ?>
-
         var tree = {
-                'contextmenu' : {'items' : customMenu},
-                'plugins': ['contextmenu', 'types', 'state', 'search'],
-                'core': {
-                    "animation" : 0,
-                    "check_callback": true,
-                    "themes": {"stripes": true},
-                    'data': []
-                }
-           };
-        var allKeys = consulUrl + "?keys";
+            'contextmenu': {'items': customMenu},
+            'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow'],
+            'core': {
+                "multiple": false,
+                "animation": 0,
+                "check_callback": true,
+                "themes": {"stripes": true},
+                'data': []
+            }
+        }, allKeys = consulUrl + "?keys", to = false;
 
-        function importConsul(){
+        function importConsul() {
             var files = document.getElementById('jsonInputFile').files;
             if (files.length <= 0) {
                 alert('JSON file must be selected first.');
@@ -232,16 +240,16 @@
             }
 
             var fr = new FileReader();
-
-            fr.onload = function(e) {
+            fr.onload = function (e) {
                 var result = JSON.parse(e.target.result), decodedValue;
+                $('#importExportModalId').modal('hide');
                 $('#processingMdlID').modal('show');
                 $.ajax({
                     method: "POST",
                     url: "api/bulkImport.php",
                     data: {
                         url: consulUrl,
-                        value : JSON.stringify(result)
+                        value: JSON.stringify(result)
                     }
                 }).done(function (data) {
                     location.reload();
@@ -249,16 +257,21 @@
             };
             fr.readAsText(files.item(0));
         }
-        function exportConsul(){
+
+        function exportConsul(obj) {
             getTree(tree, false, false);
+            var srcPath, arr = [], type, value, dataStr, dlAnchorElem;
 
-            var srcPath = JSON.parse($('#ajaxReturnFieldID').text()),
-                arr = [], type, value,dataStr, dlAnchorElem;
+            if (!obj) {
+                srcPath = JSON.parse($('#ajaxReturnFieldID').text());
+            } else {
+                srcPath = obj;
+            }
 
-            $.each( srcPath, function( key, item ) {
+            $.each(srcPath, function (key, item) {
                 var fullPath = consulUrl + item;
 
-                if (fullPath.substr(fullPath.length - 1) !== '/'){
+                if (fullPath.substr(fullPath.length - 1) !== '/') {
                     type = 'key';
                     getValue(item);
                     value = $('#gotNodeValue').text();
@@ -278,10 +291,12 @@
             dlAnchorElem.setAttribute("href", dataStr);
             dlAnchorElem.setAttribute("download", "consul-data.json");
             dlAnchorElem.click();
+
         }
+
         function parseCustomJson(data, tree) {
-            var minlen = -1;
-            var picked = "";
+            var minlen = -1,
+                picked = "", i;
             for (i = 0; i < data.length; i++) {
                 if (data[i].length < minlen || minlen == -1) {
                     minlen = data[i].length;
@@ -313,8 +328,9 @@
             }
             return tree;
         }
+
         function cleanArray(actual) {
-            var newArray = new Array();
+            var newArray = [];
             for (var i = 0; i < actual.length; i++) {
                 if (actual[i]) {
                     newArray.push(actual[i]);
@@ -322,8 +338,9 @@
             }
             return newArray;
         }
-        function getTree(tree, generateTree, path, firstRun){
-            if (path == undefined || path == false){
+
+        function getTree(tree, generateTree, path, firstRun) {
+            if (path == undefined || path == false) {
                 path = allKeys;
             } else {
                 path = path + "?keys";
@@ -339,7 +356,7 @@
                     url: path
                 }
             }).done(function (data) {
-                if (firstRun === true && checkIfDataIsValid(data) !== true){
+                if (firstRun === true && checkIfDataIsValid(data) !== true) {
                     $("#fixTreeBtnId").click()
                 }
 
@@ -359,9 +376,9 @@
                 }
             });
         }
-        function getValue(path, obj){
-            path = consulUrl + path + "?raw";
 
+        function getValue(path, obj) {
+            path = consulUrl + path + "?raw";
             $.ajax({
                 method: "POST",
                 url: "api/requests.php",
@@ -371,59 +388,59 @@
                     url: path
                 }
             }).done(function (data) {
-                if(obj) {
+                if (obj) {
                     obj.val(data);
                 } else {
                     $('#gotNodeValue').text(data);
                 }
             });
         }
+
         function sendToConsul(path, value, reload) {
             path = path.replace(/\\/g, '/');
             var fullPath = consulUrl + path;
-
             $.ajax({
                 method: "POST",
                 url: "api/requests.php",
                 data: {
                     method: "PUT",
                     url: fullPath,
-                    value : value
+                    value: value
                 }
-            }).done(function (data) {
+            }).done(function () {
                 if (reload !== undefined || reload !== false) {
-                   location.reload();
+                    location.reload();
                 }
             })
         }
-        function deleteNode(path){
+
+        function deleteNode(path) {
             var getPath = consulUrl + path;
             getTree(tree, false, getPath);
-
             var srcPath = JSON.parse($('#ajaxReturnFieldID').text());
-
-            $.each( srcPath, function( key, item ) {
+            $.each(srcPath, function (key, item) {
                 var fullPath = consulUrl + item;
                 $.ajax({
                     method: "POST",
                     url: "api/requests.php",
-                    async : false,
+                    async: false,
                     data: {
                         method: "DELETE",
                         url: fullPath
                     }
-                }).done(function (data) {
+                }).done(function () {
                 })
             });
         }
+
         function customMenu(node) {
             var items = {
-                "create" : {
-                    "separator_before"	: false,
-                    "separator_after"	: true,
-                    "_disabled"			: false, //(this.check("create_node", data.reference, {}, "last")),
-                    "label"				: "Create",
-                    "action"			: function (data) {
+                "create": {
+                    "separator_before": false,
+                    "separator_after": true,
+                    "_disabled": false, //(this.check("create_node", data.reference, {}, "last")),
+                    "label": "Create",
+                    "action": function (data) {
                         workingInst = $.jstree.reference(data.reference);
                         workingObj = workingInst.get_node(data.reference);
 
@@ -431,11 +448,11 @@
                         $('#createNodeModalId').modal('show');
                     }
                 },
-                "cut" : {
-                    "separator_before"	: true,
-                    "separator_after"	: false,
-                    "label"				: "Cut",
-                    "action"			: function (data) {
+                "cut": {
+                    "separator_before": true,
+                    "separator_after": false,
+                    "label": "Cut",
+                    "action": function (data) {
                         var inst = $.jstree.reference(data.reference),
                             obj = inst.get_node(data.reference);
 
@@ -445,20 +462,19 @@
                         var path = consulUrl + obj.id;
                         getTree(false, false, path);
 
-                        if(inst.is_selected(obj)) {
+                        if (inst.is_selected(obj)) {
                             inst.cut(inst.get_top_selected());
-                        }
-                        else {
+                        } else {
                             inst.cut(obj);
                         }
                     }
                 },
-                "copy" : {
-                    "separator_before"	: false,
-                    "icon"				: false,
-                    "separator_after"	: false,
-                    "label"				: "Copy",
-                    "action"			: function (data) {
+                "copy": {
+                    "separator_before": false,
+                    "icon": false,
+                    "separator_after": false,
+                    "label": "Copy",
+                    "action": function (data) {
                         var inst = $.jstree.reference(data.reference),
                             obj = inst.get_node(data.reference);
 
@@ -468,36 +484,36 @@
                         var path = consulUrl + obj.id;
                         getTree(false, false, path);
 
-                        if(inst.is_selected(obj)) {
+                        if (inst.is_selected(obj)) {
                             inst.copy(inst.get_top_selected());
-                        }
-                        else {
+                        } else {
                             inst.copy(obj);
                         }
                     }
                 },
-                "paste" : {
-                    "separator_before"	: false,
-                    "icon"				: false,
-                    "_disabled"			: function (data) {
+                "paste": {
+                    "separator_before": false,
+                    "icon": false,
+                    "_disabled": function (data) {
                         return !$.jstree.reference(data.reference).can_paste();
                     },
-                    "separator_after"	: false,
-                    "label"				: "Paste",
-                    "action"			: function (data) {
+                    "separator_after": false,
+                    "label": "Paste",
+                    "action": function (data) {
                         var inst = $.jstree.reference(data.reference),
                             obj = inst.get_node(data.reference),
                             srcPath = JSON.parse($('#ajaxReturnFieldID').text()),
                             parent = $('#ccParentFieldID').text(),
-                            ccType = $('#ccTypeFieldID').text();
+                            ccType = $('#ccTypeFieldID').text(),
+                            ajaxReturnedVFieldID = $('#ajaxReturnVFieldID');
 
-                        $.each( srcPath, function( key, item ) {
+                        $.each(srcPath, function (key, item) {
                             var value = false,
                                 dstPath = item.replace(parent, obj.id);
 
                             if (item.substr(-1) !== '/') {
-                                getValue(item, $('#ajaxReturnVFieldID'));
-                                value = $('#ajaxReturnVFieldID').text();
+                                getValue(item, ajaxReturnedVFieldID);
+                                value = ajaxReturnedVFieldID.text();
                             }
 
                             sendToConsul(dstPath, value, false);
@@ -509,19 +525,22 @@
                         }
                     }
                 },
-                "remove" : {
-                    "separator_before"	: true,
-                    "icon"				: false,
-                    "separator_after"	: false,
-                    "_disabled"			: false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
-                    "label"				: "Delete",
-                    "action"			: function (data) {
+                "remove": {
+                    "separator_before": true,
+                    "icon": false,
+                    "separator_after": false,
+                    "_disabled": false, //(this.check("delete_node", data.reference, this.get_parent(data.reference), "")),
+                    "label": "Delete",
+                    "action": function (data) {
                         var inst = $.jstree.reference(data.reference),
                             obj = inst.get_node(data.reference);
 
-                        if (confirm('Are you sure you want to DELETE '+obj.id+' ?')) {
-                            deleteNode(obj.id);
-                            location.reload();
+                        if (confirm('Are you sure you want to DELETE ' + obj.id + ' ?')) {
+                            $('#processingMdlID').modal('show');
+                            setTimeout(function () {
+                                deleteNode(obj.id);
+                                location.reload();
+                            }, 1000);
                         }
                     }
                 }
@@ -531,12 +550,12 @@
             } else if (node.type === 'level_2') {
                 delete items.item1;
             }
-
             return items;
         }
-        function check4Key (){
+
+        function check4Key() {
             var inputLength = $('#keyInputId').val().length;
-            if (inputLength > 0 ){
+            if (inputLength > 0) {
                 $('#inputKeyValueId').attr('disabled', false);
                 $('#createKeyBtnId').attr('disabled', false);
             } else {
@@ -544,25 +563,27 @@
                 $('#createKeyBtnId').attr('disabled', true);
             }
         }
-        function fixTree(){
+
+        function fixTree() {
             getTree(tree, false, false);
             var srcPath = $('#ajaxReturnFieldID').text();
 
             $.ajax({
                 method: "POST",
                 url: "api/import.php",
-                async : false,
+                async: false,
                 data: {
-                    consulUrl : consulUrl,
+                    consulUrl: consulUrl,
                     urls: srcPath
                 }
             }).done(function () {
                 location.reload();
             });
         }
-        function checkIfDataIsValid(data){
-            var newArray = [], lastItem, arrayedpath, newPath, array2 = [];
-            $.each( data, function( key, item ) {
+
+        function checkIfDataIsValid(data) {
+            var newArray = [], lastItem, arrayedpath, i, newPath, array2 = [];
+            $.each(data, function (key, item) {
                 if (item.substr(item.length - 1) !== '/') {
                     item = item.substr(0, item.lastIndexOf("/") + 1);
                 }
@@ -572,20 +593,20 @@
 
             newArray = cleanArray(newArray.sort());
 
-            for (var i = 0; i < newArray.length; i++) {
+            for (i = 0; i < newArray.length; i++) {
                 var newArray1 = [];
-                if (i === 0){
+                if (i === 0) {
                     lastItem = newArray[0];
                 } else {
-                    lastItem = newArray[i-1];
+                    lastItem = newArray[i - 1];
                 }
                 arrayedpath = newArray[i].split("/");
-                $.each( arrayedpath, function( key, item ) {
-                    if (item.length !== 0){
+                $.each(arrayedpath, function (key, item) {
+                    if (item.length !== 0) {
                         newArray1.push(item);
                     }
                 });
-                newArray1.splice(-1,1);
+                newArray1.splice(-1, 1);
                 newPath = newArray1.join('/');
                 array2.push(newPath);
             }
@@ -596,20 +617,20 @@
             var uniqueNames2 = [];
             var uniqueNames3 = [];
 
-            $.each(array2, function(i, el){
-                if($.inArray(el, uniqueNames1) === -1) uniqueNames1.push(el);
+            $.each(array2, function (i, el) {
+                if ($.inArray(el, uniqueNames1) === -1) uniqueNames1.push(el);
             });
 
-            $.each(uniqueNames1, function(i, el) {
+            $.each(uniqueNames1, function (i, el) {
                 uniqueNames3.push(el + '/');
             });
 
-            $.each(newArray, function(i, el){
-                if($.inArray(el, uniqueNames2) === -1) uniqueNames2.push(el);
+            $.each(newArray, function (i, el) {
+                if ($.inArray(el, uniqueNames2) === -1) uniqueNames2.push(el);
             });
 
             var valid = true;
-            for (var i = 0; i < uniqueNames3.length; i++) {
+            for (i = 0; i < uniqueNames3.length; i++) {
                 if (uniqueNames2.indexOf(uniqueNames3[i]) == -1) {
                     valid = false;
                     break;
@@ -618,12 +639,12 @@
             return valid;
         }
 
-        $('#createNodeModalId').on('shown.bs.modal', function (){
+        $('#createNodeModalId').on('shown.bs.modal', function () {
             var selectedNodePath = $('#selectedNodeID').text(), splittedArray, newPath;
 
-            if (selectedNodePath.substr(selectedNodePath.length -1) !== '/'){
+            if (selectedNodePath.substr(selectedNodePath.length - 1) !== '/') {
                 splittedArray = selectedNodePath.split("/");
-                splittedArray.splice(splittedArray.length -1, 1);
+                splittedArray.splice(splittedArray.length - 1, 1);
                 newPath = splittedArray.join('/');
                 selectedNodePath = newPath + '/';
             }
@@ -633,24 +654,52 @@
 
             check4Key();
         });
-        $('#fixTreeBtnId').on ('click', function (){
+        $('#fixTreeBtnId').on('click', function () {
             $('#loadingTreeMdlID').modal('show');
             setTimeout(function () {
                 fixTree();
             }, 2000);
         });
-        $('#valueUpdateBtnId').on('click', function (){
+        $('#valueUpdateBtnId').on('click', function () {
             var path = $('#selectedNodeID').text();
             var value = $('#cKeyValue').val();
+            sendToConsul(path, value, true)
+        });
+        $('#enableManualExport').on('click', function () {
+            localStorage['treeBackup'] = localStorage['jstree'];
+            var updateControl = $('.update-control');
+            updateControl.addClass('hidden');
+            updateControl.attr('disabled', true);
+            $('#exportSelection').removeClass('hidden');
+            $('#enableManualExport').toggleClass('hidden');
+            $('#disableManualExport').toggleClass('hidden');
+            $("#ConsulTree").jstree("destroy");
+            var tree = {
+                'contextmenu': {'items': customMenu},
+                "plugins": ["checkbox", "types", "wholerow", "state", "search"],
+                'core': {
+                    "multiple": true,
+                    "animation": 0,
+                    "check_callback": true,
+                    "themes": {"stripes": true},
+                    'data': []
+                }
+            };
 
-            sendToConsul(path, value, true )
+            getTree(tree, true, false, false);
+        });
+        $('#disableManualExport').on('click', function () {
+            if (localStorage['treeBackup']) {
+                localStorage['jstree'] = localStorage['treeBackup'];
+                localStorage.removeItem('treeBackup');
+            }
+            location.reload();
         });
         $('#exportConsulBtnId').on('click', exportConsul);
         $('#importConsulBtnId').on('click', importConsul);
         $('#ConsulTree').on("select_node.jstree", function (e, data) {
             workingInst = $.jstree.reference(data.reference);
             var updateControl = $('.update-control');
-
             if (data.node.id.substr(-1) != '/') {
                 updateControl.attr('disabled', false);
                 updateControl.removeClass('hidden');
@@ -661,27 +710,26 @@
             }
             $('#selectedNodeID').text(data.node.id);
         });
-        $('#keyInputId').on('click', check4Key);
-        $('#keyInputId').on('keyup', function (){
+        $('#keyInputId').on('keyup', function () {
             check4Key();
-
-            if ($(this).val().slice(-1) == "/"){
-                $('#inputKeyValueId').toggleClass('hidden');
+            var keyValueInput = $('#inputKeyValueId');
+            if ($(this).val().slice(-1) == "/") {
+                keyValueInput.toggleClass('hidden');
             } else {
-                if ($('#inputKeyValueId').hasClass('hidden')){
-                   $('#inputKeyValueId').removeClass('hidden');
+                if (keyValueInput.hasClass('hidden')) {
+                    keyValueInput.removeClass('hidden');
                 }
             }
-           $('#pathDescribeID').text($('#pathInputId').val() + $('#keyInputId').val());
+            $('#pathDescribeID').text($('#pathInputId').val() + $('#keyInputId').val());
         });
-        $('#createKeyBtnId').on('click', function (){
+        $('#createKeyBtnId').on('click', function () {
             workingInst.create_node(workingObj, {}, "last", function () {
                 var nodeName = $('#pathDescribeID').val();
                 var nodeValue = $('#inputKeyValueId').val(),
-                    splittedPath =  nodeName.split("/"),
+                    splittedPath = nodeName.split("/"),
                     toBeCreatedPath = '';
 
-                for (var i = 0; i < splittedPath.length -1 ; i++) {
+                for (var i = 0; i < splittedPath.length - 1; i++) {
                     toBeCreatedPath = toBeCreatedPath + splittedPath[i] + "/";
                     // Create Folders
                     sendToConsul(toBeCreatedPath, nodeValue, false);
@@ -692,17 +740,19 @@
                 }
             });
         });
-
-        var to = false, jsTreeObj;
-
+        $('#exportSelection').on('click', function () {
+            exportConsul($("#ConsulTree").jstree(true).get_selected());
+        });
         $('#searchInputId').keyup(function () {
-            if (to) {clearTimeout(to)}
+            if (to) {
+                clearTimeout(to)
+            }
             to = setTimeout(function () {
                 var v = $('#searchInputId').val();
                 $('#ConsulTree').jstree(true).search(v);
             }, 250);
         });
-
+        if (localStorage['treeBackup']) localStorage.removeItem('treeBackup');
         getTree(tree, true, false, true);
     });
 </script>
