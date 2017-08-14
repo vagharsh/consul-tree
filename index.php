@@ -372,7 +372,7 @@
                 }
             }).done(function (data) {
                 if(obj) {
-                    obj.text(data);
+                    obj.val(data);
                 } else {
                     $('#gotNodeValue').text(data);
                 }
