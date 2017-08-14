@@ -1,5 +1,7 @@
 Release Notes
 ---------
+[v3.5](https://github.com/vagharsh/consul-tree/commit/6684d1ab6d3a5d5ecf88f03c5701cc8ca59a59a0) :
+- Fixed key-Value box doesn't change its value once its edited
 
 [v3.4](https://github.com/vagharsh/consul-tree/commit/79095d36bd12d1eb80b5d22db78803821fb4f910) :
 - Horizontal scrolling of the tree enabled
@@ -15,7 +17,7 @@ v3.3
 - Waiting and loading modals were added to improve the UX.
 - Fix Importing large Data issue.
 
-[v3.0](https://github.com/vagharsh/consul-tree/commit/30df8eb9fcf8dcd9428e637d5a6837ef87ce3af3#diff-828e0013b8f3bc1bb22b4f57172b019d)  : 
+[v3.0](https://github.com/vagharsh/consul-tree/commit/30df8eb9fcf8dcd9428e637d5a6837ef87ce3af3)  : 
 - Import and Export functionality.
 - Fixed the issue when creating a key or a folder while doing a right click on the key and not a folder.
 - Notifies if there is not root for the tree.
