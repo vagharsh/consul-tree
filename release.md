@@ -1,5 +1,9 @@
 Release Notes
 ---------
+[v3.6](https://github.com/vagharsh/consul-tree/commit/2fc80314a83d89ac99143d198736dab6673dfab0) :
+- Manual/Partial/Custom export feature
+- Improvements in the UI
+
 [v3.5](https://github.com/vagharsh/consul-tree/commit/6684d1ab6d3a5d5ecf88f03c5701cc8ca59a59a0) :
 - Fixed key-Value box doesn't change its value once its edited
 
