@@ -1,5 +1,8 @@
 Release Notes
 ---------
+[v3.7](https://github.com/vagharsh/consul-tree/commit/f4fc18e6c5c2ea0515b6e5d991ef0414626db1ed) :
+- Focus folder / Key name field on create new modal open
+
 [v3.6](https://github.com/vagharsh/consul-tree/commit/2fc80314a83d89ac99143d198736dab6673dfab0) :
 - Manual/Partial/Custom export feature
 - Improvements in the UI
