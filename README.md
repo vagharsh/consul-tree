@@ -1,4 +1,4 @@
-# Consul-tree v 3.7
+# Consul-tree
 
 It's a Tree for Consul https://github.com/hashicorp/consul KV section.
 
