@@ -53,7 +53,6 @@
     <script src="lib/jstree.js"></script>
 </head>
 <body>
-
 <div class="container">
     <div class="col-md-offset-1 col-md-12">
         <div class="row">
@@ -93,7 +92,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="createNodeModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -127,7 +125,6 @@
     </div>
     <p id="demo"></p>
 </div>
-
 <div class="modal fade" id="importExportModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -210,9 +207,8 @@
 <p class="hidden" id="selectedNodeID"></p>
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
-
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 3.6 | Updated
+    <h6 style="text-align:center">Application version: 3.7 | Updated
         on: <?php echo date("F d Y", filemtime('index.php')); ?></h6>
 </div>
 <script>
@@ -640,6 +636,7 @@
         }
 
         $('#createNodeModalId').on('shown.bs.modal', function () {
+            $('#keyInputId').focus();
             var selectedNodePath = $('#selectedNodeID').text(), splittedArray, newPath;
 
             if (selectedNodePath.substr(selectedNodePath.length - 1) !== '/') {
