@@ -208,7 +208,7 @@
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 3.7 | Updated
+    <h6 style="text-align:center">Application version: 3.8 | Updated
         on: <?php echo date("F d Y", filemtime('index.php')); ?></h6>
 </div>
 <script>
