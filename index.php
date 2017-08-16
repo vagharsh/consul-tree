@@ -73,9 +73,6 @@
                     <button type="button" class="btn btn-info hidden" id="disableManualExport">Disable Manual Export
                     </button>
                     <button type="button" class="btn btn-success hidden" id="exportSelection">Export Selection</button>
-                    <div>
-                        <button type="button" id="fixTreeBtnId" class="btn btn-warning hidden">Fix Tree</button>
-                    </div>
                 </div>
             </form>
         </div>
@@ -208,7 +205,7 @@
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 3.8 | Updated
+    <h6 style="text-align:center">Application version: 4.0 | Updated
         on: <?php echo date("F d Y", filemtime('index.php')); ?></h6>
 </div>
 <script>
@@ -242,9 +239,10 @@
                 $('#processingMdlID').modal('show');
                 $.ajax({
                     method: "POST",
-                    url: "api/bulkImport.php",
+                    url: "api/requests.php",
                     data: {
                         url: consulUrl,
+                        method: "BulkIMPORT",
                         value: JSON.stringify(result)
                     }
                 }).done(function (data) {
@@ -287,7 +285,6 @@
             dlAnchorElem.setAttribute("href", dataStr);
             dlAnchorElem.setAttribute("download", "consul-data.json");
             dlAnchorElem.click();
-
         }
 
         function parseCustomJson(data, tree) {
@@ -353,7 +350,10 @@
                 }
             }).done(function (data) {
                 if (firstRun === true && checkIfDataIsValid(data) !== true) {
-                    $("#fixTreeBtnId").click()
+                    $('#loadingTreeMdlID').modal('show');
+                    setTimeout(function () {
+                        fixTree();
+                    }, 2000);
                 }
 
                 if (data.length === 0) {
@@ -392,6 +392,23 @@
             });
         }
 
+        function ccPaste(paths, parentId, replace){
+            $.ajax({
+                method: "POST",
+                url: "api/requests.php",
+                async: false,
+                data: {
+                    method: "CCP",
+                    consulUrl : consulUrl,
+                    parentId : parentId,
+                    replace : replace,
+                    url: JSON.stringify(paths)
+                }
+            }).done(function (){
+
+            })
+        }
+
         function sendToConsul(path, value, reload) {
             path = path.replace(/\\/g, '/');
             var fullPath = consulUrl + path;
@@ -413,20 +430,19 @@
         function deleteNode(path) {
             var getPath = consulUrl + path;
             getTree(tree, false, getPath);
-            var srcPath = JSON.parse($('#ajaxReturnFieldID').text());
-            $.each(srcPath, function (key, item) {
-                var fullPath = consulUrl + item;
-                $.ajax({
-                    method: "POST",
-                    url: "api/requests.php",
-                    async: false,
-                    data: {
-                        method: "DELETE",
-                        url: fullPath
-                    }
-                }).done(function () {
-                })
-            });
+            var myJsonString = $('#ajaxReturnFieldID').text();
+
+            $.ajax({
+                method: "POST",
+                url: "api/requests.php",
+                async: false,
+                data: {
+                    method: "DELETE",
+                    consulUrl : consulUrl,
+                    url: myJsonString
+                }
+            }).done(function () {
+            })
         }
 
         function customMenu(node) {
@@ -504,16 +520,15 @@
                             ajaxReturnedVFieldID = $('#ajaxReturnVFieldID');
 
                         $.each(srcPath, function (key, item) {
-                            var value = false,
-                                dstPath = item.replace(parent, obj.id);
-
-                            if (item.substr(-1) !== '/') {
-                                getValue(item, ajaxReturnedVFieldID);
-                                value = ajaxReturnedVFieldID.val();
-                            }
-
-                            sendToConsul(dstPath, value, false);
+                            item = item.replace(/\\/g, '/');
+                            srcPath[key] = item;
                         });
+
+                        $('#processingMdlID').modal('show');
+                        setTimeout(function () {
+                            ccPaste(srcPath, parent, obj.id);
+                            location.reload();
+                        }, 500);
 
                         if (ccType == 'cut') {
                             srcPath = srcPath.sort();
@@ -536,7 +551,7 @@
                             setTimeout(function () {
                                 deleteNode(obj.id);
                                 location.reload();
-                            }, 1000);
+                            }, 500);
                         }
                     }
                 }
@@ -650,12 +665,6 @@
             $('#pathInputId').val(selectedNodePath);
 
             check4Key();
-        });
-        $('#fixTreeBtnId').on('click', function () {
-            $('#loadingTreeMdlID').modal('show');
-            setTimeout(function () {
-                fixTree();
-            }, 2000);
         });
         $('#valueUpdateBtnId').on('click', function () {
             var path = $('#selectedNodeID').text();
