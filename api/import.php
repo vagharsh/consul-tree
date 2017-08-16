@@ -19,19 +19,7 @@ foreach ($manage as $item){
     }
 }
 
-function putInConsul($post, $value) {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_URL,$post);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
-    if ($value != false){
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $value);
-    }
-    $result=curl_exec($ch);
-    curl_close($ch);
-    return ($result);
-}
+require 'functions.php';
 
 if(substr($consulUrl, -1) == '/') {
     $consulUrlModified = substr($consulUrl, 0, -1);
