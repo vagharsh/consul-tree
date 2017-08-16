@@ -1,5 +1,8 @@
 Release Notes
 ---------
+[v4.0](https://github.com/vagharsh/consul-tree/commit/43b78f5205bf2b7c145044bca47be51c560e1b1a) :
+- all requests are now done form the back-end ( it caused the application to respond a bit slow ) but in my opinion its better than sending a request for every array item.
+
 [v3.7](https://github.com/vagharsh/consul-tree/commit/f4fc18e6c5c2ea0515b6e5d991ef0414626db1ed) :
 - Focus folder / Key name field on create new modal open
 
