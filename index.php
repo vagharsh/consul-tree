@@ -509,7 +509,7 @@
 
                             if (item.substr(-1) !== '/') {
                                 getValue(item, ajaxReturnedVFieldID);
-                                value = ajaxReturnedVFieldID.text();
+                                value = ajaxReturnedVFieldID.val();
                             }
 
                             sendToConsul(dstPath, value, false);
