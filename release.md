@@ -1,5 +1,10 @@
 Release Notes
 ---------
+[v4.2](https://github.com/vagharsh/consul-tree/commit/67549411048cb0a98825226e3a63817f51e0b593) :
+- Some UX fixes.
+- After copy paste added the fixTree function.
+- Loading, Processing, Fixing modals can't be hidden by Esc or other mouse clicks. it only gets hidden by a command or page reload (after finishing the requests).
+
 [v4.1](https://github.com/vagharsh/consul-tree/commit/b2db4f019b7c0d70a51026a98be440b68b1c0391) :
 - Export is separated from the import / export modal. to do full export you have to select all the tree from the root
 
