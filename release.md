@@ -1,5 +1,8 @@
 Release Notes
 ---------
+[v4.1](https://github.com/vagharsh/consul-tree/commit/b2db4f019b7c0d70a51026a98be440b68b1c0391) :
+- Export is separated from the import / export modal. to do full export you have to select all the tree from the root
+
 [v4.0](https://github.com/vagharsh/consul-tree/commit/43b78f5205bf2b7c145044bca47be51c560e1b1a) :
 - all requests are now done form the back-end ( it caused the application to respond a bit slow ) but in my opinion its better than sending a request for every array item.
 
