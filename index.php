@@ -66,7 +66,7 @@
                     </div>
                     <div class="btn-group">
                         <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal"
-                                data-target="#importExportModalId">Import / Export
+                                data-target="#importExportModalId">Import
                         </button>
                     </div>
                     <button type="button" class="btn btn-warning" id="enableManualExport">Enable Manual Export</button>
@@ -128,16 +128,12 @@
             <div class="modal-header modal-header-danger">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><strong>Import / Export Consul Data</strong></h4>
+                <h4 class="modal-title"><strong>Import Consul Data</strong></h4>
             </div>
             <div class="modal-body">
                 <form class="">
                     <div class="form-group">
-                        <label>Export all consul data : </label>
-                        <button type="button" id="exportConsulBtnId" class="btn btn-warning">Export</button>
-                    </div>
-                    <div class="form-group">
-                        <label>Import consul data : </label>
+                        <label>Browse JSON file : </label>
                         <input type="file" id="jsonInputFile">
                     </div>
                     <button type="button" id="importConsulBtnId" class="btn btn-info">Import</button>
@@ -205,7 +201,7 @@
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 4.0 | Updated
+    <h6 style="text-align:center">Application version: 4.1 | Updated
         on: <?php echo date("F d Y", filemtime('index.php')); ?></h6>
 </div>
 <script>
@@ -701,7 +697,6 @@
             }
             location.reload();
         });
-        $('#exportConsulBtnId').on('click', exportConsul);
         $('#importConsulBtnId').on('click', importConsul);
         $('#ConsulTree').on("select_node.jstree", function (e, data) {
             workingInst = $.jstree.reference(data.reference);
