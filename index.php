@@ -201,7 +201,7 @@
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 4.1 | Updated
+    <h6 style="text-align:center">Application version: 4.2 | Updated
         on: <?php echo date("F d Y", filemtime('index.php')); ?></h6>
 </div>
 <script>
@@ -232,7 +232,10 @@
             fr.onload = function (e) {
                 var result = JSON.parse(e.target.result), decodedValue;
                 $('#importExportModalId').modal('hide');
-                $('#processingMdlID').modal('show');
+                $('#processingMdlID').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
                 $.ajax({
                     method: "POST",
                     url: "api/requests.php",
@@ -346,14 +349,20 @@
                 }
             }).done(function (data) {
                 if (firstRun === true && checkIfDataIsValid(data) !== true) {
-                    $('#loadingTreeMdlID').modal('show');
+                    $('#loadingTreeMdlID').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
                     setTimeout(function () {
                         fixTree();
                     }, 2000);
                 }
 
                 if (data.length === 0) {
-                    $('#noTreeModalId').modal('show');
+                    $('#noTreeModalId').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
                     $('#searchInputId').attr('disabled', true);
                 } else {
                     $('#searchInputId').attr('disabled', false);
@@ -392,7 +401,6 @@
             $.ajax({
                 method: "POST",
                 url: "api/requests.php",
-                async: false,
                 data: {
                     method: "CCP",
                     consulUrl : consulUrl,
@@ -401,7 +409,7 @@
                     url: JSON.stringify(paths)
                 }
             }).done(function (){
-
+                fixTree();
             })
         }
 
@@ -431,13 +439,13 @@
             $.ajax({
                 method: "POST",
                 url: "api/requests.php",
-                async: false,
                 data: {
                     method: "DELETE",
                     consulUrl : consulUrl,
                     url: myJsonString
                 }
             }).done(function () {
+                location.reload();
             })
         }
 
@@ -520,10 +528,12 @@
                             srcPath[key] = item;
                         });
 
-                        $('#processingMdlID').modal('show');
+                        $('#processingMdlID').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
                         setTimeout(function () {
                             ccPaste(srcPath, parent, obj.id);
-                            location.reload();
                         }, 500);
 
                         if (ccType == 'cut') {
@@ -543,10 +553,12 @@
                             obj = inst.get_node(data.reference);
 
                         if (confirm('Are you sure you want to DELETE ' + obj.id + ' ?')) {
-                            $('#processingMdlID').modal('show');
+                            $('#processingMdlID').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            });
                             setTimeout(function () {
                                 deleteNode(obj.id);
-                                location.reload();
                             }, 500);
                         }
                     }
