@@ -1,12 +1,12 @@
-**Below screenshots are for version 3.4 and 3.7**
+**Below screenshots are for version 3.4 and 4.1**
 
 Dashboard
 --------
-![Dashboard](https://image.ibb.co/nosCHF/dashboard.png "Dashboard")
+![Dashboard](https://image.ibb.co/cCpA7F/dashoboard.png "Dashboard")
 
 Right click
 --------
-![Right click](https://image.ibb.co/mUGTra/right_click.png "Right click")
+![Right click](https://image.ibb.co/eEVHnF/right_click.png "Right click")
 
 Create Key
 --------
@@ -18,12 +18,12 @@ Create Folder
 
 Search 
 -------
-![Search](https://image.ibb.co/j4DmcF/search.png "Search")
+![Search](https://image.ibb.co/gXr1Ev/search.png "Search")
 
-Import & Export 
+Import 
 -------
-![Import & Export](https://image.ibb.co/jiSOPv/import_export.png "Import & Export")
+![Import](https://image.ibb.co/b5gOSF/import.png "Import")
 
 Manual/Custom Export
 -------
-![Manual Export](https://image.ibb.co/b53mcF/manual_export.png "Manual Export")
+![Manual Export](https://image.ibb.co/g5re1a/export.png "Manual Export")
