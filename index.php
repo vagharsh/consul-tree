@@ -201,7 +201,7 @@
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 4.2 | Updated
+    <h6 style="text-align:center">Application version: 4.3 | Updated
         on: <?php echo date("F d Y", filemtime('index.php')); ?></h6>
 </div>
 <script>
@@ -364,8 +364,10 @@
                         keyboard: false
                     });
                     $('#searchInputId').attr('disabled', true);
+                    $('#enableManualExport').attr('disabled', true);
                 } else {
                     $('#searchInputId').attr('disabled', false);
+                    $('#enableManualExport').attr('disabled', false);
                     data = data.sort();
                     if (generateTree == true) {
                         tree = parseCustomJson(data, tree);
