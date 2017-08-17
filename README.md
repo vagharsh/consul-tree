@@ -22,7 +22,12 @@ To use the Consul-tree you need PHP and a web server.
 do not change the syntax of the line inside the php since it is going to be echo-ed into the JS.
 The config line should look like this
 `consulUrl = "http://192.168.220.145:8500/v1/kv/";`
-- access the consul-tree e.g. http://yourserver/consuldirectory
+- Access the consul-tree e.g. http://yourserver/consuldirectory
+- To create a folder or a key, Right click inside the tree where you want the folder / key to be created
+
+NOTE
+------
+**Consul tree does not work if there isn't a root folder to start with, therfore wither you create a root folder from Consul-UI or import previosly exported JSON data from Consul-tree**
 
 Consul-tree on Docker
 -----------
