@@ -1,4 +1,4 @@
-**Below screenshots are for version 3.4 and 4.1**
+**Below screenshots are for version 3.4 and 4.x**
 
 Dashboard
 --------
