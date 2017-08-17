@@ -1,5 +1,8 @@
 Release Notes
 ---------
+[v4.3](https://github.com/vagharsh/consul-tree/commit/9940426cc53c1f611be62f3191dd3ed67a47d878) :
+- Disable export when no tree data is available
+
 [v4.2](https://github.com/vagharsh/consul-tree/commit/67549411048cb0a98825226e3a63817f51e0b593) :
 - Some UX fixes.
 - After copy paste added the fixTree function.
