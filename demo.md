@@ -1,4 +1,4 @@
-**Below screenshots are for version 4.4 (4.4 and 4.5 doesn't have any UI differance)**
+**Below screenshots are for version 4.4 (4.4 and 4.5 doesn't have any UI differances)**
 
 Dashboard
 --------
