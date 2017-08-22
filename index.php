@@ -11,22 +11,18 @@
         }
 
         body {
-            max-width: 800px;
-            min-width: 300px;
             margin: 0 auto;
             padding: 20px 10px;
             font-size: 14px;
             font-size: 1.4em;
         }
 
-        h1 {
-            font-size: 1.8em;
+        body > .container {
+            padding: 20px 15px 0;
         }
 
-        .demo {
-            overflow: auto;
-            border: 1px solid silver;
-            min-height: 100px;
+        h1 {
+            font-size: 1.8em;
         }
 
         .border-left {
@@ -41,6 +37,11 @@
             overflow-x: auto;
         }
 
+        .page-header {
+            border-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
+
         .jstree-container-ul {
             margin-right: 15px !important;
         }
@@ -48,47 +49,61 @@
     <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
     <link rel="shortcut icon" type="image/png" href="lib/_favicon.png"/>
     <link href="lib/css/bootstrap.min.css" rel="stylesheet">
-    <script src="lib/jquery-3.2.1.min.js"></script>
+    <script src="lib/js/jquery-3.2.1.min.js"></script>
     <script src="lib/js/bootstrap.min.js"></script>
-    <script src="lib/jstree.js"></script>
+    <script src="lib/js/jstree.js"></script>
 </head>
 <body>
-<div class="container">
-    <div class="col-md-offset-1 col-md-12">
-        <div class="row">
-            <h2>Consul Tree</h2>
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label for="searchInputId" class="col-sm-1 control-label">Search : </label>
-                    <div class="col-sm-5">
-                        <input type="text" id="searchInputId" value="" class="input form-control"
-                               style="margin:0 auto 1em auto;  padding:4px; border-radius:4px; border:1px solid silver;">
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal"
-                                data-target="#importExportModalId">Import
-                        </button>
-                    </div>
-                    <button type="button" class="btn btn-warning" id="enableManualExport">Enable Manual Export</button>
-                    <button type="button" class="btn btn-info hidden" id="disableManualExport">Disable Manual Export
-                    </button>
-                    <button type="button" class="btn btn-success hidden" id="exportSelection">Export Selection</button>
-                </div>
-            </form>
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#" id="consulTitle"></a>
         </div>
+    </div>
+</nav>
+<nav class="navbar navbar-inverse navbar-fixed-bottom">
+    <div class="container">
+        <p class="navbar-text navbar-lef">Consul-tree v4.4 | Updated on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="page-header">
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-5 padded-right-middle" style="width:505px">
+                    <label class="sr-only" for="searchInputId">Search</label>
+                    <input type="text" id="searchInputId" value="" class="input form-control" placeholder="Search"
+                           style="margin:0 auto 1em auto;  padding:4px; border-radius:4px; border:1px solid silver;">
+                </div>
+                <div class="btn-group">
+                    <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal"
+                            data-target="#importExportModalId">Import
+                    </button>
+                </div>
+                <button type="button" class="btn btn-warning" id="enableManualExport">Enable Manual Export</button>
+                <button type="button" class="btn btn-info hidden" id="disableManualExport">Disable Manual Export
+                </button>
+                <button type="button" class="btn btn-success hidden" id="exportSelection">Export Selection</button>
+            </div>
+        </form>
+    </div>
 
-        <div class="row">
+    <div class="">
             <div id="ConsulTree" class="well col-md-5 padded-right-middle"></div>
-            <div class="col-md-6 border-left" style="position: fixed; left: 610px; width: 568px;">
+            <div class="col-md-6 border-left" style="position: fixed; left: 757px; width: 568px;">
+                <span id="createElementText" style="color: #737373">Select a key to see its value, right-click on the tree to create an element.</span>
                 <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
                 <br>
                 <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
                 </button>
-                <span class="update-control hidden" style="color: #737373">&nbsp;|&nbsp;To create an element, right click on the tree.</span>
+                <span class="update-control hidden" style="color: #737373">&nbsp;|&nbsp;To create an element, right-click on the tree.</span>
             </div>
         </div>
-    </div>
 </div>
+
 <div class="modal fade" id="createNodeModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -110,7 +125,6 @@
                         <textarea class="form-control" id="pathDescribeID" readonly>@</textarea>
                     </div>
                 </form>
-
                 <h5>To create a folder, end the key with /</h5>
                 <textarea class="form-control" id="inputKeyValueId"></textarea>
             </div>
@@ -120,7 +134,6 @@
             </div>
         </div>
     </div>
-    <p id="demo"></p>
 </div>
 <div class="modal fade" id="importExportModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md">
@@ -201,8 +214,7 @@
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
 <div class="page-footer">
-    <h6 style="text-align:center">Application version: 4.3 | Updated
-        on: <?php echo date("F d Y", filemtime('index.php')); ?></h6>
+
 </div>
 <script>
     $(document).ready(function () {
@@ -660,6 +672,12 @@
             return valid;
         }
 
+        try {
+            $('#consulTitle').text(consulTitle);
+        } catch(err){
+            $('#consulTitle').text('Consul-Tree');
+        }
+
         $('#createNodeModalId').on('shown.bs.modal', function () {
             $('#keyInputId').focus();
             var selectedNodePath = $('#selectedNodeID').text(), splittedArray, newPath;
@@ -686,6 +704,7 @@
             var updateControl = $('.update-control');
             updateControl.addClass('hidden');
             updateControl.attr('disabled', true);
+            $('#createElementText').addClass('hidden');
             $('#exportSelection').removeClass('hidden');
             $('#enableManualExport').toggleClass('hidden');
             $('#disableManualExport').toggleClass('hidden');
@@ -718,10 +737,12 @@
             if (data.node.id.substr(-1) != '/') {
                 updateControl.attr('disabled', false);
                 updateControl.removeClass('hidden');
+                $('#createElementText').addClass('hidden');
                 getValue(data.node.id, $('#cKeyValue'));
             } else {
                 updateControl.addClass('hidden');
                 updateControl.attr('disabled', true);
+                $('#createElementText').removeClass('hidden');
             }
             $('#selectedNodeID').text(data.node.id);
         });
