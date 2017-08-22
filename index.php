@@ -57,7 +57,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#" id="consulTitle"></a>
+            <a class="navbar-brand" href="#" id="consulTitleID"></a>
         </div>
     </div>
 </nav>
@@ -221,6 +221,8 @@
         <?php
         require './config.php';
         ?>
+
+        // there should be a blank line before the next var, so that the contents of the config.php won't destroy anything.
         var tree = {
             'contextmenu': {'items': customMenu},
             'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow'],
@@ -673,9 +675,9 @@
         }
 
         try {
-            $('#consulTitle').text(consulTitle);
+            $('#consulTitleID').text(consulTitle);
         } catch(err){
-            $('#consulTitle').text('Consul-Tree');
+            $('#consulTitleID').text('Consul-Tree');
         }
 
         $('#createNodeModalId').on('shown.bs.modal', function () {
