@@ -22,6 +22,7 @@ To use the Consul-tree you need PHP and a web server.
 do not change the syntax of the line inside the php since it is going to be echo-ed into the JS.
 The config line should look like this
 `consulUrl = "http://192.168.220.145:8500/v1/kv/";`
+- To add a custom Title to your Consul-Tree, add `consulTitle = "My Consul Tree";` to the config.php file.
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created
 
@@ -34,9 +35,9 @@ Consul-tree on Docker
 Check my docker repo for a ready made container at https://hub.docker.com/r/vagharsh/consul-tree/.
 run it next to the consul container, just make sure you to create a `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
 
-`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:4.3`
+`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:4.4`
 
-**Current working version corresponds to the Image on Docker hub vagharsh/consul-tree:4.3**
+**Current working version corresponds to the Image on Docker hub vagharsh/consul-tree:4.4**
 
 
 Release Notes 
