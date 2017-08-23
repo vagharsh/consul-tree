@@ -4,7 +4,7 @@ It's a Tree for Consul https://github.com/hashicorp/consul KV section.
 
 **Supported Methods:** Cut, Copy, Paste, Create, Delete.
 
-**Available Features:** Search, Import, Export (Full, Custom).
+**Available Features:** Search, Import, Export.
 
 The applicaiton is based on: 
 JQuery, Twitter Bootstrap, JStree.
@@ -35,9 +35,9 @@ Consul-tree on Docker
 Check my docker repo for a ready made container at https://hub.docker.com/r/vagharsh/consul-tree/.
 run it next to the consul container, just make sure you to create a `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
 
-`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:4.5`
+`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:4.7`
 
-**Current working version corresponds to the Image on Docker hub vagharsh/consul-tree:4.5**
+**Current working version corresponds to the Image on Docker hub vagharsh/consul-tree:4.7**
 
 
 Release Notes 
