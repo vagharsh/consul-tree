@@ -1,5 +1,10 @@
 Release Notes
 ---------
+[v4.6](https://github.com/vagharsh/consul-tree/commit/9c51de632f5e5b6c32ecc8c9090723f76a33809a) :
+- Fixed issue [#9](https://github.com/vagharsh/consul-tree/issues/9)
+- Some minor UI fixes
+- Some code correction
+
 [v4.5](https://github.com/vagharsh/consul-tree/commit/fd1278cad8aab2cdf6da5c416e9debb3d9785db9) :
 - Minor bug fixes.
 
