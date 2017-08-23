@@ -1,4 +1,4 @@
-**Below screenshots are for versions 4.4 and 4.6.1**
+**Below screenshots are for versions 4.4 and 4.7**
 
 Dashboard
 --------
@@ -14,11 +14,11 @@ Key Value
 
 Create Key
 --------
-![Create Key](https://image.ibb.co/ishSbk/create_file.png "Create Key")
+![Create Key](https://image.ibb.co/bxHZ7Q/create_file.png "Create Key")
 
 Create Folder
 --------
-![Create Folder](https://image.ibb.co/dctYGk/create_folder.png "Create Folder")
+![Create Folder](https://image.ibb.co/g4OVgk/create_folder.png "Create Folder")
 
 Search 
 -------
