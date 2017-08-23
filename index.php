@@ -63,7 +63,7 @@
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v4.6 | Updated on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
+        <p class="navbar-text navbar-lef">Consul-tree v4.6.1 | Updated on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
         </ul>
