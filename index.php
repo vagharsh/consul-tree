@@ -121,11 +121,11 @@
                     </div>
 
                     <div class="form-group">
-                        <span for="pathDescribeID" class="control-label">Path : </span>
+                        <h5 for="pathDescribeID" class="control-label">Path : </h5>
                         <textarea class="form-control" id="pathDescribeID" readonly>@</textarea>
                     </div>
                 </form>
-                <span for="pathDescribeID" class="control-label">Value : </span>
+                <h5 for="pathDescribeID" class="control-label">Value : </h5>
                 <textarea class="form-control" id="pathDescribeID"></textarea>
             </div>
             <div class="modal-footer">
