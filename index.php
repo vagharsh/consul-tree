@@ -30,7 +30,7 @@
         }
 
         .padded-right-middle {
-            margin-right: 20px;
+            margin-right: 15px;
         }
 
         #ConsulTree {
@@ -63,7 +63,8 @@
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v4.6.1 | Updated on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
+        <p class="navbar-text navbar-lef">Consul-tree v4.7 | Updated
+            on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
         </ul>
@@ -78,11 +79,9 @@
                     <input type="text" id="searchInputId" value="" class="input form-control" placeholder="Search"
                            style="margin:0 auto 1em auto;  padding:4px; border-radius:4px; border:1px solid silver;">
                 </div>
-                <div class="btn-group">
-                    <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal"
-                            data-target="#importExportModalId">Import
-                    </button>
-                </div>
+                <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal"
+                        data-target="#importExportModalId">Import
+                </button>
                 <button type="button" class="btn btn-warning" id="enableManualExport">Enable Manual Export</button>
                 <button type="button" class="btn btn-info hidden" id="disableManualExport">Disable Manual Export
                 </button>
@@ -90,18 +89,15 @@
             </div>
         </form>
     </div>
-
-    <div class="">
-            <div id="ConsulTree" class="well col-md-5 padded-right-middle"></div>
-            <div class="col-md-6 border-left" style="position: fixed; left: 757px; width: 568px;">
-                <span id="createElementText" style="color: #737373">Select a key to see its value, right-click on the tree to create an element.</span>
-                <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
-                <br>
-                <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
-                </button>
-                <span class="update-control hidden" style="color: #737373">&nbsp;|&nbsp;To create an element, right-click on the tree.</span>
-            </div>
-        </div>
+    <div id="ConsulTree" class="well col-md-5 padded-right-middle"></div>
+    <div class="col-md-6 border-left" style="position: fixed; left: 757px; width: 568px;">
+        <span id="createElementText" style="color: #737373">Select a key to see its value, right-click on the tree to create an element.</span>
+        <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
+        <br>
+        <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
+        </button>
+        <span class="update-control hidden" style="color: #737373">&nbsp;|&nbsp;To create an element, right-click on the tree.</span>
+    </div>
 </div>
 
 <div class="modal fade" id="createNodeModalId" tabindex="-1" role="dialog">
@@ -113,9 +109,10 @@
                 <h4 class="modal-title"><strong>Create Folder / Key</strong></h4>
             </div>
             <div class="modal-body">
-                <form class="">
+                <form>
                     <div class="form-group">
-                        <h5 for="keyInputId" class="control-label">Folder / Key Name :  <i>To create a folder, end the key with /</i></h5>
+                        <h5 for="keyInputId" class="control-label">Folder / Key Name : <i>To create a folder, end the
+                                key with /</i></h5>
                         <input type="text" class="form-control" id="keyInputId" value="">
                         <input type="hidden" class="form-control" id="pathInputId" value="">
                     </div>
@@ -125,8 +122,8 @@
                         <textarea class="form-control" id="pathDescribeID" readonly>@</textarea>
                     </div>
                 </form>
-                <h5 for="pathDescribeID" class="control-label">Value : </h5>
-                <textarea class="form-control" id="pathDescribeID"></textarea>
+                <h5 for="inputKeyValueId" class="control-label inputKeyValueClass">Value : </h5>
+                <textarea class="form-control inputKeyValueClass" id="inputKeyValueId"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" id="createKeyBtnId" class="btn btn-info">Yes</button>
@@ -144,7 +141,7 @@
                 <h4 class="modal-title"><strong>Import Consul Data</strong></h4>
             </div>
             <div class="modal-body">
-                <form class="">
+                <form>
                     <div class="form-group">
                         <label>Browse JSON file : </label>
                         <input type="file" id="jsonInputFile">
@@ -416,18 +413,18 @@
             });
         }
 
-        function ccPaste(paths, parentId, replace){
+        function ccPaste(paths, parentId, replace) {
             $.ajax({
                 method: "POST",
                 url: "api/requests.php",
                 data: {
                     method: "CCP",
-                    consulUrl : consulUrl,
-                    parentId : parentId,
-                    replace : replace,
+                    consulUrl: consulUrl,
+                    parentId: parentId,
+                    replace: replace,
                     url: JSON.stringify(paths)
                 }
-            }).done(function (){
+            }).done(function () {
                 fixTree();
             })
         }
@@ -460,7 +457,7 @@
                 url: "api/requests.php",
                 data: {
                     method: "DELETE",
-                    consulUrl : consulUrl,
+                    consulUrl: consulUrl,
                     url: myJsonString
                 }
             }).done(function () {
@@ -677,7 +674,7 @@
             return valid;
         }
 
-        if (consulTitle != null){
+        if (consulTitle != null) {
             $('#consulTitleID').text(consulTitle);
         } else {
             $('#consulTitleID').text('Consul-Tree');
@@ -753,7 +750,7 @@
         });
         $('#keyInputId').on('keyup', function () {
             check4Key();
-            var keyValueInput = $('#inputKeyValueId');
+            var keyValueInput = $('.inputKeyValueClass');
             if ($(this).val().slice(-1) == "/") {
                 keyValueInput.addClass('hidden');
             } else {
