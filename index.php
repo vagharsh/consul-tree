@@ -63,7 +63,7 @@
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v4.5 | Updated on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
+        <p class="navbar-text navbar-lef">Consul-tree v4.6 | Updated on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
         </ul>
@@ -115,18 +115,18 @@
             <div class="modal-body">
                 <form class="">
                     <div class="form-group">
-                        <span for="keyInputId" class="control-label">Folder / Key Name : </span>
+                        <h5 for="keyInputId" class="control-label">Folder / Key Name :  <i>To create a folder, end the key with /</i></h5>
                         <input type="text" class="form-control" id="keyInputId" value="">
                         <input type="hidden" class="form-control" id="pathInputId" value="">
                     </div>
 
                     <div class="form-group">
-                        <span for="pathDescribeID" class=" control-label">Path : </span>
+                        <span for="pathDescribeID" class="control-label">Path : </span>
                         <textarea class="form-control" id="pathDescribeID" readonly>@</textarea>
                     </div>
                 </form>
-                <h5>To create a folder, end the key with /</h5>
-                <textarea class="form-control" id="inputKeyValueId"></textarea>
+                <span for="pathDescribeID" class="control-label">Value : </span>
+                <textarea class="form-control" id="pathDescribeID"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" id="createKeyBtnId" class="btn btn-info">Yes</button>
@@ -218,6 +218,9 @@
 </div>
 <script>
     $(document).ready(function () {
+        var consulUrl = null,
+            consulTitle = null;
+
         <?php
         require './config.php';
         ?>
@@ -244,7 +247,7 @@
 
             var fr = new FileReader();
             fr.onload = function (e) {
-                var result = JSON.parse(e.target.result), decodedValue;
+                var result = JSON.parse(e.target.result);
                 $('#importExportModalId').modal('hide');
                 $('#processingMdlID').modal({
                     backdrop: 'static',
@@ -674,9 +677,9 @@
             return valid;
         }
 
-        try {
+        if (consulTitle != null){
             $('#consulTitleID').text(consulTitle);
-        } catch(err){
+        } else {
             $('#consulTitleID').text('Consul-Tree');
         }
 
@@ -752,7 +755,7 @@
             check4Key();
             var keyValueInput = $('#inputKeyValueId');
             if ($(this).val().slice(-1) == "/") {
-                keyValueInput.toggleClass('hidden');
+                keyValueInput.addClass('hidden');
             } else {
                 if (keyValueInput.hasClass('hidden')) {
                     keyValueInput.removeClass('hidden');
