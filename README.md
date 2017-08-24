@@ -8,7 +8,7 @@ It's a Tree for Consul https://www.consul.io/, https://github.com/hashicorp/cons
 
 Demo
 ------
-Screenshots of the application are [Here](https://github.com/vagharsh/consul-tree/blob/master/demo.md).
+Screenshots of the application are [here](https://github.com/vagharsh/consul-tree/blob/master/demo.md).
 
 Quick Start
 -----------
@@ -39,16 +39,17 @@ run it next to the consul container, just make sure you to create a `config.php`
 
 Release Notes 
 ---------
-Release notes are available [Here](https://github.com/vagharsh/consul-tree/blob/master/release.md).
+Release notes are available [here](https://github.com/vagharsh/consul-tree/blob/master/release.md).
 
 
 Issues / Features request tracker
 -----------
 Found an issue or have a feature request ?
 
-Please create an issue [Here](https://github.com/vagharsh/consul-tree/issues).
+Please create an issue [here](https://github.com/vagharsh/consul-tree/issues).
 
 
 Copyright and License
 ---------------------
-Copyright and License information are available [Here](https://github.com/vagharsh/consul-tree/blob/master/LICENSE).
+Copyright and License under the [MIT license](https://github.com/vagharsh/consul-tree/blob/master/LICENSE).
+
