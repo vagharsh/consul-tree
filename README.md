@@ -1,13 +1,10 @@
 # Consul-tree
 
-It's a Tree for Consul https://github.com/hashicorp/consul KV section.
+It's a Tree for Consul https://www.consul.io/, https://github.com/hashicorp/consul KV section.
 
 **Supported Methods:** Cut, Copy, Paste, Create, Delete.
 
 **Available Features:** Search, Import, Export.
-
-The applicaiton is based on: 
-JQuery, Twitter Bootstrap, JStree.
 
 Demo
 ------
