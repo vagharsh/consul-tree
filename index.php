@@ -63,7 +63,7 @@
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v4.7 | Updated
+        <p class="navbar-text navbar-lef">Consul-tree v4.8 | Updated
             on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
@@ -362,7 +362,8 @@
                     url: path
                 }
             }).done(function (data) {
-                if (firstRun === true && checkIfDataIsValid(data) !== true) {
+                var validationCheck = checkIfDataIsValid(data);
+                if (firstRun === true && validationCheck !== true) {
                     $('#loadingTreeMdlID').modal({
                         backdrop: 'static',
                         keyboard: false
@@ -386,7 +387,6 @@
                     if (generateTree == true) {
                         tree = parseCustomJson(data, tree);
                         $('#ConsulTree').jstree(tree);
-
                     } else {
                         $('#ajaxReturnFieldID').text(JSON.stringify(data));
                     }
@@ -399,7 +399,6 @@
             $.ajax({
                 method: "POST",
                 url: "api/requests.php",
-                async: false,
                 data: {
                     method: "GET",
                     url: path
@@ -606,7 +605,6 @@
             $.ajax({
                 method: "POST",
                 url: "api/import.php",
-                async: false,
                 data: {
                     consulUrl: consulUrl,
                     urls: srcPath
@@ -617,7 +615,7 @@
         }
 
         function checkIfDataIsValid(data) {
-            var newArray = [], lastItem, arrayedpath, i, newPath, array2 = [];
+            var newArray = [], lastItem, arrayedpath, i, newPath, onlyParents = [];
             $.each(data, function (key, item) {
                 if (item.substr(item.length - 1) !== '/') {
                     item = item.substr(0, item.lastIndexOf("/") + 1);
@@ -643,30 +641,30 @@
                 });
                 newArray1.splice(-1, 1);
                 newPath = newArray1.join('/');
-                array2.push(newPath);
+                onlyParents.push(newPath);
             }
 
-            array2 = cleanArray(array2.sort());
+            onlyParents = cleanArray(onlyParents.sort());
 
             var uniqueNames1 = [];
-            var uniqueNames2 = [];
-            var uniqueNames3 = [];
+            var allArrayData = [];
+            var allOnlyParents = [];
 
-            $.each(array2, function (i, el) {
+            $.each(onlyParents, function (i, el) {
                 if ($.inArray(el, uniqueNames1) === -1) uniqueNames1.push(el);
             });
 
             $.each(uniqueNames1, function (i, el) {
-                uniqueNames3.push(el + '/');
+                allOnlyParents.push(el + '/');
             });
 
             $.each(newArray, function (i, el) {
-                if ($.inArray(el, uniqueNames2) === -1) uniqueNames2.push(el);
+                if ($.inArray(el, allArrayData) === -1) allArrayData.push(el);
             });
 
             var valid = true;
-            for (i = 0; i < uniqueNames3.length; i++) {
-                if (uniqueNames2.indexOf(uniqueNames3[i]) == -1) {
+            for (i = 0; i < allOnlyParents.length; i++) {
+                if (allArrayData.indexOf(allOnlyParents[i]) == -1) {
                     valid = false;
                     break;
                 }
