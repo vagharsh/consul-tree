@@ -6,6 +6,14 @@ $consulUrl = $_POST['consulUrl'];
 $manage = json_decode($list);
 $directory = './tmp/consul/';
 
+ini_set('max_execution_time', 120);
+
+if (PHP_OS === 'Windows'){
+    exec(sprintf("rd /s /q %s", escapeshellarg($directory)));
+} else {
+    exec(sprintf("rm -rf %s", escapeshellarg($directory)));
+}
+
 foreach ($manage as $item){
     $path = $directory . $item;
     $lastChar = substr($path, -1);
