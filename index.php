@@ -63,7 +63,7 @@
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v4.8 | Updated
+        <p class="navbar-text navbar-lef">Consul-tree v4.9 | Updated
             on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
@@ -165,10 +165,36 @@
                 <h4 class="modal-title"><strong>No Data</strong></h4>
             </div>
             <div class="modal-body">
-                <span><strong>No Data</strong> was found on Consul, <strong>Create</strong> at a root form the consul-ui, or <strong>Import</strong> an existing Tree form a previous export</span>
+                <span><strong>No Data</strong> was found on Consul, <strong>Create</strong> a <strong>root</strong> form the consul-ui, or <strong>Import</strong> an existing Tree form a previous export</span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="noConnectionModalId" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header modal-header-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><strong>No Connection</strong></h4>
+            </div>
+            <div class="modal-body">
+                <span>Check the connection between the <strong>Consul-Tree</strong> and <strong id="consulUrlId"></strong> and then try again.</span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="connectingModalId" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <p class="text-center">Establishing connection with <strong id="consulFullUrlId"></strong></p>
             </div>
         </div>
     </div>
@@ -192,7 +218,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header" style="border-bottom: 0px">
-                <h5 class="modal-title text-center">Fixing the tree, please wait...</h5>
+                <h5 class="modal-title text-center">Validating Tree structure, please wait...</h5>
             </div>
             <div class="modal-body">
                 <div class="progress">
@@ -235,6 +261,23 @@
             }
         }, allKeys = consulUrl + "?keys", to = false;
 
+        Array.prototype.contains = function(v) {
+            for(var i = 0; i < this.length; i++) {
+                if(this[i] === v) return true;
+            }
+            return false;
+        };
+
+        Array.prototype.unique = function() {
+            var arr = [];
+            for(var i = 0; i < this.length; i++) {
+                if(!arr.contains(this[i])) {
+                    arr.push(this[i]);
+                }
+            }
+            return arr;
+        };
+
         function importConsul() {
             var files = document.getElementById('jsonInputFile').files;
             if (files.length <= 0) {
@@ -275,29 +318,21 @@
                 srcPath = obj;
             }
 
-            $.each(srcPath, function (key, item) {
-                var fullPath = consulUrl + item;
-
-                if (fullPath.substr(fullPath.length - 1) !== '/') {
-                    type = 'key';
-                    getValue(item);
-                    value = $('#gotNodeValue').text();
-                } else {
-                    value = null;
-                    type = 'folder';
+            $.ajax({
+                method: "POST",
+                url: "api/requests.php",
+                data: {
+                    consulUrl: consulUrl,
+                    method: "EXPORT",
+                    value: JSON.stringify(srcPath)
                 }
-                arr.push({
-                    key: item,
-                    type: type,
-                    value: value
-                });
+            }).done(function (data) {
+                dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(JSON.parse(data)));
+                dlAnchorElem = document.getElementById('downloadAnchorElem');
+                dlAnchorElem.setAttribute("href", dataStr);
+                dlAnchorElem.setAttribute("download", "consul-data.json");
+                dlAnchorElem.click();
             });
-
-            dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(arr));
-            dlAnchorElem = document.getElementById('downloadAnchorElem');
-            dlAnchorElem.setAttribute("href", dataStr);
-            dlAnchorElem.setAttribute("download", "consul-data.json");
-            dlAnchorElem.click();
         }
 
         function parseCustomJson(data, tree) {
@@ -335,17 +370,26 @@
             return tree;
         }
 
-        function cleanArray(actual) {
-            var newArray = [];
-            for (var i = 0; i < actual.length; i++) {
-                if (actual[i]) {
-                    newArray.push(actual[i]);
-                }
+        function extractHostname(url) {
+            var hostname;
+            //find & remove protocol (http, ftp, etc.) and get hostname
+
+            if (url.indexOf("://") > -1) {
+                hostname = url.split('/')[2];
             }
-            return newArray;
+            else {
+                hostname = url.split('/')[0];
+            }
+
+            //find & remove port number
+            hostname = hostname.split(':')[0];
+            //find & remove "?"
+            hostname = hostname.split('?')[0];
+
+            return hostname;
         }
 
-        function getTree(tree, generateTree, path, firstRun) {
+        function getTree(tree, generateTree, path) {
             if (path == undefined || path == false) {
                 path = allKeys;
             } else {
@@ -356,39 +400,41 @@
                 method: "POST",
                 url: "api/requests.php",
                 dataType: 'json',
-                async: false,
                 data: {
                     method: "GET",
                     url: path
                 }
             }).done(function (data) {
-                var validationCheck = checkIfDataIsValid(data);
-                if (firstRun === true && validationCheck !== true) {
-                    $('#loadingTreeMdlID').modal({
-                        backdrop: 'static',
-                        keyboard: false
-                    });
-                    setTimeout(function () {
-                        fixTree();
-                    }, 2000);
-                }
-
-                if (data.length === 0) {
+                $('#connectingModalId').modal('hide');
+                if (data['data'] == '[]') {
                     $('#noTreeModalId').modal({
                         backdrop: 'static',
                         keyboard: false
                     });
+                    console.log("No Data was found on Consul");
                     $('#searchInputId').attr('disabled', true);
                     $('#enableManualExport').attr('disabled', true);
+                } else if (data['http_code'] !== 200){
+                    $('#consulUrlId').text(extractHostname(consulUrl));
+                    $('#noConnectionModalId').modal({
+                        backdrop: 'static',
+                        keyboard: false
+                    });
+                    console.log("No Connection to the Consul host");
+                    $('#searchInputId').attr('disabled', true);
+                    $('#enableManualExport').attr('disabled', true);
+                    $('#importExportBtnId').attr('disabled', true);
                 } else {
+                    var realData = JSON.parse(data['data']);
+                    dataValidation(realData);
                     $('#searchInputId').attr('disabled', false);
                     $('#enableManualExport').attr('disabled', false);
-                    data = data.sort();
+                    realData = realData.sort();
                     if (generateTree == true) {
-                        tree = parseCustomJson(data, tree);
+                        tree = parseCustomJson(realData, tree);
                         $('#ConsulTree').jstree(tree);
                     } else {
-                        $('#ajaxReturnFieldID').text(JSON.stringify(data));
+                        $('#ajaxReturnFieldID').text(JSON.stringify(realData));
                     }
                 }
             });
@@ -424,7 +470,7 @@
                     url: JSON.stringify(paths)
                 }
             }).done(function () {
-                fixTree();
+                dataValidation();
             })
         }
 
@@ -598,13 +644,18 @@
             }
         }
 
-        function fixTree() {
-            getTree(tree, false, false);
-            var srcPath = $('#ajaxReturnFieldID').text();
+        function fixTree(data) {
+            var srcPath;
+            if (data == undefined || data.length == 0) {
+                getTree(tree, false, false);
+                srcPath = $('#ajaxReturnFieldID').text();
+            } else {
+                srcPath = JSON.stringify(data);
+            }
 
             $.ajax({
                 method: "POST",
-                url: "api/import.php",
+                url: "api/fixTree.php",
                 data: {
                     consulUrl: consulUrl,
                     urls: srcPath
@@ -614,63 +665,70 @@
             });
         }
 
-        function checkIfDataIsValid(data) {
-            var newArray = [], lastItem, arrayedpath, i, newPath, onlyParents = [];
+        function getFoldersOnly(data){
+            var onlyFolders = [], uniqueFolders;
             $.each(data, function (key, item) {
                 if (item.substr(item.length - 1) !== '/') {
-                    item = item.substr(0, item.lastIndexOf("/") + 1);
+                    item = item.split( '/' ).slice( 0, -1 ).join( '/' );
+                    item = item + '/';
                 }
-                item = item.substr(0, item.lastIndexOf("/") + 1);
-                newArray.push(item);
+                onlyFolders.push(item);
             });
 
-            newArray = cleanArray(newArray.sort());
-
-            for (i = 0; i < newArray.length; i++) {
-                var newArray1 = [];
-                if (i === 0) {
-                    lastItem = newArray[0];
-                } else {
-                    lastItem = newArray[i - 1];
-                }
-                arrayedpath = newArray[i].split("/");
-                $.each(arrayedpath, function (key, item) {
-                    if (item.length !== 0) {
-                        newArray1.push(item);
-                    }
-                });
-                newArray1.splice(-1, 1);
-                newPath = newArray1.join('/');
-                onlyParents.push(newPath);
-            }
-
-            onlyParents = cleanArray(onlyParents.sort());
-
-            var uniqueNames1 = [];
-            var allArrayData = [];
-            var allOnlyParents = [];
-
-            $.each(onlyParents, function (i, el) {
-                if ($.inArray(el, uniqueNames1) === -1) uniqueNames1.push(el);
-            });
-
-            $.each(uniqueNames1, function (i, el) {
-                allOnlyParents.push(el + '/');
-            });
-
-            $.each(newArray, function (i, el) {
-                if ($.inArray(el, allArrayData) === -1) allArrayData.push(el);
-            });
-
-            var valid = true;
-            for (i = 0; i < allOnlyParents.length; i++) {
-                if (allArrayData.indexOf(allOnlyParents[i]) == -1) {
-                    valid = false;
-                    break;
-                }
-            }
-            return valid;
+            uniqueFolders = onlyFolders.unique();
+            return uniqueFolders;
         }
+
+        function explodeData(data){
+            var newData = [], obj = '';
+            $.each(data, function (key, item) {
+                obj = item;
+                while (obj !== ''){
+                    obj = obj.split( '/' ).slice( 0, -1 ).join( '/' );
+                    if (obj !== ''){
+                        newData.push(obj + '/');
+                    }
+                }
+            });
+            return newData;
+        }
+
+        function dataValidation(data){
+            console.log("Validating data structure");
+            var tobeFixedData = [], i = 0,onlyFolders, explodedData, uniqueFolders;
+            if (data == undefined || data.length == 0) {
+                data = $('#ajaxReturnFieldID').text();
+            }
+
+            $('#loadingTreeMdlID').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+
+            onlyFolders = getFoldersOnly(data);
+            explodedData = explodeData(onlyFolders);
+            uniqueFolders = explodedData.unique();
+
+            for (i = 0; i < uniqueFolders.length; i++) {
+                if (data.indexOf(uniqueFolders[i]) == -1) {
+                    tobeFixedData.push(uniqueFolders[i]);
+                }
+            }
+
+            if (tobeFixedData.length > 0){
+                console.log("Fixing data structure");
+                fixTree(tobeFixedData);
+            }
+
+            $('#loadingTreeMdlID').modal('hide');
+        }
+
+        $('#consulFullUrlId').text(consulUrl);
+        $('#connectingModalId').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        console.log("Establishing Connection to the Consul host");
 
         if (consulTitle != null) {
             $('#consulTitleID').text(consulTitle);

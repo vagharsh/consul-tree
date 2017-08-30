@@ -20,8 +20,11 @@ function getFromConsul($url) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL, $url);
     $result = curl_exec($ch);
+    $info = curl_getinfo($ch);
     curl_close($ch);
-    return ($result);
+    $data["data"] = $result;
+    $data["http_code"] = $info['http_code'];
+    return($data);
 }
 
 function deleteFromConsul($url){
