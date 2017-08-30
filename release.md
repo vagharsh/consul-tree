@@ -1,5 +1,12 @@
 Release Notes
 ---------
+[v4.9](https://github.com/vagharsh/consul-tree/commit/fd797bce0aaf37f8ab24d2ff58396009d40fd68d) :
+- Many UI addition for better user interaction (modals).
+- Export is now being handled by the back-end.
+- Data validate function improvements. 
+- NO Data, NO Connection notifications (modals) were added.
+- Some steps are now logged in the console.
+
 [v4.7](https://github.com/vagharsh/consul-tree/commit/429d6bf010e994c130483ede84cdcff715154276) :
 - Bug fixes
 - Code correction - Cleanup
