@@ -1,5 +1,10 @@
 Release Notes
 ---------
+[v5.0](https://github.com/vagharsh/consul-tree/commit/e8f1c4e867606ad8ccf8edd6dfbf92fcccc678c9) :
+- UI/UX enhancements.
+- Fixed issue with large data export / import.
+- Fixed issue with copy / cut / paste / delete.
+
 [v4.9](https://github.com/vagharsh/consul-tree/commit/fd797bce0aaf37f8ab24d2ff58396009d40fd68d) :
 - Many UI addition for better user interaction (modals).
 - Export is now being handled by the back-end.
