@@ -35,9 +35,9 @@ if ($method === 'DELETE') {
     echo (putInConsul($url, $value));
 } elseif ($method === 'BulkIMPORT') {
     $decodedJson = json_decode($value);
-    foreach ($decodedJson as $item) {
-        $keyUrl = $url . $item->key;
-        echo (putInConsul($keyUrl, $item->value));
+    foreach ($decodedJson as $key => $value ) {
+        $keyUrl = $url . $key;
+        echo (putInConsul($keyUrl, $value));
     }
 } elseif ($method === 'CCP') {
     $decodedJson = json_decode($url);
@@ -63,10 +63,22 @@ if ($method === 'DELETE') {
             $toBeExportedData[$item] = null;
         } else {
             $sourceUrl = $consulUrl . $item . "?raw";
-            $toBeExportedData[$item] = getFromConsul($sourceUrl);
+            $toBeExportedData[$item] = getFromConsul($sourceUrl)['data'];
         }
     }
-    echo (json_encode($toBeExportedData));
+
+    $filename = './tmp/consul-tree.json';
+    $fp = fopen($filename, 'w');
+    fwrite($fp, json_encode($toBeExportedData));
+    fclose($fp);
+
+    if (file_exists($filename)) {
+        header("Content-disposition: attachment; filename=" . $filename);
+        header("Content-type: application/json");
+        header('Pragma: no-cache');
+        readfile($filename);
+        unlink($filename);
+    }
 } else {
     echo (json_encode(getFromConsul($url)));
 }

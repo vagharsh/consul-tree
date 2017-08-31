@@ -25,10 +25,6 @@
             font-size: 1.8em;
         }
 
-        .border-left {
-            border-left: 1px #E6E6E6 solid;
-        }
-
         .padded-right-middle {
             margin-right: 15px;
         }
@@ -45,6 +41,19 @@
         .jstree-container-ul {
             margin-right: 15px !important;
         }
+
+        #searchclear {
+            position: absolute;
+            right: 25px;
+            top: 0;
+            bottom: 0;
+            height: 26px;
+            margin: auto;
+            font-size: 14px;
+            cursor: pointer;
+            color: #ccc;
+        }
+
     </style>
     <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
     <link rel="shortcut icon" type="image/png" href="lib/_favicon.png"/>
@@ -63,7 +72,7 @@
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v4.9 | Updated
+        <p class="navbar-text navbar-lef">Consul-tree v5.0 | Updated
             on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
@@ -76,27 +85,29 @@
             <div class="form-group">
                 <div class="col-sm-5 padded-right-middle" style="width:505px">
                     <label class="sr-only" for="searchInputId">Search</label>
-                    <input type="text" id="searchInputId" value="" class="input form-control" placeholder="Search"
-                           style="margin:0 auto 1em auto;  padding:4px; border-radius:4px; border:1px solid silver;">
+                    <input type="text" id="searchInputId" value="" class="form-control search-box" placeholder="Search"
+                           style="margin:0 auto 1em auto;  padding:4px;">
+                    <span id="searchclear" class="glyphicon glyphicon-search"></span>
                 </div>
                 <button type="button" id="importExportBtnId" class="btn btn-primary" data-toggle="modal"
                         data-target="#importExportModalId">Import
                 </button>
-                <button type="button" class="btn btn-warning" id="enableManualExport">Enable Manual Export</button>
-                <button type="button" class="btn btn-info hidden" id="disableManualExport">Disable Manual Export
+                &nbsp;
+                <button type="button" class="btn btn-warning" id="enableExportBtnId">Enable Export</button>
+                <button type="button" class="btn btn-info hidden" id="disableManualExport">Disable Export
                 </button>
                 <button type="button" class="btn btn-success hidden" id="exportSelection">Export Selection</button>
             </div>
         </form>
     </div>
-    <div id="ConsulTree" class="well col-md-5 padded-right-middle"></div>
-    <div class="col-md-6 border-left" style="position: fixed; left: 757px; width: 568px;">
-        <span id="createElementText" style="color: #737373">Select a key to see its value, right-click on the tree to create an element.</span>
+    <div id="ConsulTree" class="well col-md-5"></div>
+    <div class="border-left" id="generalValueAreaID" style="position: fixed; width: 568px; padding-left: 15px">
+        <span id="createElementText" style="color: #737373">Select a key to get its value, right-click on the tree to create an element.</span>
         <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
         <br>
         <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
         </button>
-        <span class="update-control hidden" style="color: #737373">&nbsp;|&nbsp;To create an element, right-click on the tree.</span>
+        <span class="update-control hidden" style="color: #737373">&nbsp;&nbsp;To create an element, right-click on the tree.</span>
     </div>
 </div>
 
@@ -259,7 +270,11 @@
                 "themes": {"stripes": true},
                 'data': []
             }
-        }, allKeys = consulUrl + "?keys", to = false;
+        },
+            allKeys = consulUrl + "?keys",
+            to = false,
+            consulTreeDivID = $('#ConsulTree'),
+            leftPos = consulTreeDivID.outerWidth() + consulTreeDivID.offset().left ;
 
         Array.prototype.contains = function(v) {
             for(var i = 0; i < this.length; i++) {
@@ -317,7 +332,10 @@
             } else {
                 srcPath = obj;
             }
-
+            $('#processingMdlID').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
             $.ajax({
                 method: "POST",
                 url: "api/requests.php",
@@ -327,11 +345,19 @@
                     value: JSON.stringify(srcPath)
                 }
             }).done(function (data) {
-                dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(JSON.parse(data)));
-                dlAnchorElem = document.getElementById('downloadAnchorElem');
-                dlAnchorElem.setAttribute("href", dataStr);
-                dlAnchorElem.setAttribute("download", "consul-data.json");
-                dlAnchorElem.click();
+                if (data.length !== 0) {
+                    var contentType = 'text/json';
+                    var jsonFile = new Blob([JSON.stringify(data)], {type: contentType});
+                    var a = document.createElement('a');
+                    a.download = consulTitle.toLowerCase().replace(' ', '-') + '-exported.json';
+                    a.href = window.URL.createObjectURL(jsonFile);
+                    a.textContent = 'Download Consul-Tree-data';
+                    a.dataset.downloadurl = [contentType, a.download, a.href].join(':');
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                }
+                $('#processingMdlID').modal('hide');
             });
         }
 
@@ -411,27 +437,28 @@
                         backdrop: 'static',
                         keyboard: false
                     });
-                    console.log("No Data was found on Consul");
+                    //console.log("No Data was found on Consul");
                     $('#searchInputId').attr('disabled', true);
-                    $('#enableManualExport').attr('disabled', true);
+                    $('#enableExportBtnId').attr('disabled', true);
                 } else if (data['http_code'] !== 200){
                     $('#consulUrlId').text(extractHostname(consulUrl));
                     $('#noConnectionModalId').modal({
                         backdrop: 'static',
                         keyboard: false
                     });
-                    console.log("No Connection to the Consul host");
+                    //console.log("No Connection to the Consul host");
                     $('#searchInputId').attr('disabled', true);
-                    $('#enableManualExport').attr('disabled', true);
+                    $('#enableExportBtnId').attr('disabled', true);
                     $('#importExportBtnId').attr('disabled', true);
                 } else {
                     var realData = JSON.parse(data['data']);
-                    dataValidation(realData);
                     $('#searchInputId').attr('disabled', false);
-                    $('#enableManualExport').attr('disabled', false);
+                    $('#enableExportBtnId').attr('disabled', false);
                     realData = realData.sort();
                     if (generateTree == true) {
+                        dataValidation(realData);
                         tree = parseCustomJson(realData, tree);
+                        //console.log("Drawing the Tree");
                         $('#ConsulTree').jstree(tree);
                     } else {
                         $('#ajaxReturnFieldID').text(JSON.stringify(realData));
@@ -450,10 +477,11 @@
                     url: path
                 }
             }).done(function (data) {
+                var realData = JSON.parse(data);
                 if (obj) {
-                    obj.val(data);
+                    obj.val(realData['data']);
                 } else {
-                    $('#gotNodeValue').text(data);
+                    $('#gotNodeValue').text(realData['data']);
                 }
             });
         }
@@ -496,7 +524,6 @@
             var getPath = consulUrl + path;
             getTree(tree, false, getPath);
             var myJsonString = $('#ajaxReturnFieldID').text();
-
             $.ajax({
                 method: "POST",
                 url: "api/requests.php",
@@ -694,7 +721,7 @@
         }
 
         function dataValidation(data){
-            console.log("Validating data structure");
+            //console.log("Validating data structure");
             var tobeFixedData = [], i = 0,onlyFolders, explodedData, uniqueFolders;
             if (data == undefined || data.length == 0) {
                 data = $('#ajaxReturnFieldID').text();
@@ -716,26 +743,41 @@
             }
 
             if (tobeFixedData.length > 0){
-                console.log("Fixing data structure");
+                //console.log("Fixing data structure");
                 fixTree(tobeFixedData);
             }
 
             $('#loadingTreeMdlID').modal('hide');
         }
 
+        function checkClearIcon(){
+            var searchClearIcon = $('#searchclear');
+            if ($('#searchInputId').val().length > 0){
+                searchClearIcon.removeClass('glyphicon-search');
+                searchClearIcon.addClass('glyphicon-remove');
+            } else {
+                searchClearIcon.removeClass('glyphicon-remove');
+                searchClearIcon.addClass('glyphicon-search');
+            }
+        }
+
+        $('#generalValueAreaID').css("left", leftPos + 14 + "px");
         $('#consulFullUrlId').text(consulUrl);
         $('#connectingModalId').modal({
             backdrop: 'static',
             keyboard: false
         });
-        console.log("Establishing Connection to the Consul host");
+        //console.log("Establishing Connection to the Consul host");
 
-        if (consulTitle != null) {
-            $('#consulTitleID').text(consulTitle);
-        } else {
-            $('#consulTitleID').text('Consul-Tree');
+        if (consulTitle == null) {
+            consulTitle = 'Consul-Tree';
         }
-
+        $('#consulTitleID').text(consulTitle);
+        $("#searchclear").click(function(){
+            $("#searchInputId").val('');
+            checkClearIcon();
+            $('#searchInputId').trigger('keyup');
+        });
         $('#createNodeModalId').on('shown.bs.modal', function () {
             $('#keyInputId').focus();
             var selectedNodePath = $('#selectedNodeID').text(), splittedArray, newPath;
@@ -757,14 +799,14 @@
             var value = $('#cKeyValue').val();
             sendToConsul(path, value, true)
         });
-        $('#enableManualExport').on('click', function () {
+        $('#enableExportBtnId').on('click', function () {
             localStorage['treeBackup'] = localStorage['jstree'];
             var updateControl = $('.update-control');
             updateControl.addClass('hidden');
             updateControl.attr('disabled', true);
             $('#createElementText').addClass('hidden');
             $('#exportSelection').removeClass('hidden');
-            $('#enableManualExport').toggleClass('hidden');
+            $('#enableExportBtnId').toggleClass('hidden');
             $('#disableManualExport').toggleClass('hidden');
             $("#ConsulTree").jstree("destroy");
             var tree = {
@@ -789,21 +831,6 @@
             location.reload();
         });
         $('#importConsulBtnId').on('click', importConsul);
-        $('#ConsulTree').on("select_node.jstree", function (e, data) {
-            workingInst = $.jstree.reference(data.reference);
-            var updateControl = $('.update-control');
-            if (data.node.id.substr(-1) != '/') {
-                updateControl.attr('disabled', false);
-                updateControl.removeClass('hidden');
-                $('#createElementText').addClass('hidden');
-                getValue(data.node.id, $('#cKeyValue'));
-            } else {
-                updateControl.addClass('hidden');
-                updateControl.attr('disabled', true);
-                $('#createElementText').removeClass('hidden');
-            }
-            $('#selectedNodeID').text(data.node.id);
-        });
         $('#keyInputId').on('keyup', function () {
             check4Key();
             var keyValueInput = $('.inputKeyValueClass');
@@ -838,6 +865,7 @@
             exportConsul($("#ConsulTree").jstree(true).get_selected());
         });
         $('#searchInputId').keyup(function () {
+            checkClearIcon();
             if (to) {
                 clearTimeout(to)
             }
@@ -846,7 +874,28 @@
                 $('#ConsulTree').jstree(true).search(v);
             }, 250);
         });
-        if (localStorage['treeBackup']) localStorage.removeItem('treeBackup');
+        consulTreeDivID.on("select_node.jstree", function (e, data) {
+            workingInst = $.jstree.reference(data.reference);
+            var updateControl = $('.update-control'),
+                keyValueTextArea = $('#cKeyValue');
+            if (data.node.id.substr(-1) != '/') {
+                updateControl.attr('disabled', false);
+                updateControl.removeClass('hidden');
+                $('#createElementText').addClass('hidden');
+                getValue(data.node.id, keyValueTextArea);
+            } else {
+                updateControl.addClass('hidden');
+                updateControl.attr('disabled', true);
+                $('#createElementText').removeClass('hidden');
+                keyValueTextArea.text('');
+                keyValueTextArea.val('');
+            }
+            $('#selectedNodeID').text(data.node.id);
+        });
+        if (localStorage['treeBackup']) {
+            localStorage['jstree'] = localStorage['treeBackup'];
+            localStorage.removeItem('treeBackup');
+        }
         getTree(tree, true, false, true);
     });
 </script>
