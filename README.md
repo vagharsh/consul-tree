@@ -14,14 +14,23 @@ Quick Start
 -----------
 To use the Consul-tree you need PHP and a web server.
 
-- Clone the repo into your web directory 
-- Configure the config.php file, modify the consul url with it's port and IP address of the consul and kv store section
-do not change the syntax of the line inside the php since it is going to be echo-ed into the JS.
-The config line should look like this
-`consulUrl = "http://192.168.220.145:8500/v1/kv/";`
-- To add a custom Title to your Consul-Tree, add `consulTitle = "My Consul Tree";` to the config.php file.
+- Clone the repo into your web directory.
+- Configure the `config.php` file as mentioned below.
 - Access the consul-tree e.g. http://yourserver/consuldirectory
-- To create a folder or a key, Right click inside the tree where you want the folder / key to be created
+- To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
+
+Configuration
+----------------
+If you are using the consul-tree on a physical host, then inside this repo you can find the `config/php` which contains the configurations that need to be configured before accessing the Consult-tree, an example of the `config.php` file is as below.
+
+```javascript
+consulUrl = "http://192.168.220.145:8500/v1/kv/";
+consulTitle = "My Consul Tree";
+```
+
+- Modify the `consulUrl` value to match your consul url with it's `ipaddress:port` and the kv store section.
+- Modify the `consulTitle` value with your custom title to your Consul-Tree.
+- **Do not change the syntax of the config.php content, since it will be echo-ed into the JS.**
 
 NOTE
 ------
@@ -30,24 +39,26 @@ NOTE
 Consul-tree on Docker
 -----------
 Check my docker repo for a ready made container at https://hub.docker.com/r/vagharsh/consul-tree/.
-run it next to the consul container, just make sure you to create a `config.php` file on the same host which consul is hosted and mount that file with the container and run it with this command. 
 
-`docker run --name consul-tree -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always vagharsh/consul-tree:5.0`
+On the Docker host that you want to run the Consul-tree container from.
+- Create a `config.php` file.
+- Copy and paste the configuration file contents from the above section and change their values to match your consul host and the title as well if you want a custom title.
+- Mount it to the container. 
+- Example of how to start the consul-tree container:
 
-**Current working version corresponds to the Image on Docker hub vagharsh/consul-tree:5.0**
+`docker run -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:5.0`
 
+**Current stable version corresponds to the Image on Docker hub vagharsh/consul-tree:5.0**
 
 Release Notes 
 ---------
 Release notes are available [here](https://github.com/vagharsh/consul-tree/blob/master/release.md).
-
 
 Issues / Features request tracker
 -----------
 Found an issue or have a feature request ?
 
 Please create an issue [here](https://github.com/vagharsh/consul-tree/issues).
-
 
 Copyright and License
 ---------------------
