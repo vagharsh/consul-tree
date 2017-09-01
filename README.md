@@ -34,7 +34,7 @@ consulTitle = "My Consul Tree";
 
 NOTE
 ------
-**Consul tree does not work if there isn't a root folder to start with, therfore wither you create a root folder from Consul-UI or import previosly exported JSON data from Consul-tree**
+**Consul tree does not work if there isn't a root folder to start with, therfore either you create a root folder from Consul-UI or import previosly exported JSON data from Consul-tree**
 
 Consul-tree on Docker
 -----------
