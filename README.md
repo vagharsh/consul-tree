@@ -15,7 +15,7 @@ Quick Start
 To use the Consul-tree you need PHP and a web server.
 
 - Clone the repo into your web directory.
-- Configure the `config.php` file as mentioned below.
+- Configure the `config.php` file as mentioned [here](https://github.com/vagharsh/consul-tree/blob/master/README.md#configuration).
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
@@ -42,7 +42,7 @@ Check my docker repo for a ready made container at https://hub.docker.com/r/vagh
 
 On the Docker host that you want to run the Consul-tree container from.
 - Create a `config.php` file.
-- Copy and paste the configuration file contents from the above section and change their values to match your consul host and the title as well if you want a custom title.
+- Copy and paste the configuration file contents from [here](https://github.com/vagharsh/consul-tree/blob/master/README.md#configuration) and change their values to match your consul host and the title as well if you want a custom title.
 - Mount it to the container. 
 - Example of how to start the consul-tree container:
 
