@@ -67,7 +67,7 @@ if ($method === 'DELETE') {
         }
     }
 
-    $filename = './tmp/consul-tree.json';
+    $filename = 'tmp/consul-tree.json';
     $fp = fopen($filename, 'w');
     fwrite($fp, json_encode($toBeExportedData));
     fclose($fp);
