@@ -72,7 +72,7 @@
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v5.0 | Updated
+        <p class="navbar-text navbar-lef">Consul-tree v5.2 | Updated
             on: <?php echo date("F d Y", filemtime('index.php')); ?></p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
@@ -103,7 +103,9 @@
     <div id="ConsulTree" class="well col-md-5"></div>
     <div class="border-left" id="generalValueAreaID" style="position: fixed; width: 568px; padding-left: 15px">
         <span id="createElementText" style="color: #737373">Select a key to get its value, right-click on the tree to create an element.</span>
-        <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
+        <div class="form-group">
+            <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
+        </div>
         <br>
         <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
         </button>
@@ -479,10 +481,13 @@
             }).done(function (data) {
                 var realData = JSON.parse(data);
                 if (obj) {
+                    obj.text(realData['data']);
                     obj.val(realData['data']);
                 } else {
                     $('#gotNodeValue').text(realData['data']);
                 }
+                obj.parent().removeClass('has-warning');
+                obj.attr('readonly', false)
             });
         }
 
@@ -878,6 +883,12 @@
             workingInst = $.jstree.reference(data.reference);
             var updateControl = $('.update-control'),
                 keyValueTextArea = $('#cKeyValue');
+
+            keyValueTextArea.parent().addClass('has-warning');
+            keyValueTextArea.attr('readonly', true);
+            keyValueTextArea.text('Loading...');
+            keyValueTextArea.val('Loading...');
+
             if (data.node.id.substr(-1) != '/') {
                 updateControl.attr('disabled', false);
                 updateControl.removeClass('hidden');
