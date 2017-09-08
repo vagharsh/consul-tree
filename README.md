@@ -46,9 +46,9 @@ On the Docker host that you want to run the Consul-tree container from.
 - Mount it to the container. 
 - Example of how to start the consul-tree container:
 
-`docker run -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:5.1`
+`docker run -d -v /opt/consul-tree/config.php:/var/www/html/config.php -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:5.2`
 
-**Current stable version corresponds to the Image on Docker hub vagharsh/consul-tree:5.1**
+**Current stable version corresponds to the Image on Docker hub vagharsh/consul-tree:5.2**
 
 Release Notes 
 ---------
