@@ -1,7 +1,11 @@
 Release Notes
 ---------
+[v5.2](https://github.com/vagharsh/consul-tree/commit/03d31d75ab089f0eccaeadd1257a8c94bc9e932d) :
+- Fixed the loading value field.
+- UI enhancement.
+
 [v5.1](https://github.com/vagharsh/consul-tree/commit/550abf3fd8e3ee65730ee58d83c0ab90e9539d34) :
-- Fixed Export issue
+- Fixed Export issue.
 
 [v5.0](https://github.com/vagharsh/consul-tree/commit/e8f1c4e867606ad8ccf8edd6dfbf92fcccc678c9) :
 - UI/UX enhancements.
