@@ -1,5 +1,13 @@
 Release Notes
 ---------
+[v6.0](https://github.com/vagharsh/consul-tree/) :
+- Consul-tree now supports multiple roots.
+- Access to multiple Consuls from one UI.
+- Create Root folder if does not exist.
+- Landing page is changed from php to pure html.
+- Config file has been changed from mixed php and js to pure json.
+- UI enhancement.
+
 [v5.2](https://github.com/vagharsh/consul-tree/commit/03d31d75ab089f0eccaeadd1257a8c94bc9e932d) :
 - Fixed the loading value field.
 - UI enhancement.
