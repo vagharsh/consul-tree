@@ -53,7 +53,7 @@ On the Docker host that you want to run the Consul-tree container from.
 
 Example of how to start the consul-tree container:
 
-`docker run -d -v /opt/consul-tree/config:/var/www/html/config -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:6.0`
+`docker run -d -v /opt/consul-tree:/var/www/html/config -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:6.0`
 
 **Current stable version corresponds to the Image on Docker hub vagharsh/consul-tree:6.0**
 
