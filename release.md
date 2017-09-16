@@ -1,6 +1,6 @@
 Release Notes
 ---------
-[v6.0](https://github.com/vagharsh/consul-tree/) :
+[v6.0](https://github.com/vagharsh/consul-tree/pull/11/commits/48eb372729a1fcb516b80f19ebacea58d85c7b90) :
 - Consul-tree now supports multiple roots.
 - Access to multiple Consuls from one UI.
 - Create Root folder if does not exist.
