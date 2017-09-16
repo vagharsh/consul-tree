@@ -13,7 +13,7 @@ if (isset($_POST['consul'])) {
 
     $manage = json_decode($path);
 
-    $directory = './tmp/consul/';
+    $directory = sys_get_temp_dir() . '/consul/';
 
     ini_set('max_execution_time', 120);
 
