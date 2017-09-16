@@ -12,7 +12,6 @@ if (isset($_POST['consul'])) {
     }
 
     $manage = json_decode($path);
-
     $directory = sys_get_temp_dir() . '/consul/';
 
     ini_set('max_execution_time', 120);
@@ -26,7 +25,6 @@ if (isset($_POST['consul'])) {
     foreach ($manage as $item) {
         $path = $directory . $item;
         $lastChar = substr($path, -1);
-
         if ($lastChar == '/') {
             if (!file_exists($path)) {
                 mkdir($path, 0777, true);
@@ -41,14 +39,15 @@ if (isset($_POST['consul'])) {
     }
 
     $scanned_directory = array_diff(scandir($directory), array('..', '.', 'undefined'));
-
     $objects = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory), RecursiveIteratorIterator::SELF_FIRST);
+
     foreach ($objects as $name => $object) {
         $lastChar = substr($name, -1);
         if ($lastChar != '.' && $lastChar != '..' && $lastChar != '\\') {
-            $name = str_replace("./tmp/consul", "", $name);
-            $name = str_replace("\\", "/", $name);
-            $name = $consulUrlModified . $name . '/';
+            $directory = str_replace('\\', "/", $directory);
+            $name = str_replace('\\', "/", $name);
+            $name = str_replace($directory, "", $name);
+            $name = $consulUrlModified . "/" .$name . '/';
             putInConsul($name, false);
         }
     }
