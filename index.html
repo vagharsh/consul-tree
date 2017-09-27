@@ -346,7 +346,10 @@
 
                     function resetLocationStorage() {
                         localStorage.removeItem('selectedConsul');
-                        localStorage.removeItem('ccp');
+                        localStorage.removeItem('ccpObjType');
+                        localStorage.removeItem('ccpObjPaths');
+                        localStorage.removeItem('ccpObjParent');
+                        localStorage.removeItem('ccpObjConsul');
                         location.reload();
                     }
 
@@ -579,7 +582,7 @@
                         });
                     }
 
-                    function ccPaste(path, parentId, replace, ccType) {
+                    function ccPaste(path, parentId, replace, ccType, srcConsul) {
                         $.ajax({
                             method: "POST",
                             url: "api/requests.php",
@@ -589,10 +592,14 @@
                                 parentId: parentId,
                                 replace: replace,
                                 ccType: ccType,
+                                srcConsul: srcConsul,
                                 path: path
                             }
                         }).done(function (data) {
-                            localStorage.removeItem('ccp');
+                            localStorage.removeItem('ccpObjType');
+                            localStorage.removeItem('ccpObjPaths');
+                            localStorage.removeItem('ccpObjParent');
+                            localStorage.removeItem('ccpObjConsul');
                             location.reload();
                         })
                     }
@@ -726,14 +733,13 @@
                                             var inst = $.jstree.reference(data.reference),
                                                 obj = inst.get_node(data.reference), srcPath;
 
-                                            $('#ccTypeFieldID').text('cut');
-                                            $('#ccParentFieldID').text(obj.parent);
-                                            var url = '';
-                                            $.each(obj['children_d'], function (key, item) {
-                                                srcPath[key] = url + item;
-                                            });
-                                            srcPath = srcPath.concat([url + obj['id']]);
-                                            localStorage['ccp'] = JSON.stringify(srcPath);
+                                            srcPath = obj['children_d'];
+                                            srcPath = srcPath.concat([obj['id']]);
+
+                                            localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpObjParent'] = obj.parent;
+                                            localStorage['ccpObjType'] = 'copy';
+                                            localStorage['ccpObjConsul'] = consulUrl;
                                         }
                                     },
                                     "copy": {
@@ -743,23 +749,22 @@
                                         "label": "Copy",
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
-                                                obj = inst.get_node(data.reference), srcPath = [];
+                                                obj = inst.get_node(data.reference), srcPath;
 
-                                            $('#ccTypeFieldID').text('copy');
-                                            $('#ccParentFieldID').text(obj.parent);
-                                            var url = '';
-                                            $.each(obj['children_d'], function (key, item) {
-                                                srcPath[key] = url + item;
-                                            });
-                                            srcPath = srcPath.concat([url + obj['id']]);
-                                            localStorage['ccp'] = JSON.stringify(srcPath);
+                                            srcPath = obj['children_d'];
+                                            srcPath = srcPath.concat([obj['id']]);
+
+                                            localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpObjParent'] = obj.parent;
+                                            localStorage['ccpObjType'] = 'copy';
+                                            localStorage['ccpObjConsul'] = consulUrl;
                                         }
                                     },
                                     "paste": {
                                         "separator_before": false,
                                         "icon": false,
                                         "_disabled": function (data) {
-                                            return !(localStorage['ccp'] && localStorage['ccp'].length > 0);
+                                            return !(localStorage['ccpObjPaths'] && localStorage['ccpObjPaths'].length > 0);
                                         },
                                         "separator_after": false,
                                         "label": "Paste",
@@ -771,9 +776,11 @@
 
                                             var inst = $.jstree.reference(data.reference),
                                                 obj = inst.get_node(data.reference),
-                                                srcPath = JSON.parse(localStorage['ccp']),
-                                                parent = $('#ccParentFieldID').text(),
-                                                ccType = $('#ccTypeFieldID').text();
+                                                srcPath = JSON.parse(localStorage['ccpObjPaths']),
+                                                parent = localStorage['ccpObjParent'],
+                                                ccType = localStorage['ccpObjType'],
+                                                srcConsul = localStorage['ccpObjConsul'];
+
 
                                             $.each(srcPath, function (key, item) {
                                                 item = item.replace(/\\/g, '/');
@@ -781,7 +788,7 @@
                                             });
 
                                             setTimeout(function () {
-                                                ccPaste(JSON.stringify(srcPath), parent, obj.id, ccType);
+                                                ccPaste(JSON.stringify(srcPath), parent, obj.id, ccType, srcConsul);
                                             }, 500);
                                         }
                                     }

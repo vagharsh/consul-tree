@@ -45,14 +45,14 @@ if (isset($_POST['method'])) {
             foreach ($pathsList as $item) {
                 $lastChar = substr($item, -1);
                 $newPath = str_replace($parentId, $replaceWith, $item);
-                $fullUrl = $consul . $newPath;
-                $sourceUrl = $consul . $item;
+                $newUrl = $consul . $newPath;
+                $sourceUrl = $_POST['srcConsul'] . $item;
 
                 if ($lastChar == '/') {
-                    putInConsul($fullUrl, false);
+                    putInConsul($newUrl, false);
                 } else {
                     $sourceUrl = $sourceUrl . "?raw";
-                    putInConsul($fullUrl, getFromConsul($sourceUrl)['data']);
+                    putInConsul($newUrl, getFromConsul($sourceUrl)['data']);
                 }
                 if ($ccType == 'cut'){
                     deleteFromConsul($sourceUrl);
