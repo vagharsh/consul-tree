@@ -1,4 +1,4 @@
-**Below screen-shots are for versions 6.0**
+**Below screen-shots are for versions 6.x**
 
 Dashboard
 --------

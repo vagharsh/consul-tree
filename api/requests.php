@@ -10,8 +10,7 @@ if (isset($_POST['method'])) {
             $consul = $_POST['consul'];
             $path = $_POST['path'];
 
-            $keyUrl = $consul . $path . "?keys";
-            $pathsList = json_decode(getFromConsul($keyUrl)['data']);
+            $pathsList = json_decode($path);
             foreach ($pathsList as $item) {
                 $keyUrl = $consul . $item;
                 echo(deleteFromConsul($keyUrl));
@@ -40,24 +39,28 @@ if (isset($_POST['method'])) {
             $parentId = $_POST['parentId'];
             $path = $_POST['path'];
             $consul = $_POST['consul'];
+            $ccType = $_POST['ccType'];
 
-            $decodedJson = json_decode($path);
-            foreach ($decodedJson as $item) {
+            $pathsList = json_decode($path);
+            foreach ($pathsList as $item) {
                 $lastChar = substr($item, -1);
                 $newPath = str_replace($parentId, $replaceWith, $item);
                 $fullUrl = $consul . $newPath;
                 $sourceUrl = $consul . $item;
-    
+
                 if ($lastChar == '/') {
-                    putInConsul($newPath, false);
+                    putInConsul($fullUrl, false);
                 } else {
                     $sourceUrl = $sourceUrl . "?raw";
                     putInConsul($fullUrl, getFromConsul($sourceUrl)['data']);
                 }
+                if ($ccType == 'cut'){
+                    deleteFromConsul($sourceUrl);
+                }
             }
         }
     } elseif ($method === 'EXPORT') {
-        if (isset($_POST['path']) && isset($_POST['consul'])) {
+        if (isset($_POST['consul'])) {
             $consul = $_POST['consul'];
 
             $toBeExportedData = array();
@@ -77,12 +80,12 @@ if (isset($_POST['method'])) {
                     $toBeExportedData[$item] = getFromConsul($sourceUrl)['data'];
                 }
             }
-    
-            $filename = 'tmp/consul-tree.json';
+
+            $filename = sys_get_temp_dir() . 'consul-tree.json';
             $fp = fopen($filename, 'w');
             fwrite($fp, json_encode($toBeExportedData));
             fclose($fp);
-    
+
             if (file_exists($filename)) {
                 header("Content-disposition: attachment; filename=" . $filename);
                 header("Content-type: application/json");
@@ -90,6 +93,28 @@ if (isset($_POST['method'])) {
                 readfile($filename);
                 unlink($filename);
             }
+        }
+    } elseif ($method === 'RENAME') {
+        if (isset($_POST['path']) && isset($_POST['consul'])) {
+            $consul = $_POST['consul'];
+            $path = $_POST['path'];
+
+            $decodedJson = json_decode($path);
+            foreach ($decodedJson as $key => $value) {
+                $lastChar = substr($key, -1);
+                $origUrl = $consul . $key;
+                $newUrl = $consul . $value;
+
+                if ($lastChar == '/') {
+                    putInConsul($newUrl, false);
+                } else {
+                    $sourceUrl = $origUrl . "?raw";
+                    putInConsul($newUrl, getFromConsul($sourceUrl)['data']);
+                }
+
+                deleteFromConsul($origUrl);
+            }
+            deleteFromConsul($consul . $_POST['selectedObj']);
         }
     }
 }
