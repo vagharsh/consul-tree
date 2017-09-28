@@ -1,70 +1,25 @@
+<?php
+$calledUrl = "$_SERVER[REQUEST_URI]";
+if (strpos($calledUrl, 'backend') == false) {
+    $calledLoc = '';
+    $backendStatus = 'backend/';
+} else {
+    $calledLoc = '../';
+    $backendStatus = '';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title id="pageTitle"></title>
-    <style>
-        html {
-            margin: 0;
-            padding: 0;
-            font-size: 62.5%;
-        }
-
-        .btn:focus,.btn:active {
-            outline: none !important;
-        }
-
-        body {
-            margin: 0 auto;
-            padding: 20px 10px;
-            font-size: 14px;
-            font-size: 1.4em;
-        }
-
-        body > .container {
-            padding: 20px 15px 0;
-        }
-
-        h1 {
-            font-size: 1.8em;
-        }
-
-        .padded-right-middle {
-            margin-right: 15px;
-        }
-
-        #ConsulTree {
-            overflow-x: auto;
-        }
-
-        .page-header {
-            border-bottom: 0 !important;
-            padding-bottom: 0 !important;
-        }
-
-        .jstree-container-ul {
-            margin-right: 15px !important;
-        }
-
-        #searchclear {
-            position: absolute;
-            right: 25px;
-            top: 0;
-            bottom: 0;
-            height: 26px;
-            margin: auto;
-            font-size: 14px;
-            cursor: pointer;
-            color: #ccc;
-        }
-
-    </style>
-    <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
-    <link rel="shortcut icon" type="image/png" href="lib/_favicon.png"/>
-    <link href="lib/css/bootstrap.min.css" rel="stylesheet">
-    <script src="lib/js/jquery-3.2.1.min.js"></script>
-    <script src="lib/js/bootstrap.min.js"></script>
-    <script src="lib/js/jstree.js"></script>
+    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/css/tree.css"/>
+    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/themes/default/style.min.css"/>
+    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/png" href="<?php echo $calledLoc; ?>lib/_favicon.png"/>
+    <script src="<?php echo $calledLoc; ?>lib/js/jquery-3.2.1.min.js"></script>
+    <script src="<?php echo $calledLoc; ?>lib/js/bootstrap.min.js"></script>
+    <script src="<?php echo $calledLoc; ?>lib/js/jstree.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -87,7 +42,7 @@
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v6.0</p>
+        <p class="navbar-text navbar-lef">Consul-tree v6.1</p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
         </ul>
@@ -107,7 +62,6 @@
                         data-toggle="modal"
                         data-target="#importExportModalId">Import
                 </button>
-                &nbsp;
                 <button type="button" class="btn btn-warning" disabled="disabled" id="enableExportBtnId">Enable Export
                 </button>
                 <button type="button" class="btn btn-info hidden" disabled="disabled" id="disableManualExport">Disable
@@ -138,7 +92,7 @@
 <div class="modal fade" id="createNodeModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header modal-header-danger">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><strong>Create Folder / Key</strong></h4>
@@ -170,7 +124,7 @@
 <div class="modal fade" id="importExportModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <div class="modal-header modal-header-danger">
+            <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><strong>Import Consul Data</strong></h4>
@@ -194,7 +148,7 @@
 <div class="modal fade" id="noTreeModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <div class="modal-header modal-header-danger">
+            <div class="modal-header modal-header-warning">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title"><strong>No Data</strong></h4>
@@ -226,6 +180,31 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="renameModalId" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><strong>Rename Node</strong></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <h5 for="oldNodePathId" class="control-label">Old node name</h5>
+                    <input type="text" id="oldNodePathId" value="" class="form-control" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <h5 for="newNodePathId" class="control-label">New node name</h5>
+                    <input type="text" id="newNodePathId" value="" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="renameConfirmBtnId" disabled="disabled" class="btn btn-info">Rename</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="connectingModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -238,7 +217,7 @@
 <div class="modal fade" id="processingMdlID" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
-            <div class="modal-header" style="border-bottom: 0px">
+            <div class="modal-header modal-header-primary" style="border-bottom: 0px">
                 <h5 class="modal-title text-center">Processing your request, please wait...</h5>
             </div>
             <div class="modal-body">
@@ -273,9 +252,7 @@
 <p class="hidden" id="selectedNodeID"></p>
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
-<div class="page-footer">
-
-</div>
+<div class="page-footer"></div>
 <script>
     $(document).ready(function () {
         function extractHostname(url) {
@@ -321,11 +298,12 @@
 
         $('#pageTitle').text("Consul Tree | " + window.location.hostname);
 
-        $.getJSON("config/config.json", function (consul) {
+        $.getJSON("<?php echo $calledLoc; ?>config/config.json", function (consul) {
             if (consul) {
                 if (consul.length !== 0) {
                     var optionElems, consulUrl, consulTitle, selectedConsulJson,
                         consulUrlSelector = $("#consulUrlSelectorId"),
+                        renameModalObj = $('#renameModalId'),
                         createFolderCallee;
 
                     for (var elem in consul) {
@@ -379,6 +357,10 @@
 
                     function resetLocationStorage() {
                         localStorage.removeItem('selectedConsul');
+                        localStorage.removeItem('ccpObjType');
+                        localStorage.removeItem('ccpObjPaths');
+                        localStorage.removeItem('ccpObjParent');
+                        localStorage.removeItem('ccpObjConsul');
                         location.reload();
                     }
 
@@ -399,13 +381,13 @@
                             });
                             $.ajax({
                                 method: "POST",
-                                url: "api/requests.php",
+                                url: "<?php echo $backendStatus; ?>requests.php",
                                 data: {
                                     path: consulUrl,
                                     method: "BulkIMPORT",
                                     value: JSON.stringify(result)
                                 }
-                            }).done(function (data) {
+                            }).done(function () {
                                 location.reload();
                             });
                         };
@@ -421,7 +403,7 @@
                         });
                         $.ajax({
                             method: "POST",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             dataType: "json",
                             data: {
                                 consul: consulUrl,
@@ -446,7 +428,7 @@
                     }
 
                     function parseCustomJson(data, tree, file) {
-                        if (file){
+                        if (file) {
                             tree.core.data.push({
                                 "id": data,
                                 "parent": "#",
@@ -463,7 +445,7 @@
                                 }
                             }
 
-                            tree.core.data.push({"id": picked, "parent": "#", "text": picked});
+                            tree.core.data.push({"id": picked, "parent": "#", "text": picked.slice(0, -1)});
                             var xdata = data;
                             xdata.splice(xdata.indexOf(picked), 1);
 
@@ -494,22 +476,27 @@
                         return tree;
                     }
 
-                    function check4Roots(data){
-                        var roots = [], arrays = [];
+                    function check4Roots(data) {
+                        var roots = [], arrays = [],
+                            filteredSplittedPath;
+
                         $.each(data, function (key, item) {
-                            if (item.split("/").length-1 == 1){
-                                roots.push(item);
-                            } else if (item.split("/").length-1 == 0) {
+                            filteredSplittedPath = item.split("/");
+                            if (item.indexOf("/") == -1) {
                                 roots.push(item);
                             }
+                            if (filteredSplittedPath.length !== 1){
+                                if (filteredSplittedPath[1].length  == 0) {
+                                    roots.push(item);
+                                }
+                            }
                         });
-
                         for (var i = 0; i < roots.length; i++) {
                             var stringLen = roots[i].length,
                                 list = [];
                             $.each(data, function (key, item) {
                                 var firstChars = item.substring(0, stringLen);
-                                if (firstChars === roots[i]){
+                                if (firstChars === roots[i]) {
                                     list.push(item);
                                 }
                             });
@@ -518,19 +505,13 @@
                         return arrays;
                     }
 
-                    function getTree(tree, generateTree, path) {
-                        if (path == undefined || path == false) {
-                            path = allKeys;
-                        } else {
-                            path = path + "?keys";
-                        }
-
+                    function getTree(tree) {
                         $.ajax({
                             method: "GET",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             dataType: 'json',
                             data: {
-                                path: path
+                                path: allKeys
                             }
                         }).done(function (data) {
                             $('#connectingModalId').modal('hide');
@@ -539,12 +520,13 @@
                                     backdrop: 'static',
                                     keyboard: false
                                 });
+                                var createRootBtnObj = $('#createRootBtnId');
                                 //console.log("No Data was found on Consul");
                                 $('#searchInputId').attr('disabled', true);
                                 $('#enableExportBtnId').attr('disabled', true);
-                                $('#createRootBtnId').removeClass('hidden');
+                                createRootBtnObj.removeClass('hidden');
                                 $('#importExportBtnId').attr('disabled', false);
-                                $('#createRootBtnId').attr('disabled', false);
+                                createRootBtnObj.attr('disabled', false);
                             } else if (data['http_code'] !== 200) {
                                 $('#consulUrlId').text(extractHostname(consulUrl));
                                 $('#noConnectionModalId').modal({
@@ -569,25 +551,21 @@
 
                                 realData = realData.sort();
 
-                                if (generateTree == true) {
-                                    if (dataValidation(realData)){
-                                        var el = check4Roots(realData), obj, file;
-                                        for (var i = 0; i < el.length; i++) {
-                                            obj = el[i];
-                                            file = false;
-                                            if (obj.length == 1){
-                                                if (obj[0].indexOf("/") == -1){
-                                                    obj = obj[0];
-                                                    file = true;
-                                                }
+                                if (dataValidation(realData)) {
+                                    var el = check4Roots(realData), obj, file;
+                                    for (var i = 0; i < el.length; i++) {
+                                        obj = el[i];
+                                        file = false;
+                                        if (obj.length == 1) {
+                                            if (obj[0].indexOf("/") == -1) {
+                                                obj = obj[0];
+                                                file = true;
                                             }
-                                            tree = parseCustomJson(obj, tree, file);
                                         }
-                                        //console.log("Drawing the Tree");
-                                        $('#ConsulTree').jstree(tree);
+                                        tree = parseCustomJson(obj, tree, file);
                                     }
-                                } else {
-                                    $('#ajaxReturnFieldID').text(JSON.stringify(realData));
+                                    //console.log("Drawing the Tree");
+                                    $('#ConsulTree').jstree(tree);
                                 }
                             }
                         });
@@ -597,7 +575,7 @@
                         path = consulUrl + path + "?raw";
                         $.ajax({
                             method: "GET",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
                                 path: path
                             }
@@ -610,23 +588,29 @@
                                 $('#gotNodeValue').text(realData['data']);
                             }
                             obj.parent().removeClass('has-warning');
-                            obj.attr('readonly', false)
+                            //obj.attr('readonly', false)
                         });
                     }
 
-                    function ccPaste(paths, parentId, replace) {
+                    function ccPaste(path, parentId, replace, ccType, srcConsul) {
                         $.ajax({
                             method: "POST",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
                                 method: "CCP",
                                 consul: consulUrl,
                                 parentId: parentId,
                                 replace: replace,
-                                path: JSON.stringify(paths)
+                                ccType: ccType,
+                                srcConsul: srcConsul,
+                                path: path
                             }
                         }).done(function () {
-                            dataValidation();
+                            localStorage.removeItem('ccpObjType');
+                            localStorage.removeItem('ccpObjPaths');
+                            localStorage.removeItem('ccpObjParent');
+                            localStorage.removeItem('ccpObjConsul');
+                            location.reload();
                         })
                     }
 
@@ -639,14 +623,14 @@
                         var fullPath = consulUrl + path;
                         $.ajax({
                             method: "POST",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
                                 method: "PUT",
                                 path: fullPath,
                                 value: value
                             }
                         }).done(function () {
-                            if (reload !== undefined || reload !== false) {
+                            if (reload) {
                                 location.reload();
                             }
                         })
@@ -655,7 +639,7 @@
                     function deleteNode(path) {
                         $.ajax({
                             method: "POST",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
                                 method: "DELETE",
                                 consul: consulUrl,
@@ -664,6 +648,58 @@
                         }).done(function () {
                             location.reload();
                         })
+                    }
+
+                    $('#renameConfirmBtnId').on('click', function () {
+                        $('#renameModalId').modal('hide');
+                        renameNode();
+                    });
+                    $('#newNodePathId').on('keyup', function () {
+                        var newText = $('#newNodePathId').val();
+                        if (newText.length >= 1) {
+                            $('#renameConfirmBtnId').attr('disabled', false);
+                        } else {
+                            $('#renameConfirmBtnId').attr('disabled', true);
+                        }
+                    });
+
+                    function renameNode() {
+                        var newNodeName = $('#newNodePathId').val(),
+                            objChildren = workingObj['children_d'],
+                            objParent = workingObj['parent'],
+                            oldObjPath = workingObj['id'],
+                            newNodePath, newNodeString, newData = {};
+
+                        $('#processingMdlID').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+
+                        setTimeout(function () {
+                            if (oldObjPath.substr(oldObjPath.length - 1) !== '/') {
+                                newNodeString = objParent + newNodeName;
+                                newNodePath = oldObjPath.replace(oldObjPath, newNodeString);
+                                newData[oldObjPath] = newNodePath;
+                            } else {
+                                $.each(objChildren, function (key, item) {
+                                    newNodeString = objParent + newNodeName + '/';
+                                    newNodePath = item.replace(oldObjPath, newNodeString);
+                                    newData[item] = newNodePath;
+                                });
+                            }
+                            $.ajax({
+                                method: "POST",
+                                url: "<?php echo $backendStatus; ?>requests.php",
+                                data: {
+                                    consul: consulUrl,
+                                    method: "RENAME",
+                                    path: JSON.stringify(newData),
+                                    selectedObj: oldObjPath
+                                }
+                            }).done(function () {
+                                location.reload();
+                            });
+                        }, 500);
                     }
 
                     function customMenu(node) {
@@ -681,80 +717,90 @@
                                     $('#createNodeModalId').modal('show');
                                 }
                             },
-                            "cut": {
+                            "rename": {
+                                "separator_before": false,
+                                "icon": false,
+                                "separator_after": true,
+                                "label": "Rename",
+                                "action": function (data) {
+                                    workingInst = $.jstree.reference(data.reference);
+                                    workingObj = workingInst.get_node(data.reference);
+
+                                    $('#oldNodePathId').val(workingObj['text']);
+                                    $('#renameModalId').modal('show');
+                                }
+                            },
+                            "edit": {
                                 "separator_before": true,
                                 "separator_after": false,
-                                "label": "Cut",
-                                "action": function (data) {
-                                    var inst = $.jstree.reference(data.reference),
-                                        obj = inst.get_node(data.reference);
+                                "label": "Edit",
+                                "submenu": {
+                                    "cut": {
+                                        "separator_before": true,
+                                        "separator_after": false,
+                                        "label": "Cut",
+                                        "action": function (data) {
+                                            var inst = $.jstree.reference(data.reference),
+                                                obj = inst.get_node(data.reference), srcPath;
 
-                                    $('#ccTypeFieldID').text('cut');
-                                    $('#ccParentFieldID').text(obj.parent);
+                                            srcPath = obj['children_d'];
+                                            srcPath = srcPath.concat([obj['id']]);
 
-                                    var path = consulUrl + obj.id;
-                                    getTree(false, false, path);
+                                            localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpObjParent'] = obj.parent;
+                                            localStorage['ccpObjType'] = 'copy';
+                                            localStorage['ccpObjConsul'] = consulUrl;
+                                        }
+                                    },
+                                    "copy": {
+                                        "separator_before": false,
+                                        "icon": false,
+                                        "separator_after": false,
+                                        "label": "Copy",
+                                        "action": function (data) {
+                                            var inst = $.jstree.reference(data.reference),
+                                                obj = inst.get_node(data.reference), srcPath;
 
-                                    if (inst.is_selected(obj)) {
-                                        inst.cut(inst.get_top_selected());
-                                    } else {
-                                        inst.cut(obj);
-                                    }
-                                }
-                            },
-                            "copy": {
-                                "separator_before": false,
-                                "icon": false,
-                                "separator_after": false,
-                                "label": "Copy",
-                                "action": function (data) {
-                                    var inst = $.jstree.reference(data.reference),
-                                        obj = inst.get_node(data.reference);
+                                            srcPath = obj['children_d'];
+                                            srcPath = srcPath.concat([obj['id']]);
 
-                                    $('#ccTypeFieldID').text('copy');
-                                    $('#ccParentFieldID').text(obj.parent);
+                                            localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpObjParent'] = obj.parent;
+                                            localStorage['ccpObjType'] = 'copy';
+                                            localStorage['ccpObjConsul'] = consulUrl;
+                                        }
+                                    },
+                                    "paste": {
+                                        "separator_before": false,
+                                        "icon": false,
+                                        "_disabled": function (data) {
+                                            return !(localStorage['ccpObjPaths'] && localStorage['ccpObjPaths'].length > 0);
+                                        },
+                                        "separator_after": false,
+                                        "label": "Paste",
+                                        "action": function (data) {
+                                            $('#processingMdlID').modal({
+                                                backdrop: 'static',
+                                                keyboard: false
+                                            });
 
-                                    var path = consulUrl + obj.id;
-                                    getTree(false, false, path);
+                                            var inst = $.jstree.reference(data.reference),
+                                                obj = inst.get_node(data.reference),
+                                                srcPath = JSON.parse(localStorage['ccpObjPaths']),
+                                                parent = localStorage['ccpObjParent'],
+                                                ccType = localStorage['ccpObjType'],
+                                                srcConsul = localStorage['ccpObjConsul'];
 
-                                    if (inst.is_selected(obj)) {
-                                        inst.copy(inst.get_top_selected());
-                                    } else {
-                                        inst.copy(obj);
-                                    }
-                                }
-                            },
-                            "paste": {
-                                "separator_before": false,
-                                "icon": false,
-                                "_disabled": function (data) {
-                                    return !$.jstree.reference(data.reference).can_paste();
-                                },
-                                "separator_after": false,
-                                "label": "Paste",
-                                "action": function (data) {
-                                    var inst = $.jstree.reference(data.reference),
-                                        obj = inst.get_node(data.reference),
-                                        srcPath = JSON.parse($('#ajaxReturnFieldID').text()),
-                                        parent = $('#ccParentFieldID').text(),
-                                        ccType = $('#ccTypeFieldID').text();
 
-                                    $.each(srcPath, function (key, item) {
-                                        item = item.replace(/\\/g, '/');
-                                        srcPath[key] = item;
-                                    });
+                                            $.each(srcPath, function (key, item) {
+                                                item = item.replace(/\\/g, '/');
+                                                srcPath[key] = item;
+                                            });
 
-                                    $('#processingMdlID').modal({
-                                        backdrop: 'static',
-                                        keyboard: false
-                                    });
-                                    setTimeout(function () {
-                                        ccPaste(srcPath, parent, obj.id);
-                                    }, 500);
-
-                                    if (ccType == 'cut') {
-                                        srcPath = srcPath.sort();
-                                        deleteNode(srcPath[0]);
+                                            setTimeout(function () {
+                                                ccPaste(JSON.stringify(srcPath), parent, obj.id, ccType, srcConsul);
+                                            }, 500);
+                                        }
                                     }
                                 }
                             },
@@ -766,7 +812,15 @@
                                 "label": "Delete",
                                 "action": function (data) {
                                     var inst = $.jstree.reference(data.reference),
-                                        obj = inst.get_node(data.reference);
+                                        obj = inst.get_node(data.reference),
+                                        srcPath = [];
+
+                                    if (obj['id'].slice(-1) === '/'){
+                                        srcPath = obj['children_d'];
+                                    }
+
+                                    srcPath.push(obj['id']);
+                                    srcPath = JSON.stringify(srcPath);
 
                                     if (confirm('Are you sure you want to DELETE ' + obj.id + ' ?')) {
                                         $('#processingMdlID').modal({
@@ -774,7 +828,7 @@
                                             keyboard: false
                                         });
                                         setTimeout(function () {
-                                            deleteNode(obj.id);
+                                            deleteNode(srcPath);
                                         }, 500);
                                     }
                                 }
@@ -806,8 +860,9 @@
                         }
                         $.ajax({
                             method: "POST",
-                            url: "api/fixTree.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
+                                method: "FIX",
                                 consul: consulUrl,
                                 path: data
                             }
@@ -846,12 +901,12 @@
 
                     function dataValidation(data) {
                         //console.log("Validating data structure");
-                        var tobeFixedData = [], i = 0, onlyFolders, explodedData, uniqueFolders, status = true;
-                        if (data == undefined || data.length == 0) {
-                            data = JSON.parse($('#ajaxReturnFieldID').text());
-                        }
+                        var tobeFixedData = [], i = 0, onlyFolders,
+                            explodedData, uniqueFolders,
+                            loadingModalObj = $('#loadingTreeMdlID'),
+                            status = true;
 
-                        $('#loadingTreeMdlID').modal({
+                        loadingModalObj.modal({
                             backdrop: 'static',
                             keyboard: false
                         });
@@ -870,9 +925,10 @@
                             //console.log("Fixing data structure");
                             fixTree(tobeFixedData);
                             status = false;
+                        } else {
+                            loadingModalObj.modal('hide');
                         }
 
-                        $('#loadingTreeMdlID').modal('hide');
                         return status;
                     }
 
@@ -891,6 +947,14 @@
                     $('#connectingModalId').modal({
                         backdrop: 'static',
                         keyboard: false
+                    });
+
+                    renameModalObj.on('shown.bs.modal', function () {
+                        $('#newNodePathId').focus();
+                    });
+
+                    renameModalObj.on('hidden.bs.modal', function () {
+                        $('#newNodePathId').val('');
                     });
 
                     createNodeModalObj.on('hidden.bs.modal', function () {
@@ -948,7 +1012,7 @@
                             }
                         };
 
-                        getTree(tree, true, false);
+                        getTree(tree);
                     });
                     $('#disableManualExport').on('click', function () {
                         if (localStorage['treeBackup']) {
@@ -963,26 +1027,40 @@
                         createFolderCallee = "createRootBtnId";
                     });
                     $("#searchclear").on('click', function () {
-                        $("#searchInputId").val('');
+                        var searchInputObj = $("#searchInputId");
+                        searchInputObj.val('');
                         checkClearIcon();
-                        $('#searchInputId').trigger('keyup');
-                        $('#searchInputId').focus();
+                        searchInputObj.trigger('keyup');
+                        searchInputObj.focus();
                     });
                     $('#createKeyBtnId').on('click', function () {
                         var nodeName = $('#pathDescribeID').val();
                         var nodeValue = $('#inputKeyValueId').val(),
                             splittedPath = nodeName.split("/"),
-                            toBeCreatedPath = '';
+                            toBeCreatedPath = '', lastIsFile = false,
+                            i, filteredSplittedPath = [];
 
-                        for (var i = 0; i < splittedPath.length - 1; i++) {
-                            toBeCreatedPath = toBeCreatedPath + splittedPath[i] + "/";
-                            if (toBeCreatedPath !== '/') {
+                        $.each(splittedPath, function (key, item) {
+                            if (item.length !== 0){
+                                filteredSplittedPath.push(item);
+                            }
+                        });
+
+                        if (nodeName.substr(nodeName.length - 1) !== '/') {
+                            lastIsFile = true;
+                        }
+
+                        for ( i = 0; i < filteredSplittedPath.length; i++) {
+                            toBeCreatedPath = toBeCreatedPath + filteredSplittedPath[i] + "/";
+                            if (i == filteredSplittedPath.length -1) {
+                                if (lastIsFile){
+                                    sendToConsul(nodeName, nodeValue, true);
+                                } else {
+                                    sendToConsul(toBeCreatedPath, nodeValue, true);
+                                }
+                            } else {
                                 sendToConsul(toBeCreatedPath, nodeValue, false);
                             }
-                        }
-                        // Create the key
-                        if (nodeName.substr(nodeName.length - 1) !== '/') {
-                            sendToConsul(nodeName, nodeValue, true);
                         }
                     });
                     $('#exportSelection').on('click', function () {
@@ -1023,8 +1101,7 @@
 
                         $('#selectedNodeID').text(data.node.id);
                         keyValueTextArea.parent().addClass('has-warning');
-                        keyValueTextArea.attr('readonly', true);
-                        keyValueTextArea.text('Loading...');
+                        keyValueTextArea.val('Loading...');
 
                         if (data.node.id.substr(-1) != '/') {
                             updateControl.attr('disabled', false);
@@ -1035,7 +1112,6 @@
                             updateControl.addClass('hidden');
                             updateControl.attr('disabled', true);
                             $('#createElementText').removeClass('hidden');
-                            keyValueTextArea.text('');
                             keyValueTextArea.val('');
                         }
                     });
@@ -1044,7 +1120,7 @@
                         localStorage.removeItem('treeBackup');
                     }
 
-                    getTree(tree, true, false);
+                    getTree(tree);
                 }
             }
         });

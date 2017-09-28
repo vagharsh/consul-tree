@@ -1,12 +1,21 @@
 Release Notes
 ---------
+[v6.1](https://github.com/vagharsh/consul-tree)
+- Rename Feature.
+- Copy - CUT - PASTE between Consuls.
+- Fix-tree modal hide issue-fix.
+- Fixed issue with showing root files properly.
+- Warning Modal header colors.
+- Code structural change and cleanup.
+- UI enhancement.
+
 [v6.0](https://github.com/vagharsh/consul-tree/pull/11/commits/48eb372729a1fcb516b80f19ebacea58d85c7b90) :
 - Consul-tree now supports multiple roots.
 - Access to multiple Consuls from one UI.
 - Create Root folder if does not exist.
 - Landing page is changed from php to pure html.
 - Config file has been changed from mixed php and js to pure json.
-- Create tmp dirs inside default php tmp dir
+- Create tmp dirs inside default php tmp dir.
 - UI enhancement.
 
 [v5.2](https://github.com/vagharsh/consul-tree/commit/03d31d75ab089f0eccaeadd1257a8c94bc9e932d) :

@@ -2,10 +2,12 @@
 
 Tree representation of hashicorp/consul https://www.consul.io/, https://github.com/hashicorp/consul KV section.
 
-**Supported Methods:** Cut, Copy, Paste, Create, Delete.
+**Supported Methods:** Cut, Copy, Paste, Create, Delete, Rename.
 
 **Available Features:** Search, Import, Export.
 
+**Latest Features:** Copy - CUT - PASTE between Consuls.
+ 
 Demo
 ------
 Screen-shots of the application are [here](https://github.com/vagharsh/consul-tree/blob/master/demo.md).
@@ -53,18 +55,19 @@ On the Docker host that you want to run the Consul-tree container from.
 
 Example of how to start the consul-tree container:
 
-`docker run -d -v /opt/consul-tree:/var/www/html/config -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:6.0`
+`docker run -d -v /opt/consul-tree:/var/www/html/config -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:6.1`
 
-**Current stable version corresponds to the Image on Docker hub vagharsh/consul-tree:6.0**
+**Current stable version corresponds to the Image on Docker hub vagharsh/consul-tree:6.1**
 
 Release Notes 
 ---------
-v 6.0 : 
-- Consul-tree now supports multiple roots.
-- Access to multiple Consuls from one UI.
-- Create Root folder if does not exist.
-- Landing page is changed from php to pure html.
-- Config file has been changed from mixed php and js to pure json.
+v 6.1 : 
+- Rename Feature.
+- Copy - CUT - PASTE between Consuls.
+- Fix-tree modal hide issue-fix.
+- Fixed issue with showing root files properly.
+- Warning Modal header colors.
+- Code structural change and cleanup.
 - UI enhancement.
 
 Release notes are available [here](https://github.com/vagharsh/consul-tree/blob/master/release.md).
