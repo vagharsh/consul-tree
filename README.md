@@ -17,7 +17,7 @@ Quick Start
 To use the Consul-tree you need PHP and a web server.
 
 - Clone the repo into your web directory.
-- Configure the `config.json` file as mentioned [here](https://github.com/vagharsh/consul-tree/blob/master/README.md#configuration).
+- Configure the `config.json` file as mentioned [here](https://github.com/vagharsh/consul-tree#configuration).
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
