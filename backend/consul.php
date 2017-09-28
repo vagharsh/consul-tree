@@ -813,15 +813,13 @@ if (strpos($calledUrl, 'backend') == false) {
                                 "action": function (data) {
                                     var inst = $.jstree.reference(data.reference),
                                         obj = inst.get_node(data.reference),
-                                        srcPath;
+                                        srcPath = [];
 
                                     if (obj['id'].slice(-1) === '/'){
                                         srcPath = obj['children_d'];
-                                        srcPath.push(obj['id']);
-                                    } else {
-                                        srcPath = obj['id'];
                                     }
 
+                                    srcPath.push(obj['id']);
                                     srcPath = JSON.stringify(srcPath);
 
                                     if (confirm('Are you sure you want to DELETE ' + obj.id + ' ?')) {
