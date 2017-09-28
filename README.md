@@ -2,10 +2,12 @@
 
 Tree representation of hashicorp/consul https://www.consul.io/, https://github.com/hashicorp/consul KV section.
 
-**Supported Methods:** Cut, Copy, Paste, Create, Delete.
+**Supported Methods:** Cut, Copy, Paste, Create, Delete, Rename.
 
 **Available Features:** Search, Import, Export.
 
+**Latest Features:** Copy - CUT - PASTE between Consuls.
+ 
 Demo
 ------
 Screen-shots of the application are [here](https://github.com/vagharsh/consul-tree/blob/master/demo.md).
@@ -65,6 +67,7 @@ v 6.1 :
 - Fix-tree modal hide issue-fix.
 - Fixed issue with showing root files properly.
 - Warning Modal header colors.
+- Code structural change and cleanup.
 - UI enhancement.
 
 Release notes are available [here](https://github.com/vagharsh/consul-tree/blob/master/release.md).

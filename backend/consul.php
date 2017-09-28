@@ -1,15 +1,25 @@
+<?php
+$calledUrl = "$_SERVER[REQUEST_URI]";
+if (strpos($calledUrl, 'backend') == false) {
+    $calledLoc = '';
+    $backendStatus = 'backend/';
+} else {
+    $calledLoc = '../';
+    $backendStatus = '';
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title id="pageTitle"></title>
-    <link rel="stylesheet" href="lib/css/tree.css"/>
-    <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
-    <link rel="shortcut icon" type="image/png" href="lib/_favicon.png"/>
-    <link href="lib/css/bootstrap.min.css" rel="stylesheet">
-    <script src="lib/js/jquery-3.2.1.min.js"></script>
-    <script src="lib/js/bootstrap.min.js"></script>
-    <script src="lib/js/jstree.js"></script>
+    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/css/tree.css"/>
+    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/themes/default/style.min.css"/>
+    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/png" href="<?php echo $calledLoc; ?>lib/_favicon.png"/>
+    <script src="<?php echo $calledLoc; ?>lib/js/jquery-3.2.1.min.js"></script>
+    <script src="<?php echo $calledLoc; ?>lib/js/bootstrap.min.js"></script>
+    <script src="<?php echo $calledLoc; ?>lib/js/jstree.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -288,11 +298,12 @@
 
         $('#pageTitle').text("Consul Tree | " + window.location.hostname);
 
-        $.getJSON("config/config.json", function (consul) {
+        $.getJSON("<?php echo $calledLoc; ?>config/config.json", function (consul) {
             if (consul) {
                 if (consul.length !== 0) {
                     var optionElems, consulUrl, consulTitle, selectedConsulJson,
                         consulUrlSelector = $("#consulUrlSelectorId"),
+                        renameModalObj = $('#renameModalId'),
                         createFolderCallee;
 
                     for (var elem in consul) {
@@ -370,13 +381,13 @@
                             });
                             $.ajax({
                                 method: "POST",
-                                url: "api/requests.php",
+                                url: "<?php echo $backendStatus; ?>requests.php",
                                 data: {
                                     path: consulUrl,
                                     method: "BulkIMPORT",
                                     value: JSON.stringify(result)
                                 }
-                            }).done(function (data) {
+                            }).done(function () {
                                 location.reload();
                             });
                         };
@@ -392,7 +403,7 @@
                         });
                         $.ajax({
                             method: "POST",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             dataType: "json",
                             data: {
                                 consul: consulUrl,
@@ -453,8 +464,6 @@
                                 if (name.substr(-1) == '/') {
                                     tree.core.data.push({"id": name, "parent": parent, "text": filename})
                                 } else {
-                                    //console.log(name);
-                                    //console.log(parent);
                                     tree.core.data.push({
                                         "id": name,
                                         "parent": parent,
@@ -499,7 +508,7 @@
                     function getTree(tree) {
                         $.ajax({
                             method: "GET",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             dataType: 'json',
                             data: {
                                 path: allKeys
@@ -511,12 +520,13 @@
                                     backdrop: 'static',
                                     keyboard: false
                                 });
+                                var createRootBtnObj = $('#createRootBtnId');
                                 //console.log("No Data was found on Consul");
                                 $('#searchInputId').attr('disabled', true);
                                 $('#enableExportBtnId').attr('disabled', true);
-                                $('#createRootBtnId').removeClass('hidden');
+                                createRootBtnObj.removeClass('hidden');
                                 $('#importExportBtnId').attr('disabled', false);
-                                $('#createRootBtnId').attr('disabled', false);
+                                createRootBtnObj.attr('disabled', false);
                             } else if (data['http_code'] !== 200) {
                                 $('#consulUrlId').text(extractHostname(consulUrl));
                                 $('#noConnectionModalId').modal({
@@ -565,7 +575,7 @@
                         path = consulUrl + path + "?raw";
                         $.ajax({
                             method: "GET",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
                                 path: path
                             }
@@ -574,18 +584,18 @@
                             if (obj) {
                                 obj.text(realData['data']);
                                 obj.val(realData['data']);
-                                obj.parent().removeClass('has-warning');
-                                obj.attr('readonly', false)
                             } else {
                                 $('#gotNodeValue').text(realData['data']);
                             }
+                            obj.parent().removeClass('has-warning');
+                            //obj.attr('readonly', false)
                         });
                     }
 
                     function ccPaste(path, parentId, replace, ccType, srcConsul) {
                         $.ajax({
                             method: "POST",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
                                 method: "CCP",
                                 consul: consulUrl,
@@ -595,7 +605,7 @@
                                 srcConsul: srcConsul,
                                 path: path
                             }
-                        }).done(function (data) {
+                        }).done(function () {
                             localStorage.removeItem('ccpObjType');
                             localStorage.removeItem('ccpObjPaths');
                             localStorage.removeItem('ccpObjParent');
@@ -613,7 +623,7 @@
                         var fullPath = consulUrl + path;
                         $.ajax({
                             method: "POST",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
                                 method: "PUT",
                                 path: fullPath,
@@ -629,7 +639,7 @@
                     function deleteNode(path) {
                         $.ajax({
                             method: "POST",
-                            url: "api/requests.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
                                 method: "DELETE",
                                 consul: consulUrl,
@@ -679,7 +689,7 @@
                             }
                             $.ajax({
                                 method: "POST",
-                                url: "api/requests.php",
+                                url: "<?php echo $backendStatus; ?>requests.php",
                                 data: {
                                     consul: consulUrl,
                                     method: "RENAME",
@@ -852,8 +862,9 @@
                         }
                         $.ajax({
                             method: "POST",
-                            url: "api/fixTree.php",
+                            url: "<?php echo $backendStatus; ?>requests.php",
                             data: {
+                                method: "FIX",
                                 consul: consulUrl,
                                 path: data
                             }
@@ -892,12 +903,12 @@
 
                     function dataValidation(data) {
                         //console.log("Validating data structure");
-                        var tobeFixedData = [], i = 0, onlyFolders, explodedData, uniqueFolders, status = true;
-                        if (data == undefined || data.length == 0) {
-                            data = JSON.parse($('#ajaxReturnFieldID').text());
-                        }
+                        var tobeFixedData = [], i = 0, onlyFolders,
+                            explodedData, uniqueFolders,
+                            loadingModalObj = $('#loadingTreeMdlID'),
+                            status = true;
 
-                        $('#loadingTreeMdlID').modal({
+                        loadingModalObj.modal({
                             backdrop: 'static',
                             keyboard: false
                         });
@@ -917,7 +928,7 @@
                             fixTree(tobeFixedData);
                             status = false;
                         } else {
-                            $('#loadingTreeMdlID').modal('hide');
+                            loadingModalObj.modal('hide');
                         }
 
                         return status;
@@ -940,11 +951,11 @@
                         keyboard: false
                     });
 
-                    $('#renameModalId').on('shown.bs.modal', function () {
+                    renameModalObj.on('shown.bs.modal', function () {
                         $('#newNodePathId').focus();
                     });
 
-                    $('#renameModalId').on('hidden.bs.modal', function () {
+                    renameModalObj.on('hidden.bs.modal', function () {
                         $('#newNodePathId').val('');
                     });
 
@@ -1018,10 +1029,11 @@
                         createFolderCallee = "createRootBtnId";
                     });
                     $("#searchclear").on('click', function () {
-                        $("#searchInputId").val('');
+                        var searchInputObj = $("#searchInputId");
+                        searchInputObj.val('');
                         checkClearIcon();
-                        $('#searchInputId').trigger('keyup');
-                        $('#searchInputId').focus();
+                        searchInputObj.trigger('keyup');
+                        searchInputObj.focus();
                     });
                     $('#createKeyBtnId').on('click', function () {
                         var nodeName = $('#pathDescribeID').val();
@@ -1091,8 +1103,7 @@
 
                         $('#selectedNodeID').text(data.node.id);
                         keyValueTextArea.parent().addClass('has-warning');
-                        keyValueTextArea.attr('readonly', true);
-                        keyValueTextArea.text('Loading...');
+                        keyValueTextArea.val('Loading...');
 
                         if (data.node.id.substr(-1) != '/') {
                             updateControl.attr('disabled', false);
@@ -1103,7 +1114,6 @@
                             updateControl.addClass('hidden');
                             updateControl.attr('disabled', true);
                             $('#createElementText').removeClass('hidden');
-                            keyValueTextArea.text('');
                             keyValueTextArea.val('');
                         }
                     });

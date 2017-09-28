@@ -6,6 +6,7 @@ Release Notes
 - Fix-tree modal hide issue-fix.
 - Fixed issue with showing root files properly.
 - Warning Modal header colors.
+- Code structural change and cleanup.
 - UI enhancement.
 
 [v6.0](https://github.com/vagharsh/consul-tree/pull/11/commits/48eb372729a1fcb516b80f19ebacea58d85c7b90) :
