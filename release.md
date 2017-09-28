@@ -1,6 +1,6 @@
 Release Notes
 ---------
-[v6.1](https://github.com/vagharsh/consul-tree)
+[v6.1](https://github.com/vagharsh/consul-tree/commit/e57666896eb35130a785c2a2f6a3c4a04d59fc2f)
 - Rename Feature.
 - Copy - CUT - PASTE between Consuls.
 - Fix-tree modal hide issue-fix.
