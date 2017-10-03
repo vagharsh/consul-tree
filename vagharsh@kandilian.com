@@ -55,7 +55,7 @@ On the Docker host that you want to run the Consul-tree container from.
     - Provide the config file via **HTTP** url. 
         - `docker run -d -e CONFIG=http://test.abc.com/config.json -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:6.1-web`
     - Provide the config file via **LOCAL** path.
-        - `docker run -d -e CONFIG=/tmp/config.json -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:6.1-local`
+        - `docker run -d -v /opt/consul-tree/config:/var/www/html/config -p 8123:80 --restart always --name consul-tree vagharsh/consul-tree:6.1`
 
 **Current stable version corresponds to the Image on Docker hub vagharsh/consul-tree:6.1**
 
