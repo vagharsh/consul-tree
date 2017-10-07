@@ -42,7 +42,7 @@ if (strpos($calledUrl, 'backend') == false) {
 </nav>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v6.1</p>
+        <p class="navbar-text navbar-lef">Consul-tree v6.2</p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
         </ul>
@@ -83,7 +83,7 @@ if (strpos($calledUrl, 'backend') == false) {
             <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
         </div>
         <br>
-        <button type="button" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
+        <button type="button" disabled="disabled" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
         </button>
         <span class="update-control hidden" style="color: #737373">&nbsp;&nbsp;To create an element, right-click on the tree.</span>
     </div>
@@ -571,6 +571,23 @@ if (strpos($calledUrl, 'backend') == false) {
                         });
                     }
 
+                    function updateFieldsToggle(readonly){
+                        var cKeyValue = $('#cKeyValue'),
+                            updateBtnId = $('#valueUpdateBtnId');
+
+                        if (! readonly){
+                            cKeyValue.parent().removeClass('has-warning');
+                            cKeyValue.attr('readonly', false);
+                            updateBtnId.removeClass('disabled');
+                            updateBtnId.attr('disabled', false);
+                        } else {
+                            cKeyValue.parent().addClass('has-warning');
+                            cKeyValue.attr('readonly', true);
+                            updateBtnId.addClass('disabled');
+                            updateBtnId.attr('disabled', true);
+                        }
+                    }
+
                     function getValue(path, obj) {
                         path = consulUrl + path + "?raw";
                         $.ajax({
@@ -587,8 +604,7 @@ if (strpos($calledUrl, 'backend') == false) {
                             } else {
                                 $('#gotNodeValue').text(realData['data']);
                             }
-                            obj.parent().removeClass('has-warning');
-                            //obj.attr('readonly', false)
+                            updateFieldsToggle(false);
                         });
                     }
 
@@ -614,8 +630,12 @@ if (strpos($calledUrl, 'backend') == false) {
                         })
                     }
 
-                    function sendToConsul(path, value, reload) {
+                    function sendToConsul(path, value, reload, updateBtn) {
                         path = path.replace(/\\/g, '/');
+
+                        if (updateBtn){
+                            updateFieldsToggle(true);
+                        }
 
                         if (path[0] == '/') {
                             path = path.substring(1);
@@ -631,7 +651,12 @@ if (strpos($calledUrl, 'backend') == false) {
                             }
                         }).done(function () {
                             if (reload) {
-                                location.reload();
+                                if (updateBtn) {
+                                    updateFieldsToggle(false);
+                                    $('#cKeyValue').val(value);
+                                } else {
+                                    location.reload();
+                                }
                             }
                         })
                     }
@@ -699,7 +724,7 @@ if (strpos($calledUrl, 'backend') == false) {
                             }).done(function () {
                                 location.reload();
                             });
-                        }, 500);
+                        }, 250);
                     }
 
                     function customMenu(node) {
@@ -748,7 +773,7 @@ if (strpos($calledUrl, 'backend') == false) {
 
                                             localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
                                             localStorage['ccpObjParent'] = obj.parent;
-                                            localStorage['ccpObjType'] = 'copy';
+                                            localStorage['ccpObjType'] = 'cut';
                                             localStorage['ccpObjConsul'] = consulUrl;
                                         }
                                     },
@@ -799,7 +824,7 @@ if (strpos($calledUrl, 'backend') == false) {
 
                                             setTimeout(function () {
                                                 ccPaste(JSON.stringify(srcPath), parent, obj.id, ccType, srcConsul);
-                                            }, 500);
+                                            }, 250);
                                         }
                                     }
                                 }
@@ -829,7 +854,7 @@ if (strpos($calledUrl, 'backend') == false) {
                                         });
                                         setTimeout(function () {
                                             deleteNode(srcPath);
-                                        }, 500);
+                                        }, 250);
                                     }
                                 }
                             }
@@ -986,9 +1011,12 @@ if (strpos($calledUrl, 'backend') == false) {
 
                     $('#resetLocationBtnId').on('click', resetLocationStorage);
                     $('#valueUpdateBtnId').on('click', function () {
-                        var path = $('#selectedNodeID').text();
-                        var value = $('#cKeyValue').val();
-                        sendToConsul(path, value, true)
+                        var path = $('#selectedNodeID').text(),
+                            cKeyValue = $('#cKeyValue'),
+                            value = cKeyValue.val();
+
+                        cKeyValue.val('Loading...');
+                        sendToConsul(path, value, true, true)
                     });
                     $('#enableExportBtnId').on('click', function () {
                         localStorage['treeBackup'] = localStorage['jstree'];
@@ -999,6 +1027,8 @@ if (strpos($calledUrl, 'backend') == false) {
                         $('#exportSelection').removeClass('hidden');
                         $('#enableExportBtnId').toggleClass('hidden');
                         $('#disableManualExport').toggleClass('hidden');
+                        $('#importExportBtnId').remove();
+                        $('#createRootBtnId').remove();
                         $("#ConsulTree").jstree("destroy");
                         var tree = {
                             'contextmenu': {'items': customMenu},
@@ -1100,17 +1130,14 @@ if (strpos($calledUrl, 'backend') == false) {
                             keyValueTextArea = $('#cKeyValue');
 
                         $('#selectedNodeID').text(data.node.id);
-                        keyValueTextArea.parent().addClass('has-warning');
                         keyValueTextArea.val('Loading...');
-
+                        updateFieldsToggle(true);
                         if (data.node.id.substr(-1) != '/') {
-                            updateControl.attr('disabled', false);
                             updateControl.removeClass('hidden');
                             $('#createElementText').addClass('hidden');
                             getValue(data.node.id, keyValueTextArea);
                         } else {
                             updateControl.addClass('hidden');
-                            updateControl.attr('disabled', true);
                             $('#createElementText').removeClass('hidden');
                             keyValueTextArea.val('');
                         }

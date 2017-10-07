@@ -1,5 +1,10 @@
 Release Notes
 ---------
+[v6.2](https://github.com/vagharsh/consul-tree/)
+- Fixed issue with the CUT function.
+- Update value now does not reload the page.
+- UI/UX enhancement.
+
 [v6.1](https://github.com/vagharsh/consul-tree/commit/e57666896eb35130a785c2a2f6a3c4a04d59fc2f)
 - Rename Feature.
 - Copy - CUT - PASTE between Consuls.
