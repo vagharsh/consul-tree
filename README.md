@@ -10,7 +10,7 @@ Tree representation of hashicorp/consul https://www.consul.io/, https://github.c
 
 Demo
 ------
-Screen-shots of the application are [here](https://github.com/vagharsh/consul-tree/blob/master/demo.md).
+Screen-shots of the application are [here](demo.md).
 
 Quick Start
 -----------
@@ -100,7 +100,7 @@ v 6.5 :
 - Fixed the fix-tree (delete temp folders function).
 - Overall faster functionality and UI.
 
-Release notes are available [here](https://github.com/vagharsh/consul-tree/blob/master/release.md).
+Release notes are available [here](release.md).
 
 Issues / Features request tracker
 -----------
