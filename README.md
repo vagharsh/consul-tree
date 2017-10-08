@@ -80,7 +80,7 @@ Consul-tree on Docker
 Check my docker repo for a ready-made container at https://hub.docker.com/r/vagharsh/consul-tree/.
 
 On the Docker host that you want to run the Consul-tree container from.
-- Configure the `config.json` as mentioned [here](https://github.com/vagharsh/consul-tree#configuration) and change their values to match your consul host and the title as well if you want a custom title.
+- Configure the `config.json` as mentioned [here](#configuration) and change their values to match your consul host and the title as well if you want a custom title.
 - Configure the `auth.php` as mentioned [here](https://github.com/vagharsh/consul-tree#ACL).
 - There are 2 ways to provide the config file.
     - Provide the config file via **HTTP** url.
