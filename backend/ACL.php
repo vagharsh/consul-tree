@@ -37,9 +37,9 @@ class ACL
 
     function setRights($rights){
         $newRights = "000";
-        if (in_array('read', $rights)){$newRights = "100";};
-        if (in_array('write', $rights)){$newRights = "110";};
-        if (in_array('full', $rights)){$newRights = "111";};
+        if ($rights == 'read'){$newRights = "100";};
+        if ($rights == 'write'){$newRights = "110";};
+        if ($rights == 'full'){$newRights = "111";};
         $this->userRights = $newRights;
     }
 

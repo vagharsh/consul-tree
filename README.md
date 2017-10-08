@@ -54,21 +54,17 @@ $list = [
         "user" => "james",
         "pass" => "james",
         "auto" => false,
-        "rights" => [
-            "read"
-        ]
+        "rights" => "read"
     ], [
         "user" => "admin",
         "pass" => "admin",
         "auto" => true,
-        "rights" => [
-            "full"
-        ]
+        "rights" => "full"
     ]
 ];
 ```
 - Main Title: Login screen title.
-- Rights: `rights : array`
+- Rights: `rights : string`
     - read = read only.
     - write = read and write.
     - full = read, write and delete.
