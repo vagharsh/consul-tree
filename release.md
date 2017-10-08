@@ -1,9 +1,15 @@
 Release Notes
 ---------
-[v6.2](https://github.com/vagharsh/consul-tree/)
-- Fixed issue with the CUT function.
+[v6.5](https://github.com/vagharsh/consul-tree)
+- Access Control List.
+- Auto user login.
+- Enhanced delete functionality ( now it deletes faster "recursively").
 - Update value now does not reload the page.
+- Copy, Cut, Paste, Import functions now asks for data overwrite (yes, no).
 - UI/UX enhancement.
+- Fixed issue with the CUT function.
+- Fixed the fix-tree (delete temp folders function).
+- Overall faster functionality and UI.
 
 [v6.1](https://github.com/vagharsh/consul-tree/commit/e57666896eb35130a785c2a2f6a3c4a04d59fc2f)
 - Rename Feature.
@@ -20,7 +26,7 @@ Release Notes
 - Create Root folder if does not exist.
 - Landing page is changed from php to pure html.
 - Config file has been changed from mixed php and js to pure json.
-- Create tmp dirs inside default php tmp dir.
+- Create tmp dirs inside default php tmp dir
 - UI enhancement.
 
 [v5.2](https://github.com/vagharsh/consul-tree/commit/03d31d75ab089f0eccaeadd1257a8c94bc9e932d) :

@@ -1,33 +1,33 @@
-**Below screen-shots are for versions 6.x**
+**Below screen-shots are for versions 6.5**
 
 Dashboard
 --------
-![Dashboard](https://image.ibb.co/ebv8uQ/dashoboard.png "Dashboard")
+![Dashboard]( "Dashboard")
 
 Right click
 --------
-![Right click](https://image.ibb.co/hAQV8k/right_click.png "Right click")
+![Right click]( "Right click")
 
 Key Value
 --------
-![Key Value](https://image.ibb.co/ipwgEQ/key_value.png "Key Value")
+![Key Value]( "Key Value")
 
 Create Key
 --------
-![Create Key](https://image.ibb.co/mkYuZQ/create_file.png "Create Key")
+![Create Key]( "Create Key")
 
 Create Folder
 --------
-![Create Folder](https://image.ibb.co/icMEZQ/create_folder.png "Create Folder")
+![Create Folder]( "Create Folder")
 
 Search 
 -------
-![Search](https://image.ibb.co/exfV8k/search.png "Search")
+![Search]( "Search")
 
 Import 
 -------
-![Import](https://image.ibb.co/enQxok/import.png "Import")
+![Import]( "Import")
 
 Export
 -------
-![Export](https://image.ibb.co/czcA8k/export.png "Export")
+![Export]( "Export")
