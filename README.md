@@ -110,4 +110,4 @@ Please create an issue [here](https://github.com/vagharsh/consul-tree/issues).
 
 Copyright and License
 ---------------------
-Copyright and License under the [MIT license](https://github.com/vagharsh/consul-tree/blob/master/LICENSE).
+Copyright and License under the [MIT license](LICENSE).
