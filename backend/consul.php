@@ -13,6 +13,9 @@ if (strpos($calledUrl, 'backend') == false) {
     $calledLoc = '../';
     $backendStatus = '';
 }
+
+$autoText = $_SESSION["auto"] ? "automatically" : "";;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,7 +44,7 @@ if (strpos($calledUrl, 'backend') == false) {
                     data-toggle="tooltip" data-placement="bottom" title="Reset consul location settings">
                 <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
             </button>
-            <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Logged in as <?php echo $_SESSION['username']; ?>">Logout</button>
+            <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Logged in <?php echo $autoText; ?> as <?php echo $_SESSION['username']; ?>">Logout</button>
         </form>
         <p class="navbar-text navbar-right">Consul locations</p>
 

@@ -13,6 +13,7 @@ if ($acl->autoCheck){
     $_SESSION["username"] = $acl->username;
     $_SESSION["authenticated"] = 'true';
     $_SESSION["rights"] = $acl->getRights();
+    $_SESSION["auto"] = $acl->autoCheck;
     header('Location: backend/consul.php');
 } else {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -41,6 +42,7 @@ if ($acl->autoCheck){
                         $_SESSION["username"] = $username;
                         $_SESSION["authenticated"] = 'true';
                         $_SESSION["rights"] = $acl->getRights();
+                        $_SESSION["auto"] = $acl->autoCheck;
                         header('Location: backend/consul.php');
                     } else {
                         $rights_err = "You are not Authorized to perform this action";
