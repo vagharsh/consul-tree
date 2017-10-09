@@ -1,6 +1,9 @@
 <?php
 
-function putInConsul($path, $value) {
+function putInConsul($path, $value, $cas) {
+    if ($cas == 0){
+        $path = $path."?cas=0";
+    }
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -28,6 +31,7 @@ function getFromConsul($path) {
 }
 
 function deleteFromConsul($path){
+    $path = $path."?recurse";
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -39,24 +43,21 @@ function deleteFromConsul($path){
 }
 
 function deleteFn($path, $consul){
-    $pathsList = json_decode($path);
-    foreach ($pathsList as $item) {
-        $keyUrl = $consul . $item;
-        $result = deleteFromConsul($keyUrl);
-    }
+    $keyUrl = $consul . $path;
+    $result = deleteFromConsul($keyUrl);
     return ($result);
 }
 
-function importFn($path, $value){
+function importFn($path, $value, $cas){
     $pathsList = json_decode($value);
     foreach ($pathsList as $key => $value) {
         $keyUrl = $path . $key;
-        $result = putInConsul($keyUrl, $value);
+        $result = putInConsul($keyUrl, $value, $cas);
     }
     return ($result);
 }
 
-function ccpFn($path, $parentId, $replaceWith, $consul, $ccType){
+function ccpFn($path, $parentId, $replaceWith, $consul, $ccType, $cas){
     $pathsList = json_decode($path);
     foreach ($pathsList as $item) {
         $lastChar = substr($item, -1);
@@ -65,10 +66,10 @@ function ccpFn($path, $parentId, $replaceWith, $consul, $ccType){
         $sourceUrl = $_POST['srcConsul'] . $item;
 
         if ($lastChar == '/') {
-            putInConsul($newUrl, false);
+            putInConsul($newUrl, false, 1);
         } else {
             $sourceUrl = $sourceUrl . "?raw";
-            putInConsul($newUrl, getFromConsul($sourceUrl)['data']);
+            putInConsul($newUrl, getFromConsul($sourceUrl)['data'], $cas);
         }
         if ($ccType == 'cut'){
             deleteFromConsul($sourceUrl);
@@ -84,10 +85,10 @@ function renameFn($path, $consul){
         $newUrl = $consul . $value;
 
         if ($lastChar == '/') {
-            putInConsul($newUrl, false);
+            putInConsul($newUrl, false, 1);
         } else {
             $sourceUrl = $origUrl . "?raw";
-            putInConsul($newUrl, getFromConsul($sourceUrl)['data']);
+            putInConsul($newUrl, getFromConsul($sourceUrl)['data'], 1);
         }
 
         deleteFromConsul($origUrl);
@@ -123,17 +124,27 @@ function exportFn($path, $consul){
     }
 }
 
+function rrmdir($dir) {
+    if (is_dir($dir)) {
+        $objects = scandir($dir);
+        foreach ($objects as $object) {
+            if ($object != "." && $object != "..") {
+                if (filetype($dir."/".$object) == "dir")
+                    rrmdir($dir."/".$object);
+                else unlink   ($dir."/".$object);
+            }
+        }
+        reset($objects);
+        rmdir($dir);
+    }
+}
+
 function fixTreeFn ($path, $consul){
     $manage = json_decode($path);
-    $directory = sys_get_temp_dir() . '/consul/';
 
     ini_set('max_execution_time', 120);
 
-    if (PHP_OS === 'Windows') {
-        exec(sprintf("rd /s /q %s", escapeshellarg($directory)));
-    } else {
-        exec(sprintf("rm -rf %s", escapeshellarg($directory)));
-    }
+    $directory = sys_get_temp_dir() . '/consul/';
 
     foreach ($manage as $item) {
         $path = $directory . $item;
@@ -160,13 +171,10 @@ function fixTreeFn ($path, $consul){
             $name = str_replace('\\', "/", $name);
             $name = str_replace($directory, "", $name);
             $name = $consulUrlModified . "/" .$name . '/';
-            putInConsul($name, false);
+            putInConsul($name, false, 1);
         }
     }
 
-    if (PHP_OS === 'Windows') {
-        exec(sprintf("rd /s /q %s", escapeshellarg($directory)));
-    } else {
-        exec(sprintf("rm -rf %s", escapeshellarg($directory)));
-    }
+    $directory = sys_get_temp_dir() . '/consul';
+    rrmdir($directory);
 }

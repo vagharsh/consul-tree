@@ -1,5 +1,11 @@
 <?php
+session_start();
+if(empty($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 'true') {
+    header('Location: login.php');
+}
+$userRights = (string)$_SESSION['rights'];
 $calledUrl = "$_SERVER[REQUEST_URI]";
+
 if (strpos($calledUrl, 'backend') == false) {
     $calledLoc = '';
     $backendStatus = 'backend/';
@@ -7,6 +13,8 @@ if (strpos($calledUrl, 'backend') == false) {
     $calledLoc = '../';
     $backendStatus = '';
 }
+
+$autoText = $_SESSION["auto"] ? "automatically" : "";;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +35,7 @@ if (strpos($calledUrl, 'backend') == false) {
         <div class="navbar-header">
             <a class="navbar-brand" href="#" id="consulTitleID"></a>
         </div>
-        <form class="navbar-form navbar-right">
+        <form class="navbar-form navbar-right" action="<?php echo $backendStatus; ?>logout.php">
             <div class="form-group">
                 <select class="form-control" id="consulUrlSelectorId"></select>
             </div>
@@ -35,17 +43,10 @@ if (strpos($calledUrl, 'backend') == false) {
                     data-toggle="tooltip" data-placement="bottom" title="Reset consul location settings">
                 <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
             </button>
+            <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Logged in <?php echo $autoText; ?> as <?php echo $_SESSION['username']; ?>">Logout</button>
         </form>
         <p class="navbar-text navbar-right">Consul locations</p>
 
-    </div>
-</nav>
-<nav class="navbar navbar-inverse navbar-fixed-bottom">
-    <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v6.2</p>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
-        </ul>
     </div>
 </nav>
 <div class="container">
@@ -58,19 +59,19 @@ if (strpos($calledUrl, 'backend') == false) {
                            style="margin:0 auto 1em auto;  padding:4px;">
                     <span id="searchclear" class="glyphicon glyphicon-search"></span>
                 </div>
-                <button type="button" id="importExportBtnId" class="btn btn-primary" disabled="disabled"
+                <button type="button" id="importExportBtnId" class="btn btn-primary writeACL" disabled="disabled"
                         data-toggle="modal"
                         data-target="#importExportModalId">Import
                 </button>
-                <button type="button" class="btn btn-warning" disabled="disabled" id="enableExportBtnId">Enable Export
+                <button type="button" class="btn btn-warning readACL" disabled="disabled" id="enableExportBtnId">Enable Export
                 </button>
-                <button type="button" class="btn btn-info hidden" disabled="disabled" id="disableManualExport">Disable
+                <button type="button" class="btn btn-info hidden readACL" disabled="disabled" id="disableManualExport">Disable
                     Export
                 </button>
-                <button type="button" class="btn btn-success hidden" disabled="disabled" id="exportSelection">Export
+                <button type="button" class="btn btn-success hidden readACL" disabled="disabled" id="exportSelection">Export
                     Selection
                 </button>
-                <button type="button" class="btn btn-primary" disabled="disabled" id="createRootBtnId">Create Folder /
+                <button type="button" class="btn btn-primary writeACL" disabled="disabled" id="createRootBtnId">Create Folder /
                     Key
                 </button>
             </div>
@@ -78,17 +79,19 @@ if (strpos($calledUrl, 'backend') == false) {
     </div>
     <div id="ConsulTree" class="well col-md-5"></div>
     <div class="border-left" id="generalValueAreaID" style="position: fixed; width: 568px; padding-left: 15px">
-        <span id="createElementText" style="color: #737373">Select a key to get its value, right-click on the tree to create an element.</span>
-        <div class="form-group">
-            <textarea class="form-control update-control hidden" id="cKeyValue" rows="8"></textarea>
+        <div id="keyValueFieldsid" class="panel panel-default">
+            <div class="panel-heading" style="padding: 5px 15px !important;"><h5></h5></div>
+            <div class="panel-body">
+                <span id="createElementText" style="color: #737373" class="readACL">Select a key to get its value<span class="writeACL">, right-click on the tree to create an element</span>.</span>
+                <div class="form-group update-control">
+                    <textarea class="form-control update-control hidden" id="cKeyValue" rows="8" readonly ></textarea>
+                </div>
+                <button type="button" disabled="disabled" id="valueUpdateBtnId" class="btn btn-primary update-control hidden writeACL">Update</button>
+                <span class="update-control hidden writeACL" style="color: #737373">&nbsp;&nbsp;To create an element, right-click on the tree.</span>
+            </div>
         </div>
-        <br>
-        <button type="button" disabled="disabled" id="valueUpdateBtnId" class="btn btn-primary update-control hidden">Update
-        </button>
-        <span class="update-control hidden" style="color: #737373">&nbsp;&nbsp;To create an element, right-click on the tree.</span>
     </div>
 </div>
-
 <div class="modal fade" id="createNodeModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -205,6 +208,27 @@ if (strpos($calledUrl, 'backend') == false) {
         </div>
     </div>
 </div>
+<div class="modal fade" id="overwriteModalId" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><strong>Overwrite existing key values</strong></h4>
+            </div>
+            <div class="modal-body">
+                <span>
+                    Do you want to <strong>Overwrite</strong> the existing key values ?
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-answer=1 class="btn btn-success overwriteBtn">Yes</button>
+                <button type="button" data-answer=0 class="btn btn-danger overwriteBtn">No</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="modal fade" id="connectingModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -252,7 +276,14 @@ if (strpos($calledUrl, 'backend') == false) {
 <p class="hidden" id="selectedNodeID"></p>
 <p class="hidden" id="gotNodeValue"></p>
 <a id="downloadAnchorElem" style="display:none"></a>
-<div class="page-footer"></div>
+<footer id="pageFooter">
+    <div class="container">
+        <p class="navbar-text navbar-lef">Consul-tree v6.5</p>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
+        </ul>
+    </div>
+</footer>
 <script>
     $(document).ready(function () {
         function extractHostname(url) {
@@ -273,7 +304,6 @@ if (strpos($calledUrl, 'backend') == false) {
 
             return hostname;
         }
-
         function getSetConfig(consul, modify) {
             var selectedConsulIdx = $('#consulUrlSelectorId').find(":selected").attr("data-idx"),
                 stringedObj, SelectedConsul;
@@ -293,9 +323,18 @@ if (strpos($calledUrl, 'backend') == false) {
                 localStorage['selectedConsul'] = SelectedConsul;
             }
         }
+        function checkRights(rights){
+            var readACL = rights.charAt(0),
+                writeACL = rights.charAt(1);
+
+            if (readACL != 1){
+                $('.readACL').remove();
+            } else if (writeACL != 1){
+                $('.writeACL').remove();
+            }
+        }
 
         $('[data-toggle="tooltip"]').tooltip();
-
         $('#pageTitle').text("Consul Tree | " + window.location.hostname);
 
         $.getJSON("<?php echo $calledLoc; ?>config/config.json", function (consul) {
@@ -304,6 +343,7 @@ if (strpos($calledUrl, 'backend') == false) {
                     var optionElems, consulUrl, consulTitle, selectedConsulJson,
                         consulUrlSelector = $("#consulUrlSelectorId"),
                         renameModalObj = $('#renameModalId'),
+                        userRights = "<?php echo $userRights; ?>",
                         createFolderCallee;
 
                     for (var elem in consul) {
@@ -312,6 +352,7 @@ if (strpos($calledUrl, 'backend') == false) {
                     consulUrlSelector.html(optionElems);
 
                     getSetConfig(consul);
+                    checkRights(userRights);
 
                     selectedConsulJson = JSON.parse(localStorage['selectedConsul']);
                     consulUrl = selectedConsulJson.url;
@@ -356,22 +397,17 @@ if (strpos($calledUrl, 'backend') == false) {
                     };
 
                     function resetLocationStorage() {
-                        localStorage.removeItem('selectedConsul');
-                        localStorage.removeItem('ccpObjType');
-                        localStorage.removeItem('ccpObjPaths');
-                        localStorage.removeItem('ccpObjParent');
-                        localStorage.removeItem('ccpObjConsul');
+                        $.each(localStorage, function (key, item) {
+                            localStorage.removeItem(key);
+                        });
                         location.reload();
                     }
 
-                    function importConsul() {
-                        var files = document.getElementById('jsonInputFile').files;
-                        if (files.length <= 0) {
-                            alert('JSON file must be selected first.');
-                            return false;
-                        }
+                    function importConsul(cas) {
+                        $('#overwriteModalId').modal('hide');
+                        var files = document.getElementById('jsonInputFile').files,
+                            fr = new FileReader();
 
-                        var fr = new FileReader();
                         fr.onload = function (e) {
                             var result = JSON.parse(e.target.result);
                             $('#importExportModalId').modal('hide');
@@ -385,9 +421,11 @@ if (strpos($calledUrl, 'backend') == false) {
                                 data: {
                                     path: consulUrl,
                                     method: "BulkIMPORT",
+                                    cas: cas,
                                     value: JSON.stringify(result)
                                 }
                             }).done(function () {
+                                localStorage.removeItem('overwriteFor');
                                 location.reload();
                             });
                         };
@@ -572,17 +610,21 @@ if (strpos($calledUrl, 'backend') == false) {
                     }
 
                     function updateFieldsToggle(readonly){
-                        var cKeyValue = $('#cKeyValue'),
+                        var cKeyValueObj = $('#cKeyValue'),
                             updateBtnId = $('#valueUpdateBtnId');
 
                         if (! readonly){
-                            cKeyValue.parent().removeClass('has-warning');
-                            cKeyValue.attr('readonly', false);
+                            cKeyValueObj.parent().parent().parent().removeClass('panel-warning');
+                            cKeyValueObj.parent().parent().parent().addClass('panel-success');
+                            if (userRights.charAt(1) == 1){
+                                cKeyValueObj.attr('readonly', false);
+                            }
                             updateBtnId.removeClass('disabled');
                             updateBtnId.attr('disabled', false);
                         } else {
-                            cKeyValue.parent().addClass('has-warning');
-                            cKeyValue.attr('readonly', true);
+                            cKeyValueObj.parent().parent().parent().removeClass('panel-default');
+                            cKeyValueObj.parent().parent().parent().addClass('panel-warning');
+                            cKeyValueObj.attr('readonly', true);
                             updateBtnId.addClass('disabled');
                             updateBtnId.attr('disabled', true);
                         }
@@ -608,7 +650,13 @@ if (strpos($calledUrl, 'backend') == false) {
                         });
                     }
 
-                    function ccPaste(path, parentId, replace, ccType, srcConsul) {
+                    function ccPaste(path, parentId, replace, ccType, srcConsul, cas) {
+                        $('#overwriteModalId').modal('hide');
+                        $('#processingMdlID').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        });
+
                         $.ajax({
                             method: "POST",
                             url: "<?php echo $backendStatus; ?>requests.php",
@@ -619,13 +667,15 @@ if (strpos($calledUrl, 'backend') == false) {
                                 replace: replace,
                                 ccType: ccType,
                                 srcConsul: srcConsul,
-                                path: path
+                                path: path,
+                                cas: cas
                             }
                         }).done(function () {
                             localStorage.removeItem('ccpObjType');
                             localStorage.removeItem('ccpObjPaths');
                             localStorage.removeItem('ccpObjParent');
                             localStorage.removeItem('ccpObjConsul');
+                            localStorage.removeItem('overwriteFor');
                             location.reload();
                         })
                     }
@@ -732,7 +782,9 @@ if (strpos($calledUrl, 'backend') == false) {
                             "create": {
                                 "separator_before": false,
                                 "separator_after": true,
-                                "_disabled": false,
+                                "_disabled": function () {
+                                    return userRights.charAt(1) != 1;
+                                },
                                 "label": "Create",
                                 "action": function (data) {
                                     workingInst = $.jstree.reference(data.reference);
@@ -746,6 +798,9 @@ if (strpos($calledUrl, 'backend') == false) {
                                 "separator_before": false,
                                 "icon": false,
                                 "separator_after": true,
+                                "_disabled": function () {
+                                    return userRights.charAt(1) != 1;
+                                },
                                 "label": "Rename",
                                 "action": function (data) {
                                     workingInst = $.jstree.reference(data.reference);
@@ -764,6 +819,9 @@ if (strpos($calledUrl, 'backend') == false) {
                                         "separator_before": true,
                                         "separator_after": false,
                                         "label": "Cut",
+                                        "_disabled": function () {
+                                                return userRights.charAt(2) != 1;
+                                        },
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
                                                 obj = inst.get_node(data.reference), srcPath;
@@ -780,6 +838,9 @@ if (strpos($calledUrl, 'backend') == false) {
                                     "copy": {
                                         "separator_before": false,
                                         "icon": false,
+                                        "_disabled": function () {
+                                            return userRights.charAt(1) != 1;
+                                        },
                                         "separator_after": false,
                                         "label": "Copy",
                                         "action": function (data) {
@@ -798,33 +859,29 @@ if (strpos($calledUrl, 'backend') == false) {
                                     "paste": {
                                         "separator_before": false,
                                         "icon": false,
-                                        "_disabled": function (data) {
-                                            return !(localStorage['ccpObjPaths'] && localStorage['ccpObjPaths'].length > 0);
+                                        "_disabled": function () {
+                                            if (userRights.charAt(1) != 1){
+                                                return true;
+                                            } else {
+                                                return !(localStorage['ccpObjPaths'] && localStorage['ccpObjPaths'].length > 0);
+                                            }
                                         },
                                         "separator_after": false,
                                         "label": "Paste",
                                         "action": function (data) {
-                                            $('#processingMdlID').modal({
-                                                backdrop: 'static',
-                                                keyboard: false
-                                            });
-
                                             var inst = $.jstree.reference(data.reference),
                                                 obj = inst.get_node(data.reference),
-                                                srcPath = JSON.parse(localStorage['ccpObjPaths']),
-                                                parent = localStorage['ccpObjParent'],
-                                                ccType = localStorage['ccpObjType'],
-                                                srcConsul = localStorage['ccpObjConsul'];
-
+                                                srcPath = JSON.parse(localStorage['ccpObjPaths']);
 
                                             $.each(srcPath, function (key, item) {
                                                 item = item.replace(/\\/g, '/');
                                                 srcPath[key] = item;
                                             });
 
-                                            setTimeout(function () {
-                                                ccPaste(JSON.stringify(srcPath), parent, obj.id, ccType, srcConsul);
-                                            }, 250);
+                                            localStorage['ccpObjId'] = obj.id;
+                                            localStorage['ccpSourcePaths'] = JSON.stringify(srcPath);
+                                            localStorage['overwriteFor'] = "ccp";
+                                            $('#overwriteModalId').modal('show');
                                         }
                                     }
                                 }
@@ -833,19 +890,13 @@ if (strpos($calledUrl, 'backend') == false) {
                                 "separator_before": true,
                                 "icon": false,
                                 "separator_after": false,
-                                "_disabled": false,
+                                "_disabled": function () {
+                                    return userRights.charAt(2) != 1;
+                                },
                                 "label": "Delete",
                                 "action": function (data) {
                                     var inst = $.jstree.reference(data.reference),
-                                        obj = inst.get_node(data.reference),
-                                        srcPath = [];
-
-                                    if (obj['id'].slice(-1) === '/'){
-                                        srcPath = obj['children_d'];
-                                    }
-
-                                    srcPath.push(obj['id']);
-                                    srcPath = JSON.stringify(srcPath);
+                                        obj = inst.get_node(data.reference);
 
                                     if (confirm('Are you sure you want to DELETE ' + obj.id + ' ?')) {
                                         $('#processingMdlID').modal({
@@ -853,7 +904,7 @@ if (strpos($calledUrl, 'backend') == false) {
                                             keyboard: false
                                         });
                                         setTimeout(function () {
-                                            deleteNode(srcPath);
+                                            deleteNode(obj['id']);
                                         }, 250);
                                     }
                                 }
@@ -866,6 +917,20 @@ if (strpos($calledUrl, 'backend') == false) {
                         }
                         return items;
                     }
+
+                    $('.overwriteBtn').on('click', function (){
+                        var parent = localStorage['ccpObjParent'],
+                            ccpObjId = localStorage['ccpObjId'],
+                            ccpSourcePaths = localStorage['ccpSourcePaths'],
+                            ccType = localStorage['ccpObjType'],
+                            srcConsul = localStorage['ccpObjConsul'];
+
+                        if (localStorage['overwriteFor'] == "import"){
+                            importConsul($(this).data('answer'));
+                        } else if (localStorage['overwriteFor'] == "ccp"){
+                            ccPaste(ccpSourcePaths, parent, ccpObjId, ccType, srcConsul, $(this).data('answer'));
+                        }
+                    });
 
                     function check4Key() {
                         var inputObj = $('#keyInputId');
@@ -891,7 +956,7 @@ if (strpos($calledUrl, 'backend') == false) {
                                 consul: consulUrl,
                                 path: data
                             }
-                        }).done(function () {
+                        }).done(function (data) {
                             location.reload();
                         });
                     }
@@ -973,15 +1038,12 @@ if (strpos($calledUrl, 'backend') == false) {
                         backdrop: 'static',
                         keyboard: false
                     });
-
                     renameModalObj.on('shown.bs.modal', function () {
                         $('#newNodePathId').focus();
                     });
-
                     renameModalObj.on('hidden.bs.modal', function () {
                         $('#newNodePathId').val('');
                     });
-
                     createNodeModalObj.on('hidden.bs.modal', function () {
                         $('#keyInputId').val('');
                         $('#pathDescribeID').text('/');
@@ -1008,14 +1070,13 @@ if (strpos($calledUrl, 'backend') == false) {
 
                         check4Key();
                     });
-
                     $('#resetLocationBtnId').on('click', resetLocationStorage);
                     $('#valueUpdateBtnId').on('click', function () {
                         var path = $('#selectedNodeID').text(),
-                            cKeyValue = $('#cKeyValue'),
-                            value = cKeyValue.val();
+                            cKeyValueObj = $('#cKeyValue'),
+                            value = cKeyValueObj.val();
 
-                        cKeyValue.val('Loading...');
+                        cKeyValueObj.val('Loading...');
                         sendToConsul(path, value, true, true)
                     });
                     $('#enableExportBtnId').on('click', function () {
@@ -1027,6 +1088,7 @@ if (strpos($calledUrl, 'backend') == false) {
                         $('#exportSelection').removeClass('hidden');
                         $('#enableExportBtnId').toggleClass('hidden');
                         $('#disableManualExport').toggleClass('hidden');
+                        $('#keyValueFieldsid').remove();
                         $('#importExportBtnId').remove();
                         $('#createRootBtnId').remove();
                         $("#ConsulTree").jstree("destroy");
@@ -1051,7 +1113,15 @@ if (strpos($calledUrl, 'backend') == false) {
                         }
                         location.reload();
                     });
-                    $('#importConsulBtnId').on('click', importConsul);
+                    $('#importConsulBtnId').on('click', function (){
+                        var files = document.getElementById('jsonInputFile').files;
+                        if (files.length <= 0) {
+                            alert('JSON file must be selected first.');
+                            return false;
+                        }
+                        localStorage['overwriteFor'] = "import";
+                        $('#overwriteModalId').modal('show');
+                    });
                     $('#createRootBtnId').on('click', function () {
                         $('#createNodeModalId').modal('show');
                         createFolderCallee = "createRootBtnId";
@@ -1123,30 +1193,33 @@ if (strpos($calledUrl, 'backend') == false) {
                             $('#ConsulTree').jstree(true).search(v);
                         }, 250);
                     });
-
                     consulTreeDivID.on("select_node.jstree", function (e, data) {
                         workingInst = $.jstree.reference(data.reference);
                         var updateControl = $('.update-control'),
-                            keyValueTextArea = $('#cKeyValue');
+                            cKeyValueObj = $('#cKeyValue'),
+                            selectedNodeText = data.node.id;
 
-                        $('#selectedNodeID').text(data.node.id);
-                        keyValueTextArea.val('Loading...');
+                        cKeyValueObj.parent().parent().prev().find('h5').text(selectedNodeText);
+                        $('#selectedNodeID').text(selectedNodeText);
+                        cKeyValueObj.val('Loading...');
                         updateFieldsToggle(true);
                         if (data.node.id.substr(-1) != '/') {
                             updateControl.removeClass('hidden');
                             $('#createElementText').addClass('hidden');
-                            getValue(data.node.id, keyValueTextArea);
+                            getValue(data.node.id, cKeyValueObj);
                         } else {
                             updateControl.addClass('hidden');
                             $('#createElementText').removeClass('hidden');
-                            keyValueTextArea.val('');
+                            cKeyValueObj.val('');
+                            cKeyValueObj.parent().parent().parent().removeClass('panel-warning');
+                            cKeyValueObj.parent().parent().parent().removeClass('panel-success');
+                            cKeyValueObj.parent().parent().parent().addClass('panel-default');
                         }
                     });
                     if (localStorage['treeBackup']) {
                         localStorage['jstree'] = localStorage['treeBackup'];
                         localStorage.removeItem('treeBackup');
                     }
-
                     getTree(tree);
                 }
             }

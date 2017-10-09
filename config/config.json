@@ -1,9 +1,15 @@
 [
   {
-    "url": "http://192.168.220.145:8500/v1/kv/",
-    "title": "My-Consul 1"
+    "url": "http://consul-prod:8500/v1/kv/",
+    "title": "Consul-VO-Prod"
   },{
-    "url": "http://192.168.220.146:8500/v1/kv/",
-    "title": "My-Consul 2"
+    "url": "http://k8s-master-yo-prod:8500/v1/kv/",
+    "title": "Consul-YO-Prod"
+  },{
+    "url": "http://k8s-master-dev:8500/v1/kv/",
+    "title": "Consul-DEV"
+  },{
+    "url": "http://192.168.220.145:8500/v1/kv/",
+    "title": "Consul-VM"
   }
 ]

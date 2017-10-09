@@ -1,44 +1,81 @@
 <?php
+session_start();
+if(empty($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 'true') {
+    header('Location: ../login.php');
+}
 
+$userRights = (string)$_SESSION['rights'];
 require 'functions.php';
 
 if (isset($_POST['method'])) {
     $method = $_POST['method'];
 
     if ($method === 'DELETE') {
-        if (isset($_POST['consul']) && isset($_POST['path'])) {
-            echo(deleteFn($_POST['path'], $_POST['consul']));
+        if ($userRights[2] == 1) {
+            if (isset($_POST['consul']) && isset($_POST['path'])) {
+                echo(deleteFn($_POST['path'], $_POST['consul']));
+            }
+        } else {
+            echo "You are not Authorized to perform this action";
         }
     } elseif ($method === 'PUT') {
-        if (isset($_POST['path']) && isset($_POST['value'])) {
-            echo(putInConsul($_POST['path'], $_POST['value']));
+        if ($userRights[1] == 1) {
+            if (isset($_POST['path']) && isset($_POST['value'])) {
+                echo(putInConsul($_POST['path'], $_POST['value'], 1));
+            }
+        } else {
+            echo "You are not Authorized to perform this action";
         }
     } elseif ($method === 'BulkIMPORT') {
-        if (isset($_POST['path']) && isset($_POST['value'])) {
-            echo (importFn($_POST['path'], $_POST['value']));
-        }
+        if ($userRights[1] == 1) {
+            if (isset($_POST['path']) && isset($_POST['value']) && isset($_POST['cas'])) {
+                echo (importFn($_POST['path'], $_POST['value'], $_POST['cas']));
+            }
+        } else {
+            echo "You are not Authorized to perform this action";
+        }    
     } elseif ($method === 'CCP') {
-        if (isset($_POST['replace']) && isset($_POST['parentId']) && isset($_POST['path']) && isset($_POST['consul'])) {
-            ccpFn($_POST['path'], $_POST['parentId'], $_POST['replace'], $_POST['consul'], $_POST['ccType']);
+        if ($userRights[1] == 1) {
+            if (isset($_POST['replace']) && isset($_POST['parentId']) && isset($_POST['path']) && isset($_POST['consul']) && isset($_POST['cas'])) {
+                ccpFn($_POST['path'], $_POST['parentId'], $_POST['replace'], $_POST['consul'], $_POST['ccType'], $_POST['cas']);
+            }
+        } else {
+            echo "You are not Authorized to perform this action";
         }
     } elseif ($method === 'EXPORT') {
-        if (isset($_POST['consul'])) {
-            $consul = $_POST['consul'];
-            $path = isset($_POST['path']) ? $_POST['path'] : getFromConsul($consul . "?keys")['data'];
-            exportFn($path, $consul);
+        if ($userRights[0] == 1) {
+            if (isset($_POST['path']) && isset($_POST['consul'])) {
+                $consul = $_POST['consul'];
+                $path = isset($_POST['path']) ? $_POST['path'] : getFromConsul($consul . "?keys")['data'];
+                exportFn($path, $consul);
+            }
+        } else {
+            echo "You are not Authorized to perform this action";
         }
     } elseif ($method === 'RENAME') {
-        if (isset($_POST['path']) && isset($_POST['consul'])) {
-            renameFn($_POST['path'], $_POST['consul']);
+        if ($userRights[1] == 1) {
+            if (isset($_POST['path']) && isset($_POST['consul'])) {
+                renameFn($_POST['path'], $_POST['consul']);
+            }
+        } else {
+            echo "You are not Authorized to perform this action";
         }
     } elseif ($method === 'FIX') {
-        if (isset($_POST['path']) && isset($_POST['consul'])) {
-            $consul = $_POST['consul'];
-            $path = isset($_POST['path']) ? $_POST['path'] : getFromConsul($consul . "?keys")['data'];
-            fixTreeFn($path, $_POST['consul']);
+        if ($userRights[0] == 1) {
+            if (isset($_POST['path']) && isset($_POST['consul'])) {
+                $consul = $_POST['consul'];
+                $path = isset($_POST['path']) ? $_POST['path'] : getFromConsul($consul . "?keys")['data'];
+                echo (fixTreeFn($path, $_POST['consul']));
+            }
+        } else {
+            echo "You are not Authorized to perform this action";
         }
     }
 }
 if (isset($_GET['path'])) {
-    echo(json_encode(getFromConsul($_GET['path'])));
+    if ($userRights[0] == 1) {
+        echo(json_encode(getFromConsul($_GET['path'])));
+    } else {
+        echo "You are not Authorized to perform this action";
+    }
 }
