@@ -51,10 +51,15 @@ ACL Configuration *`config/auth.php`*
 $mainTitle = "Consul-Tree";
 $list = [
     [
-        "user" => "james",
-        "pass" => "james",
+        "user" => "qa",
+        "pass" => "qa",
         "auto" => false,
         "rights" => "read"
+    ], [
+        "user" => "dev",
+        "pass" => "dev",
+        "auto" => true,
+        "rights" => "write"
     ], [
         "user" => "admin",
         "pass" => "admin",

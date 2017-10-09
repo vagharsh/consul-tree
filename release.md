@@ -1,6 +1,6 @@
 Release Notes
 ---------
-[v6.5](https://github.com/vagharsh/consul-tree)
+[v6.5](https://github.com/vagharsh/consul-tree/commit/d8188837f4b6ef02e0a385de7961abfdd60021d6)
 - Access Control List.
 - Auto user login.
 - Enhanced delete functionality ( now it deletes faster "recursively").
@@ -10,6 +10,11 @@ Release Notes
 - Fixed issue with the CUT function.
 - Fixed the fix-tree (delete temp folders function).
 - Overall faster functionality and UI.
+
+[v6.2](#)
+- Fixed issue with the CUT function.
+- Update value now does not reload the page.
+- UI/UX enhancement.
 
 [v6.1](https://github.com/vagharsh/consul-tree/commit/e57666896eb35130a785c2a2f6a3c4a04d59fc2f)
 - Rename Feature.

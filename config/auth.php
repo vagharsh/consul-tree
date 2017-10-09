@@ -5,7 +5,7 @@ $list = [
     [
         "user" => "qa",
         "pass" => "qa",
-        "auto" => true,
+        "auto" => false,
         "rights" => "read"
     ], [
         "user" => "dev",
@@ -15,7 +15,7 @@ $list = [
     ], [
         "user" => "admin",
         "pass" => "admin",
-        "auto" => false,
+        "auto" => true,
         "rights" => "full"
     ]
 ];
