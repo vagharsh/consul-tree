@@ -15,7 +15,6 @@ if (strpos($calledUrl, 'backend') == false) {
 }
 
 $autoText = $_SESSION["auto"] ? "automatically" : "";;
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
