@@ -89,7 +89,7 @@ On the Docker host that you want to run the Consul-tree container from.
     - Provide the configs file via **HTTP** url.
         ```
         docker run -d -e CONFIG=http://test.abc.com/config.json \
-                      -e CONFIG=http://test.abc.com/auth.php \
+                      -e AUTH=http://test.abc.com/auth.php \
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
