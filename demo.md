@@ -10,7 +10,7 @@ Dashboard
 
 Right click
 --------
-![Right click](https://i.imgur.com/YHLoMLf.png "Right click")
+![Right click](https://i.imgur.com/PipmILT.png "Right click")
 
 Key Value
 --------
