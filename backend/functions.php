@@ -110,7 +110,7 @@ function exportFn($path, $consul){
         }
     }
 
-    $filename = sys_get_temp_dir() . 'consul-tree.json';
+    $filename = sys_get_temp_dir() . '/consul-tree.json';
     $fp = fopen($filename, 'w');
     fwrite($fp, json_encode($toBeExportedData));
     fclose($fp);
