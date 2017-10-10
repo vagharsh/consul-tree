@@ -48,6 +48,7 @@ Consul Configuration *`config/config.json`*
 ACL Configuration *`config/auth.php`*
 ------------------
 ```php
+<?php
 $mainTitle = "Consul-Tree";
 $list = [
     [
