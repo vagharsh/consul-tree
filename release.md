@@ -1,6 +1,6 @@
 Release Notes
 ---------
-[v6.5](https://github.com/vagharsh/consul-tree/commit/)
+[v6.6](https://github.com/vagharsh/consul-tree/commit/82195636e7835cc1813349361ee1b634180a24fb)
 - Added Duplicate in the right-click context menu for easy duplicate keys, folders.
 - Fixed a bug in the rename functionality.
 - CCP function now passes only the selected node name.
