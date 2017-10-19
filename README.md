@@ -113,6 +113,7 @@ Release Notes
 v 6.6 :
 - Added Duplicate in the right-click context menu for easy duplicate keys, folders.
 - Fixed a bug in the rename functionality.
+- CCP function now passes only the selected node name.
 
 Release notes are available [here](release.md).
 

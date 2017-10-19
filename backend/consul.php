@@ -402,9 +402,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     };
 
                     function resetLocationStorage() {
-                        $.each(localStorage, function (key, item) {
-                            localStorage.removeItem(key);
-                        });
+                        localStorage.clear();
                         location.reload();
                     }
 
@@ -855,12 +853,9 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         },
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
-                                                obj = inst.get_node(data.reference), srcPath;
+                                                obj = inst.get_node(data.reference);
 
-                                            srcPath = obj['children_d'];
-                                            srcPath = srcPath.concat([obj['id']]);
-
-                                            localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpObjPaths'] = obj['id'];
                                             localStorage['ccpObjParent'] = obj.parent;
                                             localStorage['ccpObjType'] = 'cut';
                                             localStorage['ccpObjConsul'] = consulUrl;
@@ -876,12 +871,9 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         "label": "Copy",
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
-                                                obj = inst.get_node(data.reference), srcPath;
+                                                obj = inst.get_node(data.reference);
 
-                                            srcPath = obj['children_d'];
-                                            srcPath = srcPath.concat([obj['id']]);
-
-                                            localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpObjPaths'] = obj['id'];
                                             localStorage['ccpObjParent'] = obj.parent;
                                             localStorage['ccpObjType'] = 'copy';
                                             localStorage['ccpObjConsul'] = consulUrl;
@@ -901,21 +893,11 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         "label": "Paste",
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
-                                                obj = inst.get_node(data.reference),
-                                                srcPath = JSON.parse(localStorage['ccpObjPaths']);
-
-                                            $.each(srcPath, function (key, item) {
-                                                item = item.replace(/\\/g, '/');
-                                                srcPath[key] = item;
-                                            });
+                                                obj = inst.get_node(data.reference);
 
                                             localStorage['ccpObjId'] = obj.id;
-                                            localStorage['ccpSourcePaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpSourcePaths'] = localStorage['ccpObjPaths'];
                                             localStorage['overwriteFor'] = "ccp";
-
-                                            console.log(srcPath);
-                                            console.log(obj);
-
                                             $('#overwriteModalId').modal('show');
                                         }
                                     }

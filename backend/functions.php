@@ -57,13 +57,13 @@ function importFn($path, $value, $cas){
     return ($result);
 }
 
-function ccpFn($path, $parentId, $replaceWith, $consul, $ccType, $cas){
-    $pathsList = json_decode($path);
+function ccpFn($path, $parentId, $replaceWith, $consul, $ccType, $cas, $srcConsul){
+    $pathsList = json_decode(getFromConsul($srcConsul. $path . "?keys")['data']);
     foreach ($pathsList as $item) {
         $lastChar = substr($item, -1);
         $newPath = str_replace($parentId, $replaceWith, $item);
         $newUrl = $consul . $newPath;
-        $sourceUrl = $_POST['srcConsul'] . $item;
+        $sourceUrl = $srcConsul . $item;
 
         if ($lastChar == '/') {
             putInConsul($newUrl, false, 1);
