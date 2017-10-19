@@ -2,7 +2,7 @@
 
 Tree representation of hashicorp/consul https://www.consul.io/, https://github.com/hashicorp/consul KV section.
 
-**Supported Methods:** Cut, Copy, Paste, Create, Delete, Rename.
+**Supported Methods:** Cut, Copy, Paste, Create, Delete, Rename, Duplicate.
 
 **Available Features:** Search, Import, Export, Copy - CUT - PASTE between Consuls.
 
@@ -94,7 +94,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
-                      vagharsh/consul-tree:6.5-web                    
+                      vagharsh/consul-tree:6.6-web                    
     
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted ona php server.
 
@@ -104,22 +104,15 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.5
+                      vagharsh/consul-tree:6.6
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
 Release Notes
 ---------
-v 6.5 :
-- Access Control List.
-- Auto user login.
-- Enhanced delete functionality ( now it deletes faster "recursively").
-- Update value now does not reload the page.
-- Copy, Cut, Paste, Import functions now asks for data overwrite (yes, no).
-- UI/UX enhancement.
-- Fixed issue with the CUT function.
-- Fixed the fix-tree (delete temp folders function).
-- Overall faster functionality and UI.
+v 6.6 :
+- Added Duplicate in the right-click context menu for easy duplicate keys, folders.
+- Fixed a bug in the rename functionality.
 
 Release notes are available [here](release.md).
 

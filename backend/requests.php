@@ -52,10 +52,10 @@ if (isset($_POST['method'])) {
         } else {
             echo "You are not Authorized to perform this action";
         }
-    } elseif ($method === 'RENAME') {
+    } elseif ($method === 'RENAME' || $method === 'DUPLICATE') {
         if ($userRights[1] == 1) {
             if (isset($_POST['path']) && isset($_POST['consul'])) {
-                renameFn($_POST['path'], $_POST['consul']);
+                renDupFn($_POST['path'], $_POST['consul'], $method);
             }
         } else {
             echo "You are not Authorized to perform this action";

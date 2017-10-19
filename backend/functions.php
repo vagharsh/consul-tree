@@ -77,7 +77,7 @@ function ccpFn($path, $parentId, $replaceWith, $consul, $ccType, $cas){
     }
 }
 
-function renameFn($path, $consul){
+function renDupFn($path, $consul, $method){
     $decodedJson = json_decode($path);
     foreach ($decodedJson as $key => $value) {
         $lastChar = substr($key, -1);
@@ -90,10 +90,10 @@ function renameFn($path, $consul){
             $sourceUrl = $origUrl . "?raw";
             putInConsul($newUrl, getFromConsul($sourceUrl)['data'], 1);
         }
-
-        deleteFromConsul($origUrl);
     }
-    deleteFromConsul($consul . $_POST['selectedObj']);
+    if ($method === 'RENAME') {
+        deleteFromConsul($consul . $_POST['selectedObj']);
+    }
 }
 
 function exportFn($path, $consul){
