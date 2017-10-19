@@ -1,4 +1,9 @@
 <?php
+
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 session_start();
 if(empty($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 'true') {
     header('Location: login.php');
@@ -193,16 +198,16 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <h5 for="oldNodePathId" class="control-label">Old node name</h5>
+                    <h5 for="oldNodePathId" class="control-label">Current node name: </h5>
                     <input type="text" id="oldNodePathId" value="" class="form-control" readonly="readonly">
                 </div>
                 <div class="form-group">
-                    <h5 for="newNodePathId" class="control-label">New node name</h5>
+                    <h5 for="newNodePathId" class="control-label">New node name: </h5>
                     <input type="text" id="newNodePathId" value="" class="form-control">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="renameConfirmBtnId" disabled="disabled" class="btn btn-info">Rename</button>
+                <button type="button" id="renameConfirmBtnId" data-type="rename" disabled="disabled" class="btn btn-info">Rename</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -278,7 +283,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
 <a id="downloadAnchorElem" style="display:none"></a>
 <footer id="pageFooter">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v6.5</p>
+        <p class="navbar-text navbar-lef">Consul-tree v6.6</p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
         </ul>
@@ -397,9 +402,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     };
 
                     function resetLocationStorage() {
-                        $.each(localStorage, function (key, item) {
-                            localStorage.removeItem(key);
-                        });
+                        localStorage.clear();
                         location.reload();
                     }
 
@@ -727,7 +730,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
 
                     $('#renameConfirmBtnId').on('click', function () {
                         $('#renameModalId').modal('hide');
-                        renameNode();
+                        renDupNode();
                     });
                     $('#newNodePathId').on('keyup', function () {
                         var newText = $('#newNodePathId').val();
@@ -738,12 +741,13 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         }
                     });
 
-                    function renameNode() {
+                    function renDupNode() {
                         var newNodeName = $('#newNodePathId').val(),
                             objChildren = workingObj['children_d'],
                             objParent = workingObj['parent'],
                             oldObjPath = workingObj['id'],
-                            newNodePath, newNodeString, newData = {};
+                            newNodePath, newNodeString, newData = {},
+                            renDupType = $('#renameConfirmBtnId').data('type');
 
                         $('#processingMdlID').modal({
                             backdrop: 'static',
@@ -767,7 +771,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                 url: "<?php echo $backendStatus; ?>requests.php",
                                 data: {
                                     consul: consulUrl,
-                                    method: "RENAME",
+                                    method: renDupType.toUpperCase(),
                                     path: JSON.stringify(newData),
                                     selectedObj: oldObjPath
                                 }
@@ -778,6 +782,9 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     }
 
                     function customMenu(node) {
+                        var renameBtnObj = $('#renameConfirmBtnId');
+                        var renameModalObj = $('#renameModalId');
+                        var OldNodeObj = $('#oldNodePathId');
                         var items = {
                             "create": {
                                 "separator_before": false,
@@ -806,8 +813,30 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                     workingInst = $.jstree.reference(data.reference);
                                     workingObj = workingInst.get_node(data.reference);
 
-                                    $('#oldNodePathId').val(workingObj['text']);
-                                    $('#renameModalId').modal('show');
+                                    renameBtnObj.text('Rename');
+                                    renameBtnObj.attr('data-type', 'rename');
+                                    renameModalObj.find('h4 strong').text('Rename Node');
+                                    OldNodeObj.val(workingObj['text']);
+                                    renameModalObj.modal('show');
+                                }
+                            },
+                            "duplicate": {
+                                "separator_before": false,
+                                "icon": false,
+                                "separator_after": true,
+                                "_disabled": function () {
+                                    return userRights.charAt(1) != 1;
+                                },
+                                "label": "Duplicate",
+                                "action": function (data) {
+                                    workingInst = $.jstree.reference(data.reference);
+                                    workingObj = workingInst.get_node(data.reference);
+
+                                    renameBtnObj.text('Duplicate');
+                                    renameBtnObj.attr('data-type', 'duplicate');
+                                    renameModalObj.find('h4 strong').text('Duplicate Node');
+                                    OldNodeObj.val(workingObj['text']);
+                                    renameModalObj.modal('show');
                                 }
                             },
                             "edit": {
@@ -824,12 +853,9 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         },
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
-                                                obj = inst.get_node(data.reference), srcPath;
+                                                obj = inst.get_node(data.reference);
 
-                                            srcPath = obj['children_d'];
-                                            srcPath = srcPath.concat([obj['id']]);
-
-                                            localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpObjPaths'] = obj['id'];
                                             localStorage['ccpObjParent'] = obj.parent;
                                             localStorage['ccpObjType'] = 'cut';
                                             localStorage['ccpObjConsul'] = consulUrl;
@@ -845,12 +871,9 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         "label": "Copy",
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
-                                                obj = inst.get_node(data.reference), srcPath;
+                                                obj = inst.get_node(data.reference);
 
-                                            srcPath = obj['children_d'];
-                                            srcPath = srcPath.concat([obj['id']]);
-
-                                            localStorage['ccpObjPaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpObjPaths'] = obj['id'];
                                             localStorage['ccpObjParent'] = obj.parent;
                                             localStorage['ccpObjType'] = 'copy';
                                             localStorage['ccpObjConsul'] = consulUrl;
@@ -870,16 +893,10 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         "label": "Paste",
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
-                                                obj = inst.get_node(data.reference),
-                                                srcPath = JSON.parse(localStorage['ccpObjPaths']);
-
-                                            $.each(srcPath, function (key, item) {
-                                                item = item.replace(/\\/g, '/');
-                                                srcPath[key] = item;
-                                            });
+                                                obj = inst.get_node(data.reference);
 
                                             localStorage['ccpObjId'] = obj.id;
-                                            localStorage['ccpSourcePaths'] = JSON.stringify(srcPath);
+                                            localStorage['ccpSourcePaths'] = localStorage['ccpObjPaths'];
                                             localStorage['overwriteFor'] = "ccp";
                                             $('#overwriteModalId').modal('show');
                                         }

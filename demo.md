@@ -1,4 +1,4 @@
-**Below screen-shots are for version 6.5**
+**Below screen-shots are for version 6.5 and 6.6**
 
 Login
 --------
@@ -10,7 +10,7 @@ Dashboard
 
 Right click
 --------
-![Right click](https://i.imgur.com/PipmILT.png "Right click")
+![Right click](https://i.imgur.com/Kqfqi1f.png "Right click")
 
 Key Value
 --------
@@ -35,3 +35,11 @@ Import
 Export
 -------
 ![Export](https://i.imgur.com/dfJX6P3.png "Export")
+
+Rename
+-------
+![Rename](https://i.imgur.com/NWCqco0.png "Rename")
+
+Duplicate
+-------
+![Duplicate](https://i.imgur.com/QH3ApxE.png "Duplicate")

@@ -36,8 +36,8 @@ if (isset($_POST['method'])) {
         }    
     } elseif ($method === 'CCP') {
         if ($userRights[1] == 1) {
-            if (isset($_POST['replace']) && isset($_POST['parentId']) && isset($_POST['path']) && isset($_POST['consul']) && isset($_POST['cas'])) {
-                ccpFn($_POST['path'], $_POST['parentId'], $_POST['replace'], $_POST['consul'], $_POST['ccType'], $_POST['cas']);
+            if (isset($_POST['replace']) && isset($_POST['parentId']) && isset($_POST['path']) && isset($_POST['consul']) && isset($_POST['cas']) && isset($_POST['srcConsul'])) {
+                ccpFn($_POST['path'], $_POST['parentId'], $_POST['replace'], $_POST['consul'], $_POST['ccType'], $_POST['cas'], $_POST['srcConsul']);
             }
         } else {
             echo "You are not Authorized to perform this action";
@@ -52,10 +52,10 @@ if (isset($_POST['method'])) {
         } else {
             echo "You are not Authorized to perform this action";
         }
-    } elseif ($method === 'RENAME') {
+    } elseif ($method === 'RENAME' || $method === 'DUPLICATE') {
         if ($userRights[1] == 1) {
             if (isset($_POST['path']) && isset($_POST['consul'])) {
-                renameFn($_POST['path'], $_POST['consul']);
+                renDupFn($_POST['path'], $_POST['consul'], $method);
             }
         } else {
             echo "You are not Authorized to perform this action";

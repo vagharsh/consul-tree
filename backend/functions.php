@@ -57,13 +57,13 @@ function importFn($path, $value, $cas){
     return ($result);
 }
 
-function ccpFn($path, $parentId, $replaceWith, $consul, $ccType, $cas){
-    $pathsList = json_decode($path);
+function ccpFn($path, $parentId, $replaceWith, $consul, $ccType, $cas, $srcConsul){
+    $pathsList = json_decode(getFromConsul($srcConsul. $path . "?keys")['data']);
     foreach ($pathsList as $item) {
         $lastChar = substr($item, -1);
         $newPath = str_replace($parentId, $replaceWith, $item);
         $newUrl = $consul . $newPath;
-        $sourceUrl = $_POST['srcConsul'] . $item;
+        $sourceUrl = $srcConsul . $item;
 
         if ($lastChar == '/') {
             putInConsul($newUrl, false, 1);
@@ -77,7 +77,7 @@ function ccpFn($path, $parentId, $replaceWith, $consul, $ccType, $cas){
     }
 }
 
-function renameFn($path, $consul){
+function renDupFn($path, $consul, $method){
     $decodedJson = json_decode($path);
     foreach ($decodedJson as $key => $value) {
         $lastChar = substr($key, -1);
@@ -90,10 +90,10 @@ function renameFn($path, $consul){
             $sourceUrl = $origUrl . "?raw";
             putInConsul($newUrl, getFromConsul($sourceUrl)['data'], 1);
         }
-
-        deleteFromConsul($origUrl);
     }
-    deleteFromConsul($consul . $_POST['selectedObj']);
+    if ($method === 'RENAME') {
+        deleteFromConsul($consul . $_POST['selectedObj']);
+    }
 }
 
 function exportFn($path, $consul){
@@ -110,7 +110,7 @@ function exportFn($path, $consul){
         }
     }
 
-    $filename = sys_get_temp_dir() . 'consul-tree.json';
+    $filename = sys_get_temp_dir() . '/consul-tree.json';
     $fp = fopen($filename, 'w');
     fwrite($fp, json_encode($toBeExportedData));
     fclose($fp);
