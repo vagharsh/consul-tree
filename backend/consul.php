@@ -16,7 +16,7 @@ if (strpos($calledUrl, 'backend') == false) {
     $backendStatus = 'backend/';
 } else {
     $calledLoc = '../';
-    $backendStatus = '';
+    $backendStatus = 'false';
 }
 
 $autoText = $_SESSION["auto"] ? "automatically" : "";;
@@ -289,56 +289,9 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
         </ul>
     </div>
 </footer>
+<script src="<?php echo $calledLoc; ?>lib/js/consul-tree.js"></script>
 <script>
     $(document).ready(function () {
-        function extractHostname(url) {
-            var hostname;
-            //find & remove protocol (http, ftp, etc.) and get hostname
-
-            if (url.indexOf("://") > -1) {
-                hostname = url.split('/')[2];
-            }
-            else {
-                hostname = url.split('/')[0];
-            }
-
-            //find & remove port number
-            hostname = hostname.split(':')[0];
-            //find & remove "?"
-            hostname = hostname.split('?')[0];
-
-            return hostname;
-        }
-        function getSetConfig(consul, modify) {
-            var selectedConsulIdx = $('#consulUrlSelectorId').find(":selected").attr("data-idx"),
-                stringedObj, SelectedConsul;
-
-            stringedObj = {
-                "url": consul[selectedConsulIdx].url,
-                "title": consul[selectedConsulIdx].title
-            };
-
-            if (localStorage['selectedConsul']) {
-                if (modify) {
-                    SelectedConsul = JSON.stringify(stringedObj);
-                    localStorage['selectedConsul'] = SelectedConsul;
-                }
-            } else {
-                SelectedConsul = JSON.stringify(stringedObj);
-                localStorage['selectedConsul'] = SelectedConsul;
-            }
-        }
-        function checkRights(rights){
-            var readACL = rights.charAt(0),
-                writeACL = rights.charAt(1);
-
-            if (readACL != 1){
-                $('.readACL').remove();
-            } else if (writeACL != 1){
-                $('.writeACL').remove();
-            }
-        }
-
         $('[data-toggle="tooltip"]').tooltip();
         $('#pageTitle').text("Consul Tree | " + window.location.hostname);
 
@@ -351,9 +304,9 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         userRights = "<?php echo $userRights; ?>",
                         createFolderCallee;
 
-                    for (var elem in consul) {
-                        optionElems += '<option value="' + consul[elem].url + '" data-idx="' + elem + '">' + extractHostname(consul[elem].url) + '</option>';
-                    }
+                    $.each(consul, function (key, elem) {
+                        optionElems += '<option value="' + consul[key].url + '" data-idx="' + [key] + '">' + extractHostname(consul[key].url) + '</option>';
+                    });
                     consulUrlSelector.html(optionElems);
 
                     getSetConfig(consul);
@@ -381,356 +334,15 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         to = false,
                         consulTreeDivID = $('#ConsulTree'),
                         createNodeModalObj = $('#createNodeModalId'),
+                        backendStatus = "<?php echo $backendStatus; ?>",
                         leftPos = consulTreeDivID.outerWidth() + consulTreeDivID.offset().left;
 
+                        console.log();
+
                     $('#generalValueAreaID').css("left", leftPos + 14 + "px");
-
-                    Array.prototype.contains = function (v) {
-                        for (var i = 0; i < this.length; i++) {
-                            if (this[i] === v) return true;
-                        }
-                        return false;
-                    };
-                    Array.prototype.unique = function () {
-                        var arr = [];
-                        for (var i = 0; i < this.length; i++) {
-                            if (!arr.contains(this[i])) {
-                                arr.push(this[i]);
-                            }
-                        }
-                        return arr;
-                    };
-
-                    function resetLocationStorage() {
-                        localStorage.clear();
-                        location.reload();
-                    }
-
-                    function importConsul(cas) {
-                        $('#overwriteModalId').modal('hide');
-                        var files = document.getElementById('jsonInputFile').files,
-                            fr = new FileReader();
-
-                        fr.onload = function (e) {
-                            var result = JSON.parse(e.target.result);
-                            $('#importExportModalId').modal('hide');
-                            $('#processingMdlID').modal({
-                                backdrop: 'static',
-                                keyboard: false
-                            });
-                            $.ajax({
-                                method: "POST",
-                                url: "<?php echo $backendStatus; ?>requests.php",
-                                data: {
-                                    path: consulUrl,
-                                    method: "BulkIMPORT",
-                                    cas: cas,
-                                    value: JSON.stringify(result)
-                                }
-                            }).done(function () {
-                                localStorage.removeItem('overwriteFor');
-                                location.reload();
-                            });
-                        };
-                        fr.readAsText(files.item(0));
-                    }
-
-                    function exportConsul(data) {
-                        var newData = JSON.stringify(data);
-
-                        $('#processingMdlID').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        });
-                        $.ajax({
-                            method: "POST",
-                            url: "<?php echo $backendStatus; ?>requests.php",
-                            dataType: "json",
-                            data: {
-                                consul: consulUrl,
-                                method: "EXPORT",
-                                path: newData
-                            }
-                        }).done(function (data) {
-                            if (data.length !== 0) {
-                                var contentType = 'text/json';
-                                var jsonFile = new Blob([JSON.stringify(data)], {type: contentType});
-                                var a = document.createElement('a');
-                                a.download = consulTitle.toLowerCase().replace(' ', '-') + '-exported.json';
-                                a.href = window.URL.createObjectURL(jsonFile);
-                                a.textContent = 'Download Consul-Tree-data';
-                                a.dataset.downloadurl = [contentType, a.download, a.href].join(':');
-                                document.body.appendChild(a);
-                                a.click();
-                                a.remove();
-                            }
-                            $('#processingMdlID').modal('hide');
-                        });
-                    }
-
-                    function parseCustomJson(data, tree, file) {
-                        if (file) {
-                            tree.core.data.push({
-                                "id": data,
-                                "parent": "#",
-                                "text": data,
-                                'icon': 'jstree-file'
-                            })
-                        } else {
-                            var minlen = -1,
-                                picked = "", i;
-                            for (i = 0; i < data.length; i++) {
-                                if (data[i].length < minlen || minlen == -1) {
-                                    minlen = data[i].length;
-                                    picked = data[i];
-                                }
-                            }
-
-                            tree.core.data.push({"id": picked, "parent": "#", "text": picked.slice(0, -1)});
-                            var xdata = data;
-                            xdata.splice(xdata.indexOf(picked), 1);
-
-                            for (i = 0; i < xdata.length; i++) {
-                                var name = xdata[i];
-                                var parent = "";
-                                if (name.substr(name.length - 1, 1) == '/') {
-                                    var xname = name.substr(0, name.length - 1);
-                                    parent = xname.substr(0, xname.lastIndexOf("/") + 1)
-                                } else {
-                                    parent = name.substr(0, name.lastIndexOf("/") + 1)
-                                }
-
-                                var filename = name.match(/([^\/]*)\/*$/)[1];
-
-                                if (name.substr(-1) == '/') {
-                                    tree.core.data.push({"id": name, "parent": parent, "text": filename})
-                                } else {
-                                    tree.core.data.push({
-                                        "id": name,
-                                        "parent": parent,
-                                        "text": filename,
-                                        'icon': 'jstree-file'
-                                    })
-                                }
-                            }
-                        }
-                        return tree;
-                    }
-
-                    function check4Roots(data) {
-                        var roots = [], arrays = [],
-                            filteredSplittedPath;
-
-                        $.each(data, function (key, item) {
-                            filteredSplittedPath = item.split("/");
-                            if (item.indexOf("/") == -1) {
-                                roots.push(item);
-                            }
-                            if (filteredSplittedPath.length !== 1){
-                                if (filteredSplittedPath[1].length  == 0) {
-                                    roots.push(item);
-                                }
-                            }
-                        });
-                        for (var i = 0; i < roots.length; i++) {
-                            var stringLen = roots[i].length,
-                                list = [];
-                            $.each(data, function (key, item) {
-                                var firstChars = item.substring(0, stringLen);
-                                if (firstChars === roots[i]) {
-                                    list.push(item);
-                                }
-                            });
-                            arrays.push(list);
-                        }
-                        return arrays;
-                    }
-
-                    function getTree(tree) {
-                        $.ajax({
-                            method: "GET",
-                            url: "<?php echo $backendStatus; ?>requests.php",
-                            dataType: 'json',
-                            data: {
-                                path: allKeys
-                            }
-                        }).done(function (data) {
-                            $('#connectingModalId').modal('hide');
-                            if (data['data'] == '[]') {
-                                $('#noTreeModalId').modal({
-                                    backdrop: 'static',
-                                    keyboard: false
-                                });
-                                var createRootBtnObj = $('#createRootBtnId');
-                                //console.log("No Data was found on Consul");
-                                $('#searchInputId').attr('disabled', true);
-                                $('#enableExportBtnId').attr('disabled', true);
-                                createRootBtnObj.removeClass('hidden');
-                                $('#importExportBtnId').attr('disabled', false);
-                                createRootBtnObj.attr('disabled', false);
-                            } else if (data['http_code'] !== 200) {
-                                $('#consulUrlId').text(extractHostname(consulUrl));
-                                $('#noConnectionModalId').modal({
-                                    backdrop: 'static',
-                                    keyboard: false
-                                });
-                                //console.log("No Connection to the Consul host");
-                                $('#searchInputId').attr('disabled', true);
-                                $('#enableExportBtnId').attr('disabled', true);
-                                $('#importExportBtnId').attr('disabled', true);
-                                $('#createRootBtnId').attr('disabled', true);
-                                $('#disableManualExport').attr('disabled', true);
-                                $('#exportSelection').attr('disabled', true);
-                            } else {
-                                var realData = JSON.parse(data['data']);
-                                $('#searchInputId').attr('disabled', false);
-                                $('#importExportBtnId').attr('disabled', false);
-                                $('#createRootBtnId').attr('disabled', false);
-                                $('#enableExportBtnId').attr('disabled', false);
-                                $('#disableManualExport').attr('disabled', false);
-                                $('#exportSelection').attr('disabled', false);
-
-                                realData = realData.sort();
-
-                                if (dataValidation(realData)) {
-                                    var el = check4Roots(realData), obj, file;
-                                    for (var i = 0; i < el.length; i++) {
-                                        obj = el[i];
-                                        file = false;
-                                        if (obj.length == 1) {
-                                            if (obj[0].indexOf("/") == -1) {
-                                                obj = obj[0];
-                                                file = true;
-                                            }
-                                        }
-                                        tree = parseCustomJson(obj, tree, file);
-                                    }
-                                    //console.log("Drawing the Tree");
-                                    $('#ConsulTree').jstree(tree);
-                                }
-                            }
-                        });
-                    }
-
-                    function updateFieldsToggle(readonly){
-                        var cKeyValueObj = $('#cKeyValue'),
-                            updateBtnId = $('#valueUpdateBtnId');
-
-                        if (! readonly){
-                            cKeyValueObj.parent().parent().parent().removeClass('panel-warning');
-                            cKeyValueObj.parent().parent().parent().addClass('panel-success');
-                            if (userRights.charAt(1) == 1){
-                                cKeyValueObj.attr('readonly', false);
-                            }
-                            updateBtnId.removeClass('disabled');
-                            updateBtnId.attr('disabled', false);
-                        } else {
-                            cKeyValueObj.parent().parent().parent().removeClass('panel-default');
-                            cKeyValueObj.parent().parent().parent().addClass('panel-warning');
-                            cKeyValueObj.attr('readonly', true);
-                            updateBtnId.addClass('disabled');
-                            updateBtnId.attr('disabled', true);
-                        }
-                    }
-
-                    function getValue(path, obj) {
-                        path = consulUrl + path + "?raw";
-                        $.ajax({
-                            method: "GET",
-                            url: "<?php echo $backendStatus; ?>requests.php",
-                            data: {
-                                path: path
-                            }
-                        }).done(function (data) {
-                            var realData = JSON.parse(data);
-                            if (obj) {
-                                obj.text(realData['data']);
-                                obj.val(realData['data']);
-                            } else {
-                                $('#gotNodeValue').text(realData['data']);
-                            }
-                            updateFieldsToggle(false);
-                        });
-                    }
-
-                    function ccPaste(path, parentId, replace, ccType, srcConsul, cas) {
-                        $('#overwriteModalId').modal('hide');
-                        $('#processingMdlID').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        });
-
-                        $.ajax({
-                            method: "POST",
-                            url: "<?php echo $backendStatus; ?>requests.php",
-                            data: {
-                                method: "CCP",
-                                consul: consulUrl,
-                                parentId: parentId,
-                                replace: replace,
-                                ccType: ccType,
-                                srcConsul: srcConsul,
-                                path: path,
-                                cas: cas
-                            }
-                        }).done(function () {
-                            localStorage.removeItem('ccpObjType');
-                            localStorage.removeItem('ccpObjPaths');
-                            localStorage.removeItem('ccpObjParent');
-                            localStorage.removeItem('ccpObjConsul');
-                            localStorage.removeItem('overwriteFor');
-                            location.reload();
-                        })
-                    }
-
-                    function sendToConsul(path, value, reload, updateBtn) {
-                        path = path.replace(/\\/g, '/');
-
-                        if (updateBtn){
-                            updateFieldsToggle(true);
-                        }
-
-                        if (path[0] == '/') {
-                            path = path.substring(1);
-                        }
-                        var fullPath = consulUrl + path;
-                        $.ajax({
-                            method: "POST",
-                            url: "<?php echo $backendStatus; ?>requests.php",
-                            data: {
-                                method: "PUT",
-                                path: fullPath,
-                                value: value
-                            }
-                        }).done(function () {
-                            if (reload) {
-                                if (updateBtn) {
-                                    updateFieldsToggle(false);
-                                    $('#cKeyValue').val(value);
-                                } else {
-                                    location.reload();
-                                }
-                            }
-                        })
-                    }
-
-                    function deleteNode(path) {
-                        $.ajax({
-                            method: "POST",
-                            url: "<?php echo $backendStatus; ?>requests.php",
-                            data: {
-                                method: "DELETE",
-                                consul: consulUrl,
-                                path: path
-                            }
-                        }).done(function () {
-                            location.reload();
-                        })
-                    }
-
                     $('#renameConfirmBtnId').on('click', function () {
                         $('#renameModalId').modal('hide');
-                        renDupNode();
+                        renDupNode(consulUrl, backendStatus);
                     });
                     $('#newNodePathId').on('keyup', function () {
                         var newText = $('#newNodePathId').val();
@@ -741,46 +353,6 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         }
                     });
 
-                    function renDupNode() {
-                        var newNodeName = $('#newNodePathId').val(),
-                            objChildren = workingObj['children_d'],
-                            objParent = workingObj['parent'],
-                            oldObjPath = workingObj['id'],
-                            newNodePath, newNodeString, newData = {},
-                            renDupType = $('#renameConfirmBtnId').data('type');
-
-                        $('#processingMdlID').modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        });
-
-                        setTimeout(function () {
-                            if (oldObjPath.substr(oldObjPath.length - 1) !== '/') {
-                                newNodeString = objParent + newNodeName;
-                                newNodePath = oldObjPath.replace(oldObjPath, newNodeString);
-                                newData[oldObjPath] = newNodePath;
-                            } else {
-                                $.each(objChildren, function (key, item) {
-                                    newNodeString = objParent + newNodeName + '/';
-                                    newNodePath = item.replace(oldObjPath, newNodeString);
-                                    newData[item] = newNodePath;
-                                });
-                            }
-                            $.ajax({
-                                method: "POST",
-                                url: "<?php echo $backendStatus; ?>requests.php",
-                                data: {
-                                    consul: consulUrl,
-                                    method: renDupType.toUpperCase(),
-                                    path: JSON.stringify(newData),
-                                    selectedObj: oldObjPath
-                                }
-                            }).done(function () {
-                                location.reload();
-                            });
-                        }, 250);
-                    }
-
                     function customMenu(node) {
                         var renameBtnObj = $('#renameConfirmBtnId');
                         var renameModalObj = $('#renameModalId');
@@ -790,7 +362,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                 "separator_before": false,
                                 "separator_after": true,
                                 "_disabled": function () {
-                                    return userRights.charAt(1) != 1;
+                                    return userRights.charAt(1) !== "1";
                                 },
                                 "label": "Create",
                                 "action": function (data) {
@@ -806,7 +378,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                 "icon": false,
                                 "separator_after": true,
                                 "_disabled": function () {
-                                    return userRights.charAt(1) != 1;
+                                    return userRights.charAt(1) !== "1";
                                 },
                                 "label": "Rename",
                                 "action": function (data) {
@@ -825,7 +397,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                 "icon": false,
                                 "separator_after": true,
                                 "_disabled": function () {
-                                    return userRights.charAt(1) != 1;
+                                    return userRights.charAt(1) !== "1";
                                 },
                                 "label": "Duplicate",
                                 "action": function (data) {
@@ -849,7 +421,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         "separator_after": false,
                                         "label": "Cut",
                                         "_disabled": function () {
-                                                return userRights.charAt(2) != 1;
+                                                return userRights.charAt(2) !== "1";
                                         },
                                         "action": function (data) {
                                             var inst = $.jstree.reference(data.reference),
@@ -865,7 +437,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         "separator_before": false,
                                         "icon": false,
                                         "_disabled": function () {
-                                            return userRights.charAt(1) != 1;
+                                            return userRights.charAt(1) !== "1";
                                         },
                                         "separator_after": false,
                                         "label": "Copy",
@@ -883,7 +455,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                         "separator_before": false,
                                         "icon": false,
                                         "_disabled": function () {
-                                            if (userRights.charAt(1) != 1){
+                                            if (userRights.charAt(1) !== "1"){
                                                 return true;
                                             } else {
                                                 return !(localStorage['ccpObjPaths'] && localStorage['ccpObjPaths'].length > 0);
@@ -908,7 +480,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                 "icon": false,
                                 "separator_after": false,
                                 "_disabled": function () {
-                                    return userRights.charAt(2) != 1;
+                                    return userRights.charAt(2) !== "1";
                                 },
                                 "label": "Delete",
                                 "action": function (data) {
@@ -921,7 +493,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                                             keyboard: false
                                         });
                                         setTimeout(function () {
-                                            deleteNode(obj['id']);
+                                            deleteNode(obj['id'], consulUrl, backendStatus);
                                         }, 250);
                                     }
                                 }
@@ -942,113 +514,12 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                             ccType = localStorage['ccpObjType'],
                             srcConsul = localStorage['ccpObjConsul'];
 
-                        if (localStorage['overwriteFor'] == "import"){
-                            importConsul($(this).data('answer'));
-                        } else if (localStorage['overwriteFor'] == "ccp"){
-                            ccPaste(ccpSourcePaths, parent, ccpObjId, ccType, srcConsul, $(this).data('answer'));
+                        if (localStorage['overwriteFor'] === "import"){
+                            importConsul($(this).data('answer'), consulUrl, backendStatus);
+                        } else if (localStorage['overwriteFor'] === "ccp"){
+                            ccPaste(ccpSourcePaths, parent, ccpObjId, ccType, srcConsul, $(this).data('answer'), consulUrl, backendStatus);
                         }
                     });
-
-                    function check4Key() {
-                        var inputObj = $('#keyInputId');
-                        var inputObjLength = inputObj.val().length;
-                        if (inputObjLength > 0) {
-                            $('#inputKeyValueId').attr('disabled', false);
-                            $('#createKeyBtnId').attr('disabled', false);
-                        } else {
-                            $('#inputKeyValueId').attr('disabled', true);
-                            $('#createKeyBtnId').attr('disabled', true);
-                        }
-                    }
-
-                    function fixTree(data) {
-                        if (data !== undefined) {
-                            data = JSON.stringify(data)
-                        }
-                        $.ajax({
-                            method: "POST",
-                            url: "<?php echo $backendStatus; ?>requests.php",
-                            data: {
-                                method: "FIX",
-                                consul: consulUrl,
-                                path: data
-                            }
-                        }).done(function (data) {
-                            location.reload();
-                        });
-                    }
-
-                    function getFoldersOnly(data) {
-                        var onlyFolders = [], uniqueFolders;
-                        $.each(data, function (key, item) {
-                            if (item.substr(item.length - 1) !== '/') {
-                                item = item.split('/').slice(0, -1).join('/');
-                                item = item + '/';
-                            }
-                            onlyFolders.push(item);
-                        });
-
-                        uniqueFolders = onlyFolders.unique();
-                        return uniqueFolders;
-                    }
-
-                    function explodeData(data) {
-                        var newData = [], obj = '';
-                        $.each(data, function (key, item) {
-                            obj = item;
-                            while (obj !== '') {
-                                obj = obj.split('/').slice(0, -1).join('/');
-                                if (obj !== '') {
-                                    newData.push(obj + '/');
-                                }
-                            }
-                        });
-                        return newData;
-                    }
-
-                    function dataValidation(data) {
-                        //console.log("Validating data structure");
-                        var tobeFixedData = [], i = 0, onlyFolders,
-                            explodedData, uniqueFolders,
-                            loadingModalObj = $('#loadingTreeMdlID'),
-                            status = true;
-
-                        loadingModalObj.modal({
-                            backdrop: 'static',
-                            keyboard: false
-                        });
-
-                        onlyFolders = getFoldersOnly(data);
-                        explodedData = explodeData(onlyFolders);
-                        uniqueFolders = explodedData.unique();
-
-                        for (i = 0; i < uniqueFolders.length; i++) {
-                            if (data.indexOf(uniqueFolders[i]) == -1) {
-                                tobeFixedData.push(uniqueFolders[i]);
-                            }
-                        }
-
-                        if (tobeFixedData.length > 0) {
-                            //console.log("Fixing data structure");
-                            fixTree(tobeFixedData);
-                            status = false;
-                        } else {
-                            loadingModalObj.modal('hide');
-                        }
-
-                        return status;
-                    }
-
-                    function checkClearIcon() {
-                        var searchClearIcon = $('#searchclear');
-                        if ($('#searchInputId').val().length > 0) {
-                            searchClearIcon.removeClass('glyphicon-search');
-                            searchClearIcon.addClass('glyphicon-remove');
-                        } else {
-                            searchClearIcon.removeClass('glyphicon-remove');
-                            searchClearIcon.addClass('glyphicon-search');
-                        }
-                    }
 
                     //console.log("Establishing Connection to the Consul host");
                     $('#connectingModalId').modal({
@@ -1094,7 +565,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                             value = cKeyValueObj.val();
 
                         cKeyValueObj.val('Loading...');
-                        sendToConsul(path, value, true, true)
+                        sendToConsul(path, value, true, true, consulUrl, userRights, backendStatus)
                     });
                     $('#enableExportBtnId').on('click', function () {
                         localStorage['treeBackup'] = localStorage['jstree'];
@@ -1121,7 +592,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                             }
                         };
 
-                        getTree(tree);
+                        getTree(tree, consulUrl, backendStatus, allKeys);
                     });
                     $('#disableManualExport').on('click', function () {
                         if (localStorage['treeBackup']) {
@@ -1169,19 +640,19 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
 
                         for ( i = 0; i < filteredSplittedPath.length; i++) {
                             toBeCreatedPath = toBeCreatedPath + filteredSplittedPath[i] + "/";
-                            if (i == filteredSplittedPath.length -1) {
+                            if (i === filteredSplittedPath.length -1) {
                                 if (lastIsFile){
-                                    sendToConsul(nodeName, nodeValue, true);
+                                    sendToConsul(nodeName, nodeValue, true, consulUrl, userRights, backendStatus);
                                 } else {
-                                    sendToConsul(toBeCreatedPath, nodeValue, true);
+                                    sendToConsul(toBeCreatedPath, nodeValue, true, consulUrl, userRights, backendStatus);
                                 }
                             } else {
-                                sendToConsul(toBeCreatedPath, nodeValue, false);
+                                sendToConsul(toBeCreatedPath, nodeValue, false, consulUrl, userRights, backendStatus);
                             }
                         }
                     });
                     $('#exportSelection').on('click', function () {
-                        exportConsul($("#ConsulTree").jstree(true).get_selected());
+                        exportConsul($("#ConsulTree").jstree(true).get_selected(), backendStatus, consulTitle, consulUrl);
                     });
                     consulUrlSelector.on('change', function () {
                         getSetConfig(consul, true);
@@ -1191,7 +662,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     $('#keyInputId').on('keyup', function () {
                         check4Key();
                         var keyValueInput = $('.inputKeyValueClass');
-                        if ($(this).val().slice(-1) == "/") {
+                        if ($(this).val().slice(-1) === "/") {
                             keyValueInput.addClass('hidden');
                         } else {
                             if (keyValueInput.hasClass('hidden')) {
@@ -1219,11 +690,11 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         cKeyValueObj.parent().parent().prev().find('h5').text(selectedNodeText);
                         $('#selectedNodeID').text(selectedNodeText);
                         cKeyValueObj.val('Loading...');
-                        updateFieldsToggle(true);
-                        if (data.node.id.substr(-1) != '/') {
+                        updateFieldsToggle(true, userRights);
+                        if (data.node.id.substr(-1) !== '/') {
                             updateControl.removeClass('hidden');
                             $('#createElementText').addClass('hidden');
-                            getValue(data.node.id, cKeyValueObj);
+                            getValue(data.node.id, cKeyValueObj, consulUrl, userRights, backendStatus);
                         } else {
                             updateControl.addClass('hidden');
                             $('#createElementText').removeClass('hidden');
@@ -1237,7 +708,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         localStorage['jstree'] = localStorage['treeBackup'];
                         localStorage.removeItem('treeBackup');
                     }
-                    getTree(tree);
+                    getTree(tree, consulUrl, backendStatus, allKeys);
                 }
             }
         });

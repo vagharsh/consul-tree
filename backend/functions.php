@@ -49,6 +49,7 @@ function deleteFn($path, $consul){
 }
 
 function importFn($path, $value, $cas){
+    $result = '';
     $pathsList = json_decode($value);
     foreach ($pathsList as $key => $value) {
         $keyUrl = $path . $key;
@@ -141,6 +142,7 @@ function rrmdir($dir) {
 
 function fixTreeFn ($path, $consul){
     $manage = json_decode($path);
+    $consulUrlModified = '';
 
     ini_set('max_execution_time', 120);
 

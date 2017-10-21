@@ -65,7 +65,7 @@ if (isset($_POST['method'])) {
             if (isset($_POST['path']) && isset($_POST['consul'])) {
                 $consul = $_POST['consul'];
                 $path = isset($_POST['path']) ? $_POST['path'] : getFromConsul($consul . "?keys")['data'];
-                echo (fixTreeFn($path, $_POST['consul']));
+                fixTreeFn($path, $_POST['consul']);
             }
         } else {
             echo "You are not Authorized to perform this action";
