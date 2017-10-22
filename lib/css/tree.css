@@ -86,7 +86,7 @@ h1 {
      border-top-left-radius: 5px;
      border-top-right-radius: 5px;
  }
-#searchclear {
+#searchClear {
     position: absolute;
     right: 25px;
     top: 0;

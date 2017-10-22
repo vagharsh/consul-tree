@@ -94,7 +94,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
-                      vagharsh/consul-tree:6.6-web                    
+                      vagharsh/consul-tree:6.7-web                    
     
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
@@ -104,16 +104,14 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.6
+                      vagharsh/consul-tree:6.7
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
 Release Notes
 ---------
-v 6.6 :
-- Added Duplicate in the right-click context menu for easy duplicate keys, folders.
-- Fixed a bug in the rename functionality.
-- CCP function now passes only the selected node name.
+v 6.7 :
+- Re-organizing the JS functions.
 
 Release notes are available [here](release.md).
 
