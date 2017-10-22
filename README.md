@@ -112,6 +112,7 @@ Release Notes
 ---------
 v 6.7 :
 - Re-organizing the JS functions.
+- Fixed issue with misbehave when doing rename and duplicate on a root folder/file.
 
 Release notes are available [here](release.md).
 

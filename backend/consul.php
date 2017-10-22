@@ -283,7 +283,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
 <p class="hidden" id="treeAsString"></p>
 <p class="hidden" id="ajaxReturnFieldID"></p>
 <p class="hidden" id="ajaxReturnVFieldID"></p>
-<p class="hidden" id="ccTypeFieldID"></p>
+<p class="hidden" id="userRights"></p>
 <p class="hidden" id="ccParentFieldID"></p>
 <p class="hidden" id="selectedNodeID"></p>
 <p class="hidden" id="gotNodeValue"></p>
@@ -324,11 +324,12 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
 
                 localStorage['consulUrl'] = consulUrl;
                 localStorage['backendPath'] = backendPath;
+                $('#userRights').text(userRights);
 
                 tree = {
-                    'contextmenu': {'items': customMenu(userRights)},
+                    'contextmenu': {'items': customMenu},
                     'check_callback': true,
-                    'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow'],
+                    'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow', 'dnd'],
                     'core': {
                         "multiple": false,
                         "animation": 0,
@@ -342,19 +343,10 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
 
                 $('#generalValueAreaID').css("left", leftPos + 14 + "px");
 
-                $('#valueUpdateBtnId').on('click', function () {
-                    var path = $('#selectedNodeID').text(),
-                        cKeyValueObj = $('#cKeyValue'),
-                        value = cKeyValueObj.val();
-
-                    cKeyValueObj.val('Loading...');
-                    sendToConsul(path, value, true, true, userRights)
-                });
-
                 $('#enableExportBtnId').on('click', function () {
                     enableExportMode();
                     var tree = {
-                        'contextmenu': {'items': customMenu(userRights)},
+                        'contextmenu': {'items': customMenu},
                         "plugins": ["checkbox", "types", "wholerow", "state", "search"],
                         'core': {
                             "multiple": true,
@@ -368,38 +360,11 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     getTree(tree, allKeys);
                 });
 
-                $('#createKeyBtnId').on('click', function () {
-                    var nodeName = $('#pathDescribeID').val();
-                    var nodeValue = $('#inputKeyValueId').val(),
-                        splitUpPath = nodeName.split("/"),
-                        toBeCreatedPath = '', lastIsFile = false,
-                        i, filteredSplitUpPath = [];
-
-                    $.each(splitUpPath, function (key, item) {
-                        if (item.length !== 0) filteredSplitUpPath.push(item);
-                    });
-
-                    if (nodeName.substr(nodeName.length - 1) !== '/') lastIsFile = true;
-
-                    for (i = 0; i < filteredSplitUpPath.length; i++) {
-                        toBeCreatedPath = toBeCreatedPath + filteredSplitUpPath[i] + "/";
-                        if (i === filteredSplitUpPath.length - 1) {
-                            if (lastIsFile) {
-                                sendToConsul(nodeName, nodeValue, true, false, userRights);
-                            } else {
-                                sendToConsul(toBeCreatedPath, nodeValue, true, false, userRights);
-                            }
-                        } else {
-                            sendToConsul(toBeCreatedPath, nodeValue, false, false, userRights);
-                        }
-                    }
-                });
                 $('#exportSelection').on('click', function () {
-                    exportConsul($("#ConsulTree").jstree(true).get_selected(), consulTitle);
+                    exportConsul(consulTreeDivID.jstree(true).get_selected(), consulTitle);
                 });
                 consulUrlSelector.on('change', function () {
                     getSetConfig(consul, true);
-                    location.reload();
                 });
                 $('#consulFullUrlId').text(consulUrl);
                 $('#searchInputId').on('keyup', function () {
@@ -409,28 +374,6 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         var v = $('#searchInputId').val();
                         $('#ConsulTree').jstree(true).search(v);
                     }, 250);
-                });
-                consulTreeDivID.on("select_node.jstree", function (e, data) {
-                    var updateControl = $('.update-control'),
-                        cKeyValueObj = $('#cKeyValue'),
-                        selectedNodeText = data.node.id;
-
-                    cKeyValueObj.parent().parent().prev().find('h5').text(selectedNodeText);
-                    $('#selectedNodeID').text(selectedNodeText);
-                    cKeyValueObj.val('Loading...');
-                    updateFieldsToggle(true, userRights);
-                    if (data.node.id.substr(-1) !== '/') {
-                        updateControl.removeClass('hidden');
-                        $('#createElementText').addClass('hidden');
-                        getValue(data.node.id, cKeyValueObj, userRights);
-                    } else {
-                        updateControl.addClass('hidden');
-                        $('#createElementText').removeClass('hidden');
-                        cKeyValueObj.val('');
-                        cKeyValueObj.parent().parent().parent().removeClass('panel-warning');
-                        cKeyValueObj.parent().parent().parent().removeClass('panel-success');
-                        cKeyValueObj.parent().parent().parent().addClass('panel-default');
-                    }
                 });
 
                 //console.log("Establishing Connection to the Consul host");
