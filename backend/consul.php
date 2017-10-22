@@ -322,8 +322,11 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                 consulUrlSelector.val(consulUrl).attr("selected", "selected");
                 $('#consulTitleID').text(consulTitle);
 
+                localStorage['consulUrl'] = consulUrl;
+                localStorage['backendPath'] = backendPath;
+
                 tree = {
-                    'contextmenu': {'items': customMenu(false, userRights, consulUrl, backendPath)},
+                    'contextmenu': {'items': customMenu(userRights)},
                     'check_callback': true,
                     'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow'],
                     'core': {
@@ -339,48 +342,19 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
 
                 $('#generalValueAreaID').css("left", leftPos + 14 + "px");
 
-                $('#renameConfirmBtnId').on('click', function () {
-                    renDupNode(consulUrl, backendPath);
-                });
-
-                $('.overwriteBtn').on('click', function () {
-                    var parent = localStorage['ccpObjParent'],
-                        ccpObjId = localStorage['ccpObjId'],
-                        ccpSourcePaths = localStorage['ccpSourcePaths'],
-                        ccType = localStorage['ccpObjType'],
-                        srcConsul = localStorage['ccpObjConsul'];
-
-                    if (localStorage['overwriteFor'] === "import") {
-                        importConsul($(this).data('answer'), consulUrl, backendPath);
-                    } else if (localStorage['overwriteFor'] === "ccp") {
-                        ccPaste(ccpSourcePaths, parent, ccpObjId, ccType, srcConsul, $(this).data('answer'), consulUrl, backendPath);
-                    }
-                });
-
                 $('#valueUpdateBtnId').on('click', function () {
                     var path = $('#selectedNodeID').text(),
                         cKeyValueObj = $('#cKeyValue'),
                         value = cKeyValueObj.val();
 
                     cKeyValueObj.val('Loading...');
-                    sendToConsul(path, value, true, true, consulUrl, userRights, backendPath)
+                    sendToConsul(path, value, true, true, userRights)
                 });
 
                 $('#enableExportBtnId').on('click', function () {
-                    localStorage['treeBackup'] = localStorage['jstree'];
-                    var updateControl = $('.update-control'), tree;
-                    updateControl.addClass('hidden');
-                    updateControl.attr('disabled', true);
-                    $('#createElementText').addClass('hidden');
-                    $('#exportSelection').removeClass('hidden');
-                    $('#enableExportBtnId').toggleClass('hidden');
-                    $('#disableManualExport').toggleClass('hidden');
-                    $('#keyValueFieldsid').remove();
-                    $('#importExportBtnId').remove();
-                    $('#createRootBtnId').remove();
-                    $("#ConsulTree").jstree("destroy");
-                    tree = {
-                        'contextmenu': {'items': customMenu(false, userRights, consulUrl, backendPath)},
+                    enableExportMode();
+                    var tree = {
+                        'contextmenu': {'items': customMenu(userRights)},
                         "plugins": ["checkbox", "types", "wholerow", "state", "search"],
                         'core': {
                             "multiple": true,
@@ -391,7 +365,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         }
                     };
 
-                    getTree(tree, consulUrl, backendPath, allKeys);
+                    getTree(tree, allKeys);
                 });
 
                 $('#createKeyBtnId').on('click', function () {
@@ -411,17 +385,17 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         toBeCreatedPath = toBeCreatedPath + filteredSplitUpPath[i] + "/";
                         if (i === filteredSplitUpPath.length - 1) {
                             if (lastIsFile) {
-                                sendToConsul(nodeName, nodeValue, true, false, consulUrl, userRights, backendPath);
+                                sendToConsul(nodeName, nodeValue, true, false, userRights);
                             } else {
-                                sendToConsul(toBeCreatedPath, nodeValue, true, false, consulUrl, userRights, backendPath);
+                                sendToConsul(toBeCreatedPath, nodeValue, true, false, userRights);
                             }
                         } else {
-                            sendToConsul(toBeCreatedPath, nodeValue, false, false, consulUrl, userRights, backendPath);
+                            sendToConsul(toBeCreatedPath, nodeValue, false, false, userRights);
                         }
                     }
                 });
                 $('#exportSelection').on('click', function () {
-                    exportConsul($("#ConsulTree").jstree(true).get_selected(), backendPath, consulTitle, consulUrl);
+                    exportConsul($("#ConsulTree").jstree(true).get_selected(), consulTitle);
                 });
                 consulUrlSelector.on('change', function () {
                     getSetConfig(consul, true);
@@ -448,7 +422,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     if (data.node.id.substr(-1) !== '/') {
                         updateControl.removeClass('hidden');
                         $('#createElementText').addClass('hidden');
-                        getValue(data.node.id, cKeyValueObj, consulUrl, userRights, backendPath);
+                        getValue(data.node.id, cKeyValueObj, userRights);
                     } else {
                         updateControl.addClass('hidden');
                         $('#createElementText').removeClass('hidden');
@@ -470,7 +444,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     localStorage.removeItem('treeBackup');
                 }
 
-                getTree(tree, consulUrl, backendPath, allKeys);
+                getTree(tree, allKeys);
             }
         });
     });
