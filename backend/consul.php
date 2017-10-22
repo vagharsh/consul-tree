@@ -280,14 +280,9 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
         </div>
     </div>
 </div>
-<p class="hidden" id="treeAsString"></p>
-<p class="hidden" id="ajaxReturnFieldID"></p>
-<p class="hidden" id="ajaxReturnVFieldID"></p>
 <p class="hidden" id="userRights"></p>
-<p class="hidden" id="ccParentFieldID"></p>
 <p class="hidden" id="selectedNodeID"></p>
 <p class="hidden" id="gotNodeValue"></p>
-<a id="downloadAnchorElem" style="display:none"></a>
 <footer id="pageFooter">
     <div class="container">
         <p class="navbar-text navbar-lef">Consul-tree v6.7</p>
@@ -329,7 +324,8 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                 tree = {
                     'contextmenu': {'items': customMenu},
                     'check_callback': true,
-                    'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow', 'dnd'],
+                    //'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow', 'dnd'],
+                    'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow'],
                     'core': {
                         "multiple": false,
                         "animation": 0,
