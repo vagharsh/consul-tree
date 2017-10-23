@@ -62,7 +62,11 @@ function ccpFn($path, $parentId, $replaceWith, $consul, $ccType, $cas, $srcConsu
     $pathsList = json_decode(getFromConsul($srcConsul. $path . "?keys")['data']);
     foreach ($pathsList as $item) {
         $lastChar = substr($item, -1);
-        $newPath = str_replace($parentId, $replaceWith, $item);
+        if ($parentId === ''){
+            $newPath = $replaceWith . $item;
+        } else {
+            $newPath = str_replace($parentId, $replaceWith, $item);
+        }
         $newUrl = $consul . $newPath;
         $sourceUrl = $srcConsul . $item;
 

@@ -1,5 +1,9 @@
 Release Notes
 ---------
+[v6.7](https://github.com/vagharsh/consul-tree/)
+- Re-organizing the JS functions.
+- Fixed issue with misbehave when performing (Rename, Duplicate, Copy, Cut) actions on a root folder/file.
+
 [v6.6](https://github.com/vagharsh/consul-tree/commit/6f395a9563a6bcb23746946be189edc664354927)
 - Added Duplicate in the right-click context menu for easy duplicate keys, folders.
 - Fixed a bug in the rename functionality.

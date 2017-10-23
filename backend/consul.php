@@ -119,7 +119,6 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                         <input class="form-control" id="keyInputId" value="" title="Folder / Key Name">
                         <input type="hidden" class="form-control" id="pathInputId" value="">
                     </div>
-
                     <div class="form-group">
                         <h5 class="control-label">Path : </h5>
                         <textarea class="form-control" id="pathDescribeID" readonly title="Path"></textarea>
@@ -299,32 +298,24 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
         $('#pageTitle').text("Consul Tree | " + window.location.hostname);
         $.getJSON("<?php echo $calledLoc; ?>config/config.json", function (consul) {
             if (consul) if (consul.length !== 0) {
-                var consulUrl, consulTitle, selectedConsulJson, to = false, tree, allKeys,
-                    consulUrlSelector = $("#consulUrlSelectorId"),
+                var selectedConsulJson, tree,
                     userRights = "<?php echo $userRights; ?>",
                     backendStatus = "<?php echo $backendStatus; ?>",
                     consulTreeDivID = $('#ConsulTree'),
                     leftPos = consulTreeDivID.outerWidth() + consulTreeDivID.offset().left,
                     backendPath = returnBackend(backendStatus);
 
-                getConsulLocations(consul);
-                getSetConfig(consul);
-                checkRights(userRights);
-
-                selectedConsulJson = JSON.parse(localStorage['selectedConsul']);
-                consulUrl = selectedConsulJson.url;
-                consulTitle = selectedConsulJson.title;
-                consulUrlSelector.val(consulUrl).attr("selected", "selected");
-                $('#consulTitleID').text(consulTitle);
-
-                localStorage['consulUrl'] = consulUrl;
+                localStorage['consulConfig'] = JSON.stringify(consul);
                 localStorage['backendPath'] = backendPath;
-                $('#userRights').text(userRights);
+                $('#generalValueAreaID').css("left", leftPos + 14 + "px");
+
+                getConsulLocations();
+                checkRights(userRights);
+                selectedConsulJson = getSetConfig();
 
                 tree = {
                     'contextmenu': {'items': customMenu},
                     'check_callback': true,
-                    //'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow', 'dnd'],
                     'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow'],
                     'core': {
                         "multiple": false,
@@ -335,55 +326,12 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     }
                 };
 
-                allKeys = consulUrl + "?keys";
-
-                $('#generalValueAreaID').css("left", leftPos + 14 + "px");
-
-                $('#enableExportBtnId').on('click', function () {
-                    enableExportMode();
-                    var tree = {
-                        'contextmenu': {'items': customMenu},
-                        "plugins": ["checkbox", "types", "wholerow", "state", "search"],
-                        'core': {
-                            "multiple": true,
-                            "animation": 0,
-                            "check_callback": true,
-                            "themes": {"stripes": true},
-                            'data': []
-                        }
-                    };
-
-                    getTree(tree, allKeys);
-                });
-
-                $('#exportSelection').on('click', function () {
-                    exportConsul(consulTreeDivID.jstree(true).get_selected(), consulTitle);
-                });
-                consulUrlSelector.on('change', function () {
-                    getSetConfig(consul, true);
-                });
-                $('#consulFullUrlId').text(consulUrl);
-                $('#searchInputId').on('keyup', function () {
-                    checkClearIcon();
-                    if (to) clearTimeout(to);
-                    to = setTimeout(function () {
-                        var v = $('#searchInputId').val();
-                        $('#ConsulTree').jstree(true).search(v);
-                    }, 250);
-                });
-
-                //console.log("Establishing Connection to the Consul host");
-                $('#connectingModalId').modal({
-                    backdrop: 'static',
-                    keyboard: false
-                });
-
                 if (localStorage['treeBackup']) {
                     localStorage['jstree'] = localStorage['treeBackup'];
                     localStorage.removeItem('treeBackup');
                 }
 
-                getTree(tree, allKeys);
+                getTree(tree, selectedConsulJson.url + "?keys");
             }
         });
     });
