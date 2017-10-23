@@ -290,7 +290,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
         </ul>
     </div>
 </footer>
-<script src="<?php echo $calledLoc; ?>lib/js/consul-tree.js"></script>
+<script src="<?php echo $calledLoc; ?>lib/js/functions.js"></script>
 <script src="<?php echo $calledLoc; ?>lib/js/triggers.js"></script>
 <script>
     $(document).ready(function () {
