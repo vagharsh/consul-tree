@@ -87,7 +87,7 @@ On the Docker host that you want to run the Consul-tree container from.
 - Configure the `config.json` as mentioned [here](#consul-configuration-configconfigjson).
 - Configure the `auth.php` as mentioned [here](#acl-configuration-configauthphp).
 - There are 2 ways to provide the config file.
-    - Provide the configs file via **HTTP** url.
+    - Provide the configs file via **HTTP** url. (**both files [auth.php, config.json] should be provided**)
         ```
         docker run -d -e CONFIG=http://test.abc.com/config.json \
                       -e AUTH=http://test.abc.com/auth.php \
@@ -98,13 +98,25 @@ On the Docker host that you want to run the Consul-tree container from.
     
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
-    - Provide the config file via **Mounting**.
+    - Provide the config file via **Mounting**. 
+        - Mounting the config folder.
         ```
         docker run -d -v /opt/consul-tree/config:/var/www/html/config \
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
                       vagharsh/consul-tree:6.7
+        
+        ```
+        - Mounting the config files separately.
+        ```
+        docker run -d -v /opt/consul-tree/config/config.json:/var/www/html/config/config.json \
+                      -v /opt/consul-tree/config/auth.php:/var/www/html/config/auth.php \
+                      -p 8123:80 \
+                      --restart always \
+                      --name consul-tree \
+                      vagharsh/consul-tree:6.7
+        ```
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
