@@ -95,7 +95,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       --restart always \
                       --name consul-tree \ 
                       vagharsh/consul-tree:6.7-web                    
-    
+        ```
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
     - Provide the config file via **Mounting**. 
@@ -106,7 +106,6 @@ On the Docker host that you want to run the Consul-tree container from.
                       --restart always \
                       --name consul-tree \
                       vagharsh/consul-tree:6.7
-        
         ```
         - Mounting the config files separately.
         ```
