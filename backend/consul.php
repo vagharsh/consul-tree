@@ -145,8 +145,8 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label>Browse JSON file : </label>
-                        <input type="file" id="jsonInputFile">
+                        <label for="jsonInputFile">Browse JSON file : </label>
+                        <input type="file" class="form-control" id="jsonInputFile">
                     </div>
                     <button type="button" id="importConsulBtnId" class="btn btn-info">Import</button>
                     <span style="color: #737373">&nbsp;|&nbsp;Only applicable if the JSON file was exported from the Consul-tree.</span>

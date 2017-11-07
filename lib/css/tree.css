@@ -33,11 +33,13 @@ h1 {
 .page-header {
     border-bottom: 0 !important;
     padding-bottom: 0 !important;
+    margin: 40px 0 15px !important;
 }
 
 .jstree-container-ul {
     margin-right: 15px !important;
 }
+
 .modal-header-danger {
     color:#fff;
     padding:9px 15px;
@@ -50,6 +52,7 @@ h1 {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
+
 .modal-header-warning {
     color:#fff;
     padding:9px 15px;
@@ -62,6 +65,7 @@ h1 {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
+
 .modal-header-primary {
     color:#fff;
     padding:9px 15px;
@@ -74,6 +78,7 @@ h1 {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 }
+
 .modal-header-info {
      color:#fff;
      padding:9px 15px;
@@ -85,7 +90,8 @@ h1 {
      -moz-border-radius-topright: 5px;
      border-top-left-radius: 5px;
      border-top-right-radius: 5px;
- }
+}
+
 #searchClear {
     position: absolute;
     right: 25px;
@@ -97,7 +103,6 @@ h1 {
     cursor: pointer;
     color: #ccc;
 }
-
 
 #pageFooter {
     background-color: #3a3f46;
@@ -112,4 +117,3 @@ h1 {
 #pageFooter a, #pageFooter p {
     color: #d2d1d1;
 }
-
