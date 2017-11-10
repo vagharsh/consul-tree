@@ -2,6 +2,10 @@
 
 Tree representation of hashicorp/consul https://www.consul.io/, https://github.com/hashicorp/consul KV section.
 
+**Used Technologies:** JS, HTML, CSS, PHP, JsTree, JQuery, Twitter Bootstrap.
+
+-----------------
+
 **Supported Methods:** Cut, Copy, Paste, Create, Delete, Rename, Duplicate.
 
 **Available Features:** Search, Import, Export, Copy - CUT - PASTE between Consuls.
@@ -94,7 +98,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
-                      vagharsh/consul-tree:6.7-web                    
+                      vagharsh/consul-tree:6.8-web                    
         ```
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
@@ -105,7 +109,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.7
+                      vagharsh/consul-tree:6.8
         ```
         - Mounting the config files separately.
         ```
@@ -114,16 +118,17 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.7
+                      vagharsh/consul-tree:6.8
         ```
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
 Release Notes
 ---------
-v 6.7 :
-- Re-organizing the JS functions.
-- Fixed issue with misbehave when performing (Rename, Duplicate, Copy, Cut) actions on a root folder/file.
+v 6.8 :
+- Added scroll-bar to the tree for better UI/UX. [commit](https://github.com/vagharsh/consul-tree/commit/3c6ba5486109aad647def581a0aa37993d7fe4fe)
+- Removed the fixed position of the key/value view box.
+- Added the login.php in the backend to redirect to the home when a session gets broken. [commit](https://github.com/vagharsh/consul-tree/commit/32b6ccd347cfc8a4a6169b4464de2f560d2e7b01). 
 
 Release notes are available [here](release.md).
 

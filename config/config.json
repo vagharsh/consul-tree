@@ -1,9 +1,9 @@
 [
   {
-    "url": "http://192.168.175.128:8500/v1/kv/",
-    "title": "Consul-VM-1"
+    "url": "http://192.168.220.145:8500/v1/kv/",
+    "title": "My-Consul 1"
   },{
-  "url": "http://192.168.220.145:8500/v1/kv/",
-  "title": "Consul-VM-2"
-}
+    "url": "http://192.168.220.146:8500/v1/kv/",
+    "title": "My-Consul 2"
+  }
 ]

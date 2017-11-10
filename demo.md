@@ -1,4 +1,4 @@
-**Below screen-shots are for version 6.5 and 6.6**
+**Below screen-shots are for version 6.8** 
 
 Login
 --------

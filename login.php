@@ -91,7 +91,7 @@ if ($acl->autoCheck){
             <button>Login</button>
         </form>
         <br>
-        <h6 class="text-center" style="">Consul-tree v6.7</h6>
+        <h6 class="text-center" style="">Consul-tree v6.8</h6>
     </div>
 </div>
 <script src="lib/js/jquery-3.2.1.min.js"></script>

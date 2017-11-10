@@ -1,5 +1,10 @@
 Release Notes
 ---------
+[v6.8](https://github.com/vagharsh/consul-tree/)
+- Added scroll-bar to the tree for better UI/UX. [commit](https://github.com/vagharsh/consul-tree/commit/3c6ba5486109aad647def581a0aa37993d7fe4fe)
+- Removed the fixed position of the key/value view box.
+- Added the login.php in the backend to redirect to the home when a session gets broken. [commit](https://github.com/vagharsh/consul-tree/commit/32b6ccd347cfc8a4a6169b4464de2f560d2e7b01). 
+
 [v6.7](https://github.com/vagharsh/consul-tree/)
 - Re-organizing the JS functions.
 - Fixed issue with misbehave when performing (Rename, Duplicate, Copy, Cut) actions on a root folder/file.
