@@ -12,7 +12,8 @@ class ACL
     private $userRights;
 
     function __construct(){
-        require ("config/auth.php");
+        $list = '';
+        require ("../config/auth.php");
         $this->list = $list;
         if (isset($mainTitle)){
             $this->mainTitle = $mainTitle;

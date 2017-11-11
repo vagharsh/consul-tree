@@ -10,7 +10,7 @@ html {
 
 body {
     margin: 0 auto;
-    padding: 20px 10px;
+    padding: 50px 10px;
     font-size: 1.4em;
 }
 
@@ -28,7 +28,7 @@ h1 {
 
 #ConsulTree {
     overflow-x: auto;
-    max-height: 70vh;
+    max-height: 65vh;
     overflow-y: auto;
 }
 
@@ -96,14 +96,14 @@ h1 {
 
 #searchClear {
     position: absolute;
-    right: 25px;
+    right: 10px;
     top: 0;
     bottom: 0;
-    height: 26px;
+    height: 14px;
     margin: auto;
     font-size: 14px;
-    cursor: pointer;
-    color: #ccc;
+    cursor: pointer ;
+    color: #c0c0c0;
 }
 
 #pageFooter {

@@ -128,7 +128,10 @@ Release Notes
 v 6.8 :
 - Added scroll-bar to the tree for better UI/UX. [commit](https://github.com/vagharsh/consul-tree/commit/3c6ba5486109aad647def581a0aa37993d7fe4fe)
 - Removed the fixed position of the key/value view box.
-- Added the login.php in the backend to redirect to the home when a session gets broken. [commit](https://github.com/vagharsh/consul-tree/commit/32b6ccd347cfc8a4a6169b4464de2f560d2e7b01). 
+- Added the login.php in the backend to redirect to the home when a session gets broken. [commit](https://github.com/vagharsh/consul-tree/commit/32b6ccd347cfc8a4a6169b4464de2f560d2e7b01).
+- Desktop / Tablet / Mobile friendly.
+- Added an indicator to the search field when results are found the field's border gets green when no results it gets red.
+- Re-organized files structure.
 
 Release notes are available [here](release.md).
 
