@@ -4,6 +4,8 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
+$consulTreeVersion = trim(file_get_contents('version'));
+
 $password_err = null;
 $username_err = null;
 $rights_err = null;
@@ -91,7 +93,7 @@ if ($acl->autoCheck){
             <button>Login</button>
         </form>
         <br>
-        <h6 class="text-center" style="">Consul-tree v6.8</h6>
+        <h6 class="text-center" style="">Consul-tree <?php echo $consulTreeVersion; ?></h6>
     </div>
 </div>
 <script src="../lib/js/jquery-3.2.1.min.js"></script>

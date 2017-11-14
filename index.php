@@ -8,6 +8,8 @@ session_start();
 if (empty($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 'true') {
     header('Location: backend/login.php');
 }
+
+$consulTreeVersion = trim(file_get_contents('backend/version'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -95,7 +97,7 @@ if (empty($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 'true') {
 <p class="hidden" id="gotNodeValue"></p>
 <footer id="pageFooter">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v6.8</p>
+        <p class="navbar-text navbar-lef">Consul-tree <?php echo $consulTreeVersion; ?></p>
         <ul class="nav navbar-nav navbar-right">
             <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
         </ul>
