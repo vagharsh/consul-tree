@@ -2,44 +2,44 @@
 
 Login
 --------
-![Dashboard](https://i.imgur.com/LwQOSsg.png "Login")
+![Dashboard](https://image.ibb.co/gSYSnb/login.png "Login")
 
 Dashboard
 --------
-![Dashboard](https://i.imgur.com/pDBDbdV.png "Dashboard")
+![Dashboard](https://image.ibb.co/kPf7nb/dashoboard.png "Dashboard")
 
 Right click
 --------
-![Right click](https://i.imgur.com/Kqfqi1f.png "Right click")
+![Right click](https://image.ibb.co/iABrDG/right_click.png "Right click")
 
 Key Value
 --------
-![Key Value](https://i.imgur.com/MfgXf6v.png "Key Value")
+![Key Value](https://image.ibb.co/h5NytG/key_value.png "Key Value")
 
 Create Key
 --------
-![Create Key](https://i.imgur.com/11T6PSR.png "Create Key")
+![Create Key](https://image.ibb.co/dvSbfw/create_file.png "Create Key")
 
 Create Folder
 --------
-![Create Folder](https://i.imgur.com/SSMccG3.png "Create Folder")
+![Create Folder](https://image.ibb.co/eDNWDG/create_folder.png "Create Folder")
 
 Search 
 -------
-![Search](https://i.imgur.com/60g9Was.png "Search")
+![Search](https://image.ibb.co/fDU07b/search.png "Search")
 
 Import 
 -------
-![Import](https://i.imgur.com/8pevOdD.png "Import")
+![Import](https://image.ibb.co/b2wPYG/import.png "Import")
 
 Export
 -------
-![Export](https://i.imgur.com/dfJX6P3.png "Export")
+![Export](https://image.ibb.co/fkw2Lw/export.png "Export")
 
 Rename
 -------
-![Rename](https://i.imgur.com/NWCqco0.png "Rename")
+![Rename](https://image.ibb.co/bTAU0w/rename.png "Rename")
 
 Duplicate
 -------
-![Duplicate](https://i.imgur.com/QH3ApxE.png "Duplicate")
+![Duplicate](https://image.ibb.co/gGz07b/duplicate.png "Duplicate")

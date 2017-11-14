@@ -7,6 +7,7 @@ Release Notes
 - Desktop / Tablet / Mobile friendly.
 - Added an indicator to the search field when results are found the field's border gets green when no results it gets red.
 - Re-organized files structure.
+- Added version file for code centralization. 
 
 [v6.7](https://github.com/vagharsh/consul-tree/)
 - Re-organizing the JS functions.

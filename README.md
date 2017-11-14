@@ -4,13 +4,15 @@ Tree representation of hashicorp/consul https://www.consul.io/, https://github.c
 
 **Used Technologies:** JS, HTML, CSS, PHP, JsTree, JQuery, Twitter Bootstrap.
 
+**UI/UX:** : (Desktop, Tablet, Mobile) friendly - responsive (80+%).
+
 -----------------
 
 **Supported Methods:** Cut, Copy, Paste, Create, Delete, Rename, Duplicate.
 
 **Available Features:** Search, Import, Export, Copy - CUT - PASTE between Consuls.
 
-***Latest Features:*** *ACL (Access Control List) with authentication and authorization, based on a php file.*
+***Latest Features:*** ACL (Access Control List) with authentication and authorization, based on a php file.
 
 Demo
 ------
@@ -132,6 +134,7 @@ v 6.8 :
 - Desktop / Tablet / Mobile friendly.
 - Added an indicator to the search field when results are found the field's border gets green when no results it gets red.
 - Re-organized files structure.
+- Added version file for code centralization. 
 
 Release notes are available [here](release.md).
 
