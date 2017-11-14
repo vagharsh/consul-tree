@@ -91,7 +91,7 @@ $consulTreeVersion = trim(file_get_contents('backend/version'));
         </div>
     </div>
 </div>
-<?php include_once('backend\modals.html'); ?>
+<?php include_once('backend/modals.html'); ?>
 <p class="hidden" id="userRights"></p>
 <p class="hidden" id="selectedNodeID"></p>
 <p class="hidden" id="gotNodeValue"></p>
