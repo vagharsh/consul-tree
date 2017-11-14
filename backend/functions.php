@@ -1,9 +1,7 @@
 <?php
 
 function putInConsul($path, $value, $cas) {
-    if ($cas == 0){
-        $path = $path."?cas=0";
-    }
+    if ($cas == 0){$path = $path."?cas=0";}
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

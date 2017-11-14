@@ -1,5 +1,4 @@
 <?php
-
 $mainTitle = "Consul-Tree";
 $list = [
     [
@@ -10,7 +9,7 @@ $list = [
     ], [
         "user" => "dev",
         "pass" => "dev",
-        "auto" => false,
+        "auto" => true,
         "rights" => "write"
     ], [
         "user" => "admin",

@@ -28,8 +28,8 @@ if (isset($_POST['method'])) {
         }
     } elseif ($method === 'BulkIMPORT') {
         if ($userRights[1] == 1) {
-            if (isset($_POST['path']) && isset($_POST['value']) && isset($_POST['cas'])) {
-                echo (importFn($_POST['path'], $_POST['value'], $_POST['cas']));
+            if (isset($_POST['consul']) && isset($_POST['value']) && isset($_POST['cas'])) {
+                echo (importFn($_POST['consul'], $_POST['value'], $_POST['cas']));
             }
         } else {
             echo "You are not Authorized to perform this action";
@@ -72,9 +72,9 @@ if (isset($_POST['method'])) {
         }
     }
 }
-if (isset($_GET['path'])) {
+if (isset($_GET['consul'])) {
     if ($userRights[0] == 1) {
-        echo(json_encode(getFromConsul($_GET['path'])));
+        echo(json_encode(getFromConsul($_GET['consul'])));
     } else {
         echo "You are not Authorized to perform this action";
     }

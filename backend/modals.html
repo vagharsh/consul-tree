@@ -1,108 +1,3 @@
-<?php
-
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-
-session_start();
-if (empty($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 'true') {
-    header('Location: login.php');
-}
-$userRights = (string)$_SESSION['rights'];
-$calledUrl = "$_SERVER[REQUEST_URI]";
-
-if (strpos($calledUrl, 'backend') == false) {
-    $calledLoc = '';
-    $backendStatus = 'backend/';
-} else {
-    $calledLoc = '../';
-    $backendStatus = '';
-}
-
-$autoText = $_SESSION["auto"] ? "automatically" : "";;
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title id="pageTitle"></title>
-    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/css/tree.css"/>
-    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/themes/default/style.min.css"/>
-    <link rel="stylesheet" href="<?php echo $calledLoc; ?>lib/css/bootstrap.min.css">
-    <link rel="shortcut icon" type="image/png" href="<?php echo $calledLoc; ?>lib/_favicon.png"/>
-    <script src="<?php echo $calledLoc; ?>lib/js/jquery-3.2.1.min.js"></script>
-    <script src="<?php echo $calledLoc; ?>lib/js/bootstrap.min.js"></script>
-    <script src="<?php echo $calledLoc; ?>lib/js/jstree.js"></script>
-</head>
-<body>
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#" id="consulTitleID"></a>
-        </div>
-        <form class="navbar-form navbar-right" action="<?php echo $backendStatus; ?>logout.php">
-            <div class="form-group">
-                <select class="form-control" id="consulUrlSelectorId" title="Consul-Urls"></select>
-            </div>
-            <button type="button" class="btn btn-default" aria-label="Left Align" id="resetLocationBtnId"
-                    data-toggle="tooltip" data-placement="bottom" title="Reset consul location settings">
-                <span class="glyphicon glyphicon-refresh"></span>
-            </button>
-            <button class="btn btn-danger" data-toggle="tooltip" data-placement="bottom"
-                    title="Logged in <?php echo $autoText; ?> as <?php echo $_SESSION['username']; ?>">Logout
-            </button>
-        </form>
-        <p class="navbar-text navbar-right">Consul locations</p>
-
-    </div>
-</nav>
-<div class="container">
-    <div class="page-header">
-        <form class="form-horizontal">
-            <div class="form-group">
-                <div class="col-sm-5 padded-right-middle" style="width:505px">
-                    <label class="sr-only" for="searchInputId">Search</label>
-                    <input id="searchInputId" value="" class="form-control search-box" placeholder="Search"
-                           style="margin:0 auto 1em auto;  padding:4px;">
-                    <span id="searchClear" class="glyphicon glyphicon-search"></span>
-                </div>
-                <button type="button" id="importExportBtnId" class="btn btn-primary writeACL" disabled
-                        data-toggle="modal"
-                        data-target="#importExportModalId">Import
-                </button>
-                <button type="button" class="btn btn-warning readACL" disabled id="enableExportBtnId">Enable Export
-                </button>
-                <button type="button" class="btn btn-info hidden readACL" disabled id="disableManualExport">Disable
-                    Export
-                </button>
-                <button type="button" class="btn btn-success hidden readACL" disabled id="exportSelection">Export
-                    Selection
-                </button>
-                <button type="button" class="btn btn-primary writeACL" disabled id="createRootBtnId">Create Folder /
-                    Key
-                </button>
-            </div>
-        </form>
-    </div>
-    <div id="ConsulTree" class="well col-md-5"></div>
-    <div class="border-left" id="generalValueAreaID" style="position: fixed; width: 568px; padding-left: 15px">
-        <div id="keyValueFieldsid" class="panel panel-default">
-            <div class="panel-heading" style="padding: 5px 15px !important;"><h5></h5></div>
-            <div class="panel-body">
-                <span id="createElementText" style="color: #737373" class="readACL">Select a key to get its value<span
-                            class="writeACL">, right-click on the tree to create an element</span>.</span>
-                <div class="form-group update-control">
-                    <textarea class="form-control update-control hidden" id="cKeyValue" rows="8" readonly
-                              title="Value"></textarea>
-                </div>
-                <button type="button" disabled id="valueUpdateBtnId"
-                        class="btn btn-primary update-control hidden writeACL">Update
-                </button>
-                <span class="update-control hidden writeACL" style="color: #737373">&nbsp;&nbsp;To create an element, right-click on the tree.</span>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="modal fade" id="createNodeModalId" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -115,7 +10,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                 <form>
                     <div class="form-group">
                         <h5 class="control-label">Folder / Key Name : <i>To create a folder, end the
-                                key with /</i></h5>
+                            key with /</i></h5>
                         <input class="form-control" id="keyInputId" value="" title="Folder / Key Name">
                         <input type="hidden" class="form-control" id="pathInputId" value="">
                     </div>
@@ -125,7 +20,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
                     </div>
                 </form>
                 <h5 class="control-label inputKeyValueClass">Value : </h5>
-                <textarea class="form-control inputKeyValueClass" id="inputKeyValueId" title="Value"></textarea>
+                <textarea class="form-control inputKeyValueClass" disabled id="inputKeyValueId" title="Value"></textarea>
             </div>
             <div class="modal-footer">
                 <button type="button" id="createKeyBtnId" class="btn btn-info">Yes</button>
@@ -145,8 +40,8 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
             <div class="modal-body">
                 <form>
                     <div class="form-group">
-                        <label>Browse JSON file : </label>
-                        <input type="file" id="jsonInputFile">
+                        <label for="jsonInputFile">Browse JSON file : </label>
+                        <input type="file" class="form-control" id="jsonInputFile">
                     </div>
                     <button type="button" id="importConsulBtnId" class="btn btn-info">Import</button>
                     <span style="color: #737373">&nbsp;|&nbsp;Only applicable if the JSON file was exported from the Consul-tree.</span>
@@ -185,7 +80,7 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
             </div>
             <div class="modal-body text-center">
                 <span>Check the connection between the <strong>Consul-Tree</strong> and <strong
-                            id="consulUrlId"></strong> and then try again.</span>
+                        id="consulUrlId"></strong> and then try again.</span>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -279,62 +174,3 @@ $autoText = $_SESSION["auto"] ? "automatically" : "";;
         </div>
     </div>
 </div>
-<p class="hidden" id="userRights"></p>
-<p class="hidden" id="selectedNodeID"></p>
-<p class="hidden" id="gotNodeValue"></p>
-<footer id="pageFooter">
-    <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree v6.7</p>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
-        </ul>
-    </div>
-</footer>
-<script src="<?php echo $calledLoc; ?>lib/js/functions.js"></script>
-<script src="<?php echo $calledLoc; ?>lib/js/triggers.js"></script>
-<script>
-    $(document).ready(function () {
-        $('[data-toggle="tooltip"]').tooltip();
-        $('#pageTitle').text("Consul Tree | " + window.location.hostname);
-        $.getJSON("<?php echo $calledLoc; ?>config/config.json", function (consul) {
-            if (consul) if (consul.length !== 0) {
-                var selectedConsulJson, tree,
-                    userRights = "<?php echo $userRights; ?>",
-                    backendStatus = "<?php echo $backendStatus; ?>",
-                    consulTreeDivID = $('#ConsulTree'),
-                    leftPos = consulTreeDivID.outerWidth() + consulTreeDivID.offset().left,
-                    backendPath = returnBackend(backendStatus);
-
-                localStorage['consulConfig'] = JSON.stringify(consul);
-                localStorage['backendPath'] = backendPath;
-                $('#generalValueAreaID').css("left", leftPos + 14 + "px");
-
-                getConsulLocations();
-                checkRights(userRights);
-                selectedConsulJson = getSetConfig();
-
-                tree = {
-                    'contextmenu': {'items': customMenu},
-                    'check_callback': true,
-                    'plugins': ['contextmenu', 'types', 'state', 'search', 'wholerow'],
-                    'core': {
-                        "multiple": false,
-                        "animation": 0,
-                        "check_callback": true,
-                        "themes": {"stripes": true},
-                        'data': []
-                    }
-                };
-
-                if (localStorage['treeBackup']) {
-                    localStorage['jstree'] = localStorage['treeBackup'];
-                    localStorage.removeItem('treeBackup');
-                }
-
-                getTree(tree, selectedConsulJson.url + "?keys");
-            }
-        });
-    });
-</script>
-</body>
-</html>
