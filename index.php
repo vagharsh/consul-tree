@@ -49,7 +49,7 @@ $consulTreeVersion = trim(file_get_contents('backend/version'));
 </nav>
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="form-group has-feedback">
                 <label class="sr-only" for="searchInputId">Search</label>
                 <input id="searchInputId" value="" class="form-control search-box" placeholder="Search"
@@ -57,7 +57,7 @@ $consulTreeVersion = trim(file_get_contents('backend/version'));
                 <span id="searchClear" class="glyphicon glyphicon-search"></span>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="form-group">
                 <button type="button" id="importExportBtnId" class="btn btn-primary writeACL" disabled
                         data-toggle="modal"
@@ -71,8 +71,8 @@ $consulTreeVersion = trim(file_get_contents('backend/version'));
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6"><div id="ConsulTree" class="well"></div></div>
-        <div class="col-md-6" id="generalValueAreaID">
+        <div class="col-md-5"><div id="ConsulTree" class="well"></div></div>
+        <div class="col-md-7" id="generalValueAreaID">
             <div id="keyValueFieldsid" class="panel panel-default">
                 <div class="panel-heading">No item is selected to view it's value.</div>
                 <div class="panel-body">
