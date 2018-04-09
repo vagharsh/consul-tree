@@ -111,7 +111,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.8
+                      vagharsh/consul-tree:6.9
         ```
         - Mounting the config files separately.
         ```
@@ -120,21 +120,18 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.8
+                      vagharsh/consul-tree:6.9
         ```
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
 Release Notes
 ---------
-v 6.8 :
-- Added scroll-bar to the tree for better UI/UX. [commit](https://github.com/vagharsh/consul-tree/commit/3c6ba5486109aad647def581a0aa37993d7fe4fe)
-- Removed the fixed position of the key/value view box.
-- Added the login.php in the backend to redirect to the home when a session gets broken. [commit](https://github.com/vagharsh/consul-tree/commit/32b6ccd347cfc8a4a6169b4464de2f560d2e7b01).
-- Desktop / Tablet / Mobile friendly.
-- Added an indicator to the search field when results are found the field's border gets green when no results it gets red.
-- Re-organized files structure.[commit](https://github.com/vagharsh/consul-tree/commit/18fbd05a2506163a5b0aa6f5727477e3a3b2c969)
-- Added version file for code centralization. [commit](https://github.com/vagharsh/consul-tree/commit/ae484a07584d7d97b657b0215705173c871766b0)
+[v6.9](#)
+- Removed the F2 hotkey which simulates the rename process.
+- Updated the JsTree to 3.3.5.
+- Changed the delete process from showing alert box to modal.
+- Modified the way it keeps the data in localstorage which enables opening multiple consul-trees at the same time without each one interfering with another.
 
 Release notes are available [here](release.md).
 
