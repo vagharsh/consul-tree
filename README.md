@@ -100,7 +100,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
-                      vagharsh/consul-tree:6.8-web                    
+                      vagharsh/consul-tree:6.9-web                    
         ```
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
@@ -111,7 +111,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.8
+                      vagharsh/consul-tree:6.9
         ```
         - Mounting the config files separately.
         ```
@@ -120,7 +120,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.8
+                      vagharsh/consul-tree:6.9
         ```
 - Access the consul-tree e.g. http://yourserver/consuldirectory
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
