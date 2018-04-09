@@ -100,7 +100,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
-                      vagharsh/consul-tree:6.8-web                    
+                      vagharsh/consul-tree:6.9-web                    
         ```
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
@@ -127,7 +127,7 @@ On the Docker host that you want to run the Consul-tree container from.
 
 Release Notes
 ---------
-[v6.9](#)
+[v6.9](https://github.com/vagharsh/consul-tree/commit/a17f0c7bb0f10c2ea9852e930840306bb71e88ad)
 - Removed the F2 hotkey which simulates the rename process.
 - Updated the JsTree to 3.3.5.
 - Changed the delete process from showing alert box to modal.
