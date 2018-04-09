@@ -1,5 +1,11 @@
 Release Notes
 ---------
+[v6.9](#)
+- Removed the F2 hotkey which simulates the rename process.
+- Updated the JsTree to 3.3.5.
+- Changed the delete process from showing alert box to modal.
+- Modified the way it keeps the data in localstorage which enables opening multiple consul-trees at the same time without each one interfering with another.
+
 [v6.8](#)
 - Added scroll-bar to the tree for better UI/UX. [commit](https://github.com/vagharsh/consul-tree/commit/3c6ba5486109aad647def581a0aa37993d7fe4fe)
 - Removed the fixed position of the key/value view box.

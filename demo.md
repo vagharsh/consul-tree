@@ -2,7 +2,7 @@
 
 Login
 --------
-![Dashboard](https://image.ibb.co/gSYSnb/login.png "Login")
+![Login](https://image.ibb.co/gSYSnb/login.png "Login")
 
 Dashboard
 --------

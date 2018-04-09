@@ -97,9 +97,9 @@ $consulTreeVersion = trim(file_get_contents('backend/version'));
 <p class="hidden" id="gotNodeValue"></p>
 <footer id="pageFooter">
     <div class="container">
-        <p class="navbar-text navbar-lef">Consul-tree <?php echo $consulTreeVersion; ?></p>
+        <p class="navbar-text">Consul-tree <?php echo $consulTreeVersion; ?></p>
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="https://github.com/vagharsh/consul-tree">GitHub Project</a></li>
+            <li><a href="https://github.com/vagharsh/consul-tree" target="_blank">GitHub Project</a></li>
         </ul>
     </div>
 </footer>
