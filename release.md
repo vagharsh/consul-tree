@@ -1,5 +1,12 @@
 Release Notes
 ---------
+[v7.0](https://github.com/vagharsh/consul-tree/commit/477d85711b8051d8ba7d70772f50765c64ee3b79)
+- Added the ability to configure (containerized) consul-tree to be accessible from under virtual-directory e.g. `http://test.domain.com/consuldirectory`.
+- Fixed the issue of not deleting old data after copy/cut/paste from localstorage.
+- Cleanup and reformatting some code parts.
+- Moved Copy/Cut/Paste from under edit submenu, to the main context-menu.
+- Replaced the alert box with modal window for the node delete function.
+
 [v6.9](#)
 - Removed the F2 hotkey which simulates the rename process.
 - Updated the JsTree to 3.3.5.
