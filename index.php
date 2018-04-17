@@ -6,7 +6,14 @@ header("Pragma: no-cache");
 
 session_start();
 if (empty($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 'true') {
-    header('Location: backend/login.php');
+    $BASE_URI = getenv("BASE_URI");
+    if ($BASE_URI){
+        header('location: ' . $BASE_URI . '/backend/');
+        exit();
+    } else {
+        header('Location: backend/');
+        exit();
+    }
 }
 
 $consulTreeVersion = trim(file_get_contents('backend/version'));
