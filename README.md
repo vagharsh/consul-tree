@@ -86,12 +86,22 @@ $list = [
 
 Consul-tree on Docker
 -----------
-Check my docker repo for a ready-made container at https://hub.docker.com/r/vagharsh/consul-tree/.
+Check my docker repo for a ready-made container at [https://hub.docker.com/r/vagharsh/consul-tree/](https://hub.docker.com/r/vagharsh/consul-tree/).
 
 On the Docker host that you want to run the Consul-tree container from.
 - Create a directory and inside it create `config.json` and `auth.php` files.
 - Configure the `config.json` as mentioned [here](#consul-configuration-configconfigjson).
 - Configure the `auth.php` as mentioned [here](#acl-configuration-configauthphp).
+- To deploy `consul-tree` under a virtual-directory e.g. `http://yourserver/consuldirectory`
+    - add `--env "BASE_URI=consul-dev"` if you are planning to access it via `http://test.domain.com/consul-dev/`
+    - ```
+          docker run -d -v /opt/consul-tree/config:/var/www/html/config \
+                    -p 8123:80 \
+                    --restart always \
+                    --name consul-tree \
+                    --env "BASE_URI=consuldirectory" \
+                    vagharsh/consul-tree:7.0
+      ```
 - There are 2 ways to provide the config file.
     - Provide the configs file via **HTTP** url. (**both files [auth.php, config.json] should be provided**)
         ```
@@ -100,7 +110,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
-                      vagharsh/consul-tree:6.9-web                    
+                      vagharsh/consul-tree:7.0-web                    
         ```
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
@@ -111,7 +121,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.9
+                      vagharsh/consul-tree:7.0
         ```
         - Mounting the config files separately.
         ```
@@ -120,18 +130,19 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:6.9
+                      vagharsh/consul-tree:7.0
         ```
-- Access the consul-tree e.g. http://yourserver/consuldirectory
+- Access the `consul-tree` e.g. `http://test.domain.com/consuldirectory` or `http://test.domain.com/`
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
 Release Notes
 ---------
-[v6.9](https://github.com/vagharsh/consul-tree/commit/a17f0c7bb0f10c2ea9852e930840306bb71e88ad)
-- Removed the F2 hotkey which simulates the rename process.
-- Updated the JsTree to 3.3.5.
-- Changed the delete process from showing alert box to modal.
-- Modified the way it keeps the data in localstorage which enables opening multiple consul-trees at the same time without each one interfering with another.
+[v7.0](https://github.com/vagharsh/consul-tree/commit/477d85711b8051d8ba7d70772f50765c64ee3b79)
+- Added the ability to configure (containerized) consul-tree to be accessible from under virtual-directory e.g. `http://test.domain.com/consuldirectory`.
+- Fixed the issue of not deleting old data after copy/cut/paste from localstorage.
+- Cleanup and reformatting some code parts.
+- Moved Copy/Cut/Paste from under edit submenu, to the main context-menu.
+- Replaced the alert box with modal window for the node delete function.
 
 Release notes are available [here](release.md).
 

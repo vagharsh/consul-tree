@@ -23,9 +23,9 @@ class ACL
 
     function getAuto(){
         $list = $this->list;
-        foreach ($list as $users){
-            if ($users['auto'] || $users['auto'] === 1){
-                $this->username = $users['user'];
+        foreach ($list as $user){
+            if ($user['auto'] === true ){
+                $this->username = $user['user'];
                 $this->autoCheck = true;
                 break;
             }
