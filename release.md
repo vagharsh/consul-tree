@@ -6,6 +6,7 @@ Release Notes
 - Cleanup and reformatting some code parts.
 - Moved Copy/Cut/Paste from under edit submenu, to the main context-menu.
 - Replaced the alert box with modal window for the node delete function.
+- Modal will appear to save the exported json file name as.
 
 [v6.9](#)
 - Removed the F2 hotkey which simulates the rename process.

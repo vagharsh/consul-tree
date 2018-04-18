@@ -1,12 +1,11 @@
 <?php
 session_start();
 if(empty($_SESSION["authenticated"]) || $_SESSION["authenticated"] != 'true') {
-    header('Location: ../');
-    exit();
+    redirectTo();
 }
 
 $userRights = (string)$_SESSION['rights'];
-require 'functions.php';
+require_once('functions.php');
 
 if (isset($_POST['method'])) {
     $method = $_POST['method'];

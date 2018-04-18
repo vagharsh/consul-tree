@@ -10,7 +10,16 @@ $password_err = null;
 $username_err = null;
 $rights_err = null;
 
+$BASE_URI = getenv("BASE_URI");
+if ($BASE_URI){
+    $appRoot = '/'. $BASE_URI . '/backend/';
+} else {
+    $appRoot = $_SERVER["PHP_SELF"];
+}
+
+require_once('functions.php');
 require_once("ACL.php");
+
 $acl = new ACL;
 $mainTitle = $acl->mainTitle;
 
@@ -20,8 +29,7 @@ if ($acl->autoCheck){
     $_SESSION["authenticated"] = 'true';
     $_SESSION["rights"] = $acl->getRights();
     $_SESSION["auto"] = $acl->autoCheck;
-    header('Location: ../');
-    die;
+    redirectTo();
 } else {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Check if username is empty
@@ -50,8 +58,7 @@ if ($acl->autoCheck){
                         $_SESSION["authenticated"] = 'true';
                         $_SESSION["rights"] = $acl->getRights();
                         $_SESSION["auto"] = $acl->autoCheck;
-                        header('Location: ../');
-                        die;
+                        redirectTo();
                     } else {
                         $rights_err = "You are not Authorized to perform this action";
                     }
@@ -77,7 +84,7 @@ if ($acl->autoCheck){
 <body>
 <div class="login-page">
     <div class="form">
-        <form class="login-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <form class="login-form" action="<?php echo htmlspecialchars($appRoot); ?>" method="post">
             <div class="page-header">
                 <h3><?php echo $mainTitle; ?></h3>
             </div>
