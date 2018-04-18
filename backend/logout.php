@@ -3,6 +3,8 @@
 session_start();
 session_unset();
 
+require_once('functions.php');
+
 if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(session_name(), '', time() - 42000,
@@ -12,5 +14,4 @@ if (ini_get("session.use_cookies")) {
 }
 
 session_destroy();
-header('Location: ../');
-exit();
+redirectTo('root');

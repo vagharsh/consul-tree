@@ -182,3 +182,15 @@ function fixTreeFn ($path, $consul){
     $directory = sys_get_temp_dir() . '/consul';
     rrmdir($directory);
 }
+
+function redirectTo(){
+    $BASE_URI = getenv("BASE_URI");
+
+    if ($BASE_URI){
+        header('location: /' . $BASE_URI );
+        exit();
+    } else {
+        header('Location: /' );
+        exit();
+    }
+}
