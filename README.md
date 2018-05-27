@@ -100,7 +100,7 @@ On the Docker host that you want to run the Consul-tree container from.
                     --restart always \
                     --name consul-tree \
                     --env "BASE_URI=consuldirectory" \
-                    vagharsh/consul-tree:7.0
+                    vagharsh/consul-tree:7.1
       ```
 - There are 2 ways to provide the config file.
     - Provide the configs file via **HTTP** url. (**both files [auth.php, config.json] should be provided**)
@@ -110,7 +110,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
-                      vagharsh/consul-tree:7.0-web                    
+                      vagharsh/consul-tree:7.1-web                    
         ```
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
@@ -121,7 +121,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:7.0
+                      vagharsh/consul-tree:7.1
         ```
         - Mounting the config files separately.
         ```
@@ -130,7 +130,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:7.0
+                      vagharsh/consul-tree:7.1
         ```
 - Access the `consul-tree` e.g. `http://test.domain.com/consuldirectory` or `http://test.domain.com/`
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
@@ -161,7 +161,7 @@ Release Notes
 - Added : Data import summary which indicated if the key was imported successfully or not (OK, NOK).
 - Added : Content-Length, which indicator below the value box.
 - Added : Data is being sent to the backend as Base64 encoded format.
-- Added : External API for importing JSON file into Consul, more is mentioned [here](#README.md/external-api-for-importing-json-file-into-consul).
+- Added : External API for importing JSON file into Consul, more is mentioned [here](#https://github.com/vagharsh/consul-tree/blob/dev-b3/README.md#external-api-for-importing-json-file-into-consul).
  
 Release notes are available [here](release.md).
 

@@ -1,4 +1,4 @@
-**Below screen-shots are for version 6.8** 
+**Below screen-shots are for versions 7.1 and 6.8** 
 
 Login
 --------
@@ -10,11 +10,11 @@ Dashboard
 
 Right click
 --------
-![Right click](https://image.ibb.co/iABrDG/right_click.png "Right click")
+![Right click](https://image.ibb.co/n0GoAo/right_click.png "Right click")
 
 Key Value
 --------
-![Key Value](https://image.ibb.co/h5NytG/key_value.png "Key Value")
+![Key Value](https://image.ibb.co/b3FyAo/key_value.png "Key Value")
 
 Create Key
 --------
@@ -26,7 +26,7 @@ Create Folder
 
 Search 
 -------
-![Search](https://image.ibb.co/fDU07b/search.png "Search")
+![Search](https://image.ibb.co/f0kFqo/search.png "Search")
 
 Import 
 -------
@@ -34,7 +34,7 @@ Import
 
 Export
 -------
-![Export](https://image.ibb.co/fkw2Lw/export.png "Export")
+![Export](https://image.ibb.co/jdgAO8/export.png "Export")
 
 Rename
 -------
@@ -43,3 +43,11 @@ Rename
 Duplicate
 -------
 ![Duplicate](https://image.ibb.co/gGz07b/duplicate.png "Duplicate")
+
+Delete
+-------
+![Delete](https://image.ibb.co/kYK8Ao/delete.png "Delete")
+
+Import Summary
+-------
+![Import Summary](https://image.ibb.co/kadqO8/import_summary.png "Summary")
