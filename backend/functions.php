@@ -1,6 +1,7 @@
 <?php
 
 function putInConsul($path, $value, $cas) {
+    $value = base64_decode($value);
     if ($cas == 0){$path = $path."?cas=0";}
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -46,12 +47,23 @@ function deleteFn($path, $consul){
     return ($result);
 }
 
-function importFn($path, $value, $cas){
-    $result = '';
-    $pathsList = json_decode($value);
-    foreach ($pathsList as $key => $value) {
-        $keyUrl = $path . $key;
-        $result = putInConsul($keyUrl, $value, $cas);
+function importFn($consul, $path, $value, $cas){
+    $result = array();
+    $keyUrl = $consul . $path;
+    $result['key'] =  $path;
+
+    if ($value != NULL){
+        $valHash = hash('tiger192,3', base64_decode($value));
+        putInConsul($keyUrl, $value, $cas);
+        $getValue = getFromConsul($keyUrl."?raw")['data'];
+        $newValHash = hash('tiger192,3', $getValue);
+        if ($valHash === $newValHash){
+            $result['value'] =  "OK";
+        } else {
+            $result['value'] =  "NOK";
+        }
+    } else {
+        putInConsul($keyUrl, $value, $cas);
     }
     return ($result);
 }
@@ -193,4 +205,28 @@ function redirectTo(){
         header('Location: /' );
         exit();
     }
+}
+
+function importFnAPI($consul, $filePath){
+    $fileContents = json_decode(file_get_contents($filePath));
+    $result = array();
+
+    foreach ($fileContents as $key => $value) {
+        $keyUrl = $consul . $key;
+
+        if ($value != NULL){
+            $valHash = hash('tiger192,3', base64_decode($value));
+            putInConsul($keyUrl, $value, 1);
+            $getValue = getFromConsul($keyUrl."?raw")['data'];
+            $newValHash = hash('tiger192,3', $getValue);
+            if ($valHash === $newValHash){
+                $result[$key] =  "OK";
+            } else {
+                $result[$key] =  "NOK";
+            }
+        } else {
+            putInConsul($keyUrl, $value, 1);
+        }
+    }
+    return ($result);
 }

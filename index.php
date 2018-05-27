@@ -86,7 +86,7 @@ $consulTreeVersion = trim(file_get_contents('backend/version'));
                     <button type="button" disabled id="valueUpdateBtnId"
                             class="btn btn-primary update-control hidden writeACL">Update
                     </button>
-                    <span class="update-control hidden writeACL" style="color: #737373">&nbsp;&nbsp;To create an element, right-click on the tree.</span>
+                    <span class="update-control hidden writeACL" style="color: #737373">&nbsp;&nbsp;To create an element, right-click on the tree.<span style="float: right;margin-top: 6px;">Content-Length : <span id="valueContentLengthId">15</span></span></span>
                 </div>
             </div>
         </div>

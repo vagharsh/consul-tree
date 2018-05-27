@@ -135,16 +135,34 @@ On the Docker host that you want to run the Consul-tree container from.
 - Access the `consul-tree` e.g. `http://test.domain.com/consuldirectory` or `http://test.domain.com/`
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
 
+External API for importing JSON file into Consul
+------------------
+This feature has been added in order to Import large amount of data to the consul without using the UI.
+a simple basic `token` is used to authenticate and `rights` to import the data through `backend/api.php`.
+
+`Rights` : always use `111`
+
+`Authorization` : `Basic GbYpjCigzBM4PayeozwG`, which is configured in `api.php`
+
+  - Method : `POST`
+  - URL : consul-tree requests URL e.g. : `http://localhost/consul-tree/backend/api.php`
+  - form-data :
+    - method : `IMPORT`
+    - consul : consul url e.g. : `http://192.168.220.145:8500/v1/kv/`
+    - file : exported JSON file which will be imported.
+  - Headers : 
+    - Authorization : `Basic GbYpjCigzBM4PayeozwG`, which is configured in `api.php`
+    - Rights : `111`
+
+
 Release Notes
 ---------
-[v7.0](https://github.com/vagharsh/consul-tree/commit/477d85711b8051d8ba7d70772f50765c64ee3b79)
-- Added the ability to configure (containerized) consul-tree to be accessible from under virtual-directory e.g. `http://test.domain.com/consuldirectory`.
-- Fixed the issue of not deleting old data after copy/cut/paste from localstorage.
-- Cleanup and reformatting some code parts.
-- Moved Copy/Cut/Paste from under edit submenu, to the main context-menu.
-- Replaced the alert box with modal window for the node delete function.
-- Modal will appear to save the exported json file name as.
-
+[v7.1]()
+- Added : Data import summary which indicated if the key was imported successfully or not (OK, NOK).
+- Added : Content-Length, which indicator below the value box.
+- Added : Data is being sent to the backend as Base64 encoded format.
+- Added : External API for importing JSON file into Consul, more is mentioned [here](#README.md/external-api-for-importing-json-file-into-consul).
+ 
 Release notes are available [here](release.md).
 
 Issues / Features request tracker
