@@ -16,31 +16,33 @@ if (isset($_POST['method'])) {
                 echo(deleteFn($_POST['path'], $_POST['consul']));
             }
         } else {
-            echo "You are not Authorized to perform this action";
+            echo "You are not Authorized to perform the DELETE action";
         }
     } elseif ($method === 'PUT') {
         if ($userRights[1] == 1) {
+            $cas = isset($_POST['cas']) ? $_POST['cas'] : 0;
+
             if (isset($_POST['path']) && isset($_POST['value'])) {
-                echo(putInConsul($_POST['path'], $_POST['value'], 1));
+                echo(putInConsul($_POST['path'], $_POST['value'], $cas));
             }
         } else {
-            echo "You are not Authorized to perform this action";
+            echo "You are not Authorized to perform the PUT action";
         }
-    } elseif ($method === 'BulkIMPORT') {
+    } elseif ($method === 'IMPORT') {
         if ($userRights[1] == 1) {
-            if (isset($_POST['consul']) && isset($_POST['value']) && isset($_POST['cas'])) {
-                echo (importFn($_POST['consul'], $_POST['value'], $_POST['cas']));
+            if (isset($_POST['path']) && isset($_POST['value'])) {
+                echo (json_encode(importFn($_POST['consul'], $_POST['path'], $_POST['value'], 1)));
             }
         } else {
-            echo "You are not Authorized to perform this action";
-        }    
+            echo "You are not Authorized to perform the IMPORT action";
+        }
     } elseif ($method === 'CCP') {
         if ($userRights[1] == 1) {
             if (isset($_POST['replace']) && isset($_POST['parentId']) && isset($_POST['path']) && isset($_POST['consul']) && isset($_POST['cas']) && isset($_POST['srcConsul'])) {
                 ccpFn($_POST['path'], $_POST['parentId'], $_POST['replace'], $_POST['consul'], $_POST['ccType'], $_POST['cas'], $_POST['srcConsul']);
             }
         } else {
-            echo "You are not Authorized to perform this action";
+            echo "You are not Authorized to perform the CCP action";
         }
     } elseif ($method === 'EXPORT') {
         if ($userRights[0] == 1) {
@@ -50,7 +52,7 @@ if (isset($_POST['method'])) {
                 exportFn($path, $consul);
             }
         } else {
-            echo "You are not Authorized to perform this action";
+            echo "You are not Authorized to perform the EXPORT action";
         }
     } elseif ($method === 'RENAME' || $method === 'DUPLICATE') {
         if ($userRights[1] == 1) {
@@ -58,7 +60,7 @@ if (isset($_POST['method'])) {
                 renDupFn($_POST['path'], $_POST['consul'], $method);
             }
         } else {
-            echo "You are not Authorized to perform this action";
+            echo "You are not Authorized to perform neither RENAME nor DUPLICATE actions";
         }
     } elseif ($method === 'FIX') {
         if ($userRights[0] == 1) {
@@ -68,7 +70,7 @@ if (isset($_POST['method'])) {
                 fixTreeFn($path, $_POST['consul']);
             }
         } else {
-            echo "You are not Authorized to perform this action";
+            echo "You are not Authorized to perform the FIX action";
         }
     }
 }
@@ -76,6 +78,6 @@ if (isset($_GET['consul'])) {
     if ($userRights[0] == 1) {
         echo(json_encode(getFromConsul($_GET['consul'])));
     } else {
-        echo "You are not Authorized to perform this action";
+        echo "You are not Authorized to perform the GET consul DATA action";
     }
 }
