@@ -140,20 +140,20 @@ External API for importing JSON file into Consul
 This feature has been added in order to Import large amount of data to the consul without using the UI.
 a simple basic `token` is used to authenticate and `rights` to import the data through `backend/api.php`.
 
-`Rights` : always use `111`
+**Rights** : always use `111`
 
-`Authorization` : `Basic GbYpjCigzBM4PayeozwG`, which is configured in `api.php`
-
-  - Method : `POST`
-  - URL : consul-tree requests URL e.g. : `http://localhost/consul-tree/backend/api.php`
+**Authorization** : `Basic GbYpjCigzBM4PayeozwG`, which is configured in `api.php`
+```
+  - Method : POST
+  - URL : http://localhost/consul-tree/backend/api.php
   - form-data :
-    - method : `IMPORT`
-    - consul : consul url e.g. : `http://192.168.220.145:8500/v1/kv/`
+    - method : IMPORT
+    - consul : http://192.168.220.145:8500/v1/kv/
     - file : exported JSON file which will be imported.
   - Headers : 
-    - Authorization : `Basic GbYpjCigzBM4PayeozwG`, which is configured in `api.php`
-    - Rights : `111`
-
+    - Authorization : Basic GbYpjCigzBM4PayeozwG, which is configured in api.php
+    - Rights : 111
+```
 
 Release Notes
 ---------
@@ -161,7 +161,7 @@ Release Notes
 - Added : Data import summary which indicated if the key was imported successfully or not (OK, NOK).
 - Added : Content-Length, which indicator below the value box.
 - Added : Data is being sent to the backend as Base64 encoded format.
-- Added : External API for importing JSON file into Consul, more is mentioned [here](#https://github.com/vagharsh/consul-tree#external-api-for-importing-json-file-into-consul).
+- Added : External API for importing JSON file into Consul, more is mentioned [here](#external-api-for-importing-json-file-into-consul).
  
 Release notes are available [here](release.md).
 
