@@ -1,11 +1,16 @@
 Release Notes
 ---------
+[v7.2]()
+- Fixed : Not updating values using the update button.
+- Fixed : Multiple selects when returning from export.  
+
 [v7.1](https://github.com/vagharsh/consul-tree/commit/01a57b7325c2f094e76cf5eb5f9f0c96084d793b)
 - Added : Data import summary which indicated if the key was imported successfully or not (OK, NOK).
 - Added : Content-Length, which indicator below the value box.
 - Added : Data is being sent to the backend as Base64 encoded format.
 - Added : External API for importing JSON file into Consul, more is mentioned [here](#https://github.com/vagharsh/consul-tree#external-api-for-importing-json-file-into-consul).
- 
+
+
 [v7.0](https://github.com/vagharsh/consul-tree/commit/477d85711b8051d8ba7d70772f50765c64ee3b79)
 - Added the ability to configure (containerized) consul-tree to be accessible from under virtual-directory e.g. `http://test.domain.com/consuldirectory`.
 - Fixed the issue of not deleting old data after copy/cut/paste from localstorage.

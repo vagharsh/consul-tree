@@ -157,12 +157,10 @@ a simple basic `token` is used to authenticate and `rights` to import the data t
 
 Release Notes
 ---------
-[v7.1](https://github.com/vagharsh/consul-tree/commit/01a57b7325c2f094e76cf5eb5f9f0c96084d793b)
-- Added : Data import summary which indicated if the key was imported successfully or not (OK, NOK).
-- Added : Content-Length, which indicator below the value box.
-- Added : Data is being sent to the backend as Base64 encoded format.
-- Added : External API for importing JSON file into Consul, more is mentioned [here](#external-api-for-importing-json-file-into-consul).
- 
+[v7.2]()
+- Fixed : Not updating values using the update button.
+- Fixed : Multiple selects when returning from export.  
+
 Release notes are available [here](release.md).
 
 Issues / Features request tracker

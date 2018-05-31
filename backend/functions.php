@@ -1,7 +1,6 @@
 <?php
 
 function putInConsul($path, $value, $cas) {
-    $value = base64_decode($value);
     if ($cas == 0){$path = $path."?cas=0";}
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -53,7 +52,7 @@ function importFn($consul, $path, $value, $cas){
     $result['key'] =  $path;
 
     if ($value != NULL){
-        $valHash = hash('tiger192,3', base64_decode($value));
+        $valHash = hash('tiger192,3', $value);
         putInConsul($keyUrl, $value, $cas);
         $getValue = getFromConsul($keyUrl."?raw")['data'];
         $newValHash = hash('tiger192,3', $getValue);
@@ -63,7 +62,7 @@ function importFn($consul, $path, $value, $cas){
             $result['value'] =  "NOK";
         }
     } else {
-        putInConsul($keyUrl, $value, $cas);
+        putInConsul($keyUrl, false, $cas);
     }
     return ($result);
 }
@@ -215,7 +214,7 @@ function importFnAPI($consul, $filePath){
         $keyUrl = $consul . $key;
 
         if ($value != NULL){
-            $valHash = hash('tiger192,3', base64_decode($value));
+            $valHash = hash('tiger192,3', $value);
             putInConsul($keyUrl, $value, 1);
             $getValue = getFromConsul($keyUrl."?raw")['data'];
             $newValHash = hash('tiger192,3', $getValue);
@@ -225,7 +224,7 @@ function importFnAPI($consul, $filePath){
                 $result[$key] =  "NOK";
             }
         } else {
-            putInConsul($keyUrl, $value, 1);
+            putInConsul($keyUrl, false, 1);
         }
     }
     return ($result);
