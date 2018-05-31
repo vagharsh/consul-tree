@@ -21,9 +21,8 @@ if (isset($_POST['method'])) {
     } elseif ($method === 'PUT') {
         if ($userRights[1] == 1) {
             $cas = isset($_POST['cas']) ? $_POST['cas'] : 0;
-
             if (isset($_POST['path']) && isset($_POST['value'])) {
-                echo(putInConsul($_POST['path'], $_POST['value'], $cas));
+                echo(putInConsul($_POST['path'], base64_decode($_POST['value']), $cas));
             }
         } else {
             echo "You are not Authorized to perform the PUT action";
@@ -31,7 +30,7 @@ if (isset($_POST['method'])) {
     } elseif ($method === 'IMPORT') {
         if ($userRights[1] == 1) {
             if (isset($_POST['path']) && isset($_POST['value'])) {
-                echo (json_encode(importFn($_POST['consul'], $_POST['path'], $_POST['value'], 1)));
+                echo (json_encode(importFn($_POST['consul'], $_POST['path'], base64_decode($_POST['value']), 1)));
             }
         } else {
             echo "You are not Authorized to perform the IMPORT action";
