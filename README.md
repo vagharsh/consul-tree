@@ -138,9 +138,7 @@ On the Docker host that you want to run the Consul-tree container from.
 External API for importing JSON file into Consul
 ------------------
 This feature has been added in order to Import large amount of data to the consul without using the UI.
-a simple basic `token` is used to authenticate and `rights` to import the data through `backend/api.php`.
-
-**Rights** : always use `111`
+a simple basic `token` is used to authenticate to import the data through `backend/api.php`.
 
 **Authorization** : `Basic GbYpjCigzBM4PayeozwG`, which is configured in `api.php`
 ```
@@ -151,8 +149,7 @@ a simple basic `token` is used to authenticate and `rights` to import the data t
     - consul : http://192.168.220.145:8500/v1/kv/
     - file : exported JSON file which will be imported.
   - Headers : 
-    - Authorization : Basic GbYpjCigzBM4PayeozwG, which is configured in api.php
-    - Rights : 111
+    - Authorization : Basic GbYpjCigzBM4PayeozwG 
 ```
 
 Release Notes

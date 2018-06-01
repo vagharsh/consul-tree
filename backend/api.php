@@ -14,13 +14,6 @@ if (isset($_POST['method']) && $_POST['method'] === "IMPORT") {
         exit;
     }
 
-    if (array_key_exists('Rights', getallheaders())) {
-        $userRights = getallheaders()['Rights'];
-    } else {
-        header("HTTP/1.1 401 Unauthorized, No Rights were provided");
-        exit;
-    }
-
     if ($auth !== $okAUTH) {
         header("HTTP/1.1 401 Unauthorized, Invalid Token");
         exit;
