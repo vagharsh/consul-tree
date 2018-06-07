@@ -73,10 +73,20 @@ if (isset($_POST['method'])) {
         }
     }
 }
-if (isset($_GET['consul'])) {
-    if ($userRights[0] == 1) {
-        echo(json_encode(getFromConsul($_GET['consul'])));
-    } else {
-        echo "You are not Authorized to perform the GET consul DATA action";
+
+if (isset($_GET['method']) && isset($_GET['consul'])) {
+    $method = $_GET['method'];
+    if ($method === 'TREE') {
+        if ($userRights[0] == 1) {
+            echo(json_encode(getFromConsul($_GET['consul'])));
+        } else {
+            echo "You are not Authorized to perform the GET consul DATA action";
+        }
+    } elseif ($method === 'VALUE') {
+        if ($userRights[0] == 1) {
+            echo(json_encode(getFromConsul($_GET['consul'], true)));
+        } else {
+            echo "You are not Authorized to perform the GET consul DATA action";
+        }
     }
 }

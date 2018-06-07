@@ -15,7 +15,7 @@ function putInConsul($path, $value, $cas) {
     return ($result);
 }
 
-function getFromConsul($path) {
+function getFromConsul($path, $encode=false) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -23,7 +23,12 @@ function getFromConsul($path) {
     $result = curl_exec($ch);
     $info = curl_getinfo($ch);
     curl_close($ch);
-    $data["data"] = $result;
+    if ($encode){
+        $data["data"] = base64_encode($result);
+    } else {
+        $data["data"] = $result;
+    }
+
     $data["http_code"] = $info['http_code'];
     return($data);
 }

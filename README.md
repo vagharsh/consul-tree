@@ -154,9 +154,9 @@ a simple basic `token` is used to authenticate to import the data through `backe
 
 Release Notes
 ---------
-[v7.2](https://github.com/vagharsh/consul-tree/pull/22/commits/9bff209c1f1c91fe46bfab05a75af64c8a9da5b8)
-- Fixed : Not updating values using the update button.
-- Fixed : Multiple selects when returning from export.  
+[v7.3]()
+- Fixed : now the get value function in the frontend receives the content encoded with base64.
+- Fixed : other UI minor tweaks.
 
 Release notes are available [here](release.md).
 
