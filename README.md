@@ -154,7 +154,7 @@ a simple basic `token` is used to authenticate to import the data through `backe
 
 Release Notes
 ---------
-[v7.3]()
+[v7.3](https://github.com/vagharsh/consul-tree/commit/c276d1b0e65bd3a6833dc4b8e3af7b9ed2951468)
 - Fixed : now the get value function in the frontend receives the content encoded with base64.
 - Fixed : other UI minor tweaks.
 
