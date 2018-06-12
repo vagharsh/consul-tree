@@ -1,5 +1,9 @@
 Release Notes
 ---------
+[v7.4]()
+- Updated : Send the exported data to the backend using chunks, instead of a huge object, which was preventing the export when the keys count was more than 64000. 
+- Added : Export function progress bar which indicates the percentage of the received data.
+
 [v7.3](https://github.com/vagharsh/consul-tree/commit/c276d1b0e65bd3a6833dc4b8e3af7b9ed2951468)
 - Fixed : now the get value function in the frontend receives the content encoded with base64.
 - Fixed : other UI minor tweaks.  

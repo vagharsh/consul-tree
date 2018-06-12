@@ -154,9 +154,10 @@ a simple basic `token` is used to authenticate to import the data through `backe
 
 Release Notes
 ---------
-[v7.3](https://github.com/vagharsh/consul-tree/commit/c276d1b0e65bd3a6833dc4b8e3af7b9ed2951468)
-- Fixed : now the get value function in the frontend receives the content encoded with base64.
-- Fixed : other UI minor tweaks.
+[v7.4]()
+- Fixed : Not exporting when the keys count is more than 64000.
+- Updated : Send the exported data to the backend using chunks, instead of a huge object. 
+- Added : Export function progress bar which indicates the percentage of the received data.
 
 Release notes are available [here](release.md).
 
