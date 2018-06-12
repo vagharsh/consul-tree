@@ -100,7 +100,7 @@ On the Docker host that you want to run the Consul-tree container from.
                     --restart always \
                     --name consul-tree \
                     --env "BASE_URI=consuldirectory" \
-                    vagharsh/consul-tree:7.1
+                    vagharsh/consul-tree:7.4
       ```
 - There are 2 ways to provide the config file.
     - Provide the configs file via **HTTP** url. (**both files [auth.php, config.json] should be provided**)
@@ -110,7 +110,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \ 
-                      vagharsh/consul-tree:7.1-web                    
+                      vagharsh/consul-tree:7.4-web                    
         ```
     **Note**: Make sure that the files are not shared publicly, and that the php file is not hosted on a php server.
 
@@ -121,7 +121,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:7.1
+                      vagharsh/consul-tree:7.4
         ```
         - Mounting the config files separately.
         ```
@@ -130,7 +130,7 @@ On the Docker host that you want to run the Consul-tree container from.
                       -p 8123:80 \
                       --restart always \
                       --name consul-tree \
-                      vagharsh/consul-tree:7.1
+                      vagharsh/consul-tree:7.4
         ```
 - Access the `consul-tree` e.g. `http://test.domain.com/consuldirectory` or `http://test.domain.com/`
 - To create a folder or a key, Right click inside the tree where you want the folder / key to be created. and then click on the create.
@@ -154,7 +154,7 @@ a simple basic `token` is used to authenticate to import the data through `backe
 
 Release Notes
 ---------
-[v7.4]()
+[v7.4](https://github.com/vagharsh/consul-tree/commit/64e7363f5ca914984a7fc826122e2fd5e35bc188)
 - Fixed : Not exporting when the keys count is more than 64000.
 - Updated : Send the exported data to the backend using chunks, instead of a huge object. 
 - Added : Export function progress bar which indicates the percentage of the received data.
