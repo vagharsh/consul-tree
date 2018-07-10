@@ -33,6 +33,25 @@ function getFromConsul($path, $encode=false) {
     return($data);
 }
 
+function bulkExportFn($consul, $paths){
+    $decodedPaths = json_decode($paths);
+    $newArray = [];
+
+    $res = shell_exec("consul kv export -http-addr=" . $consul . " /");
+    $array = json_decode($res);
+
+    foreach ($array as $item){
+        $key = $item->key;
+        $value = base64_decode($item->value);
+        if (in_array($key, $decodedPaths)){
+            if ($value === ''){ $value = null;}
+            $newArray[$key] = $value;
+        }
+    }
+
+    return(json_encode($newArray));
+}
+
 function deleteFromConsul($path){
     $path = $path."?recurse";
     $ch = curl_init();
@@ -112,34 +131,6 @@ function renDupFn($path, $consul, $method){
     }
     if ($method === 'RENAME') {
         deleteFromConsul($consul . $_POST['selectedObj']);
-    }
-}
-
-function exportFn($path, $consul){
-    $decodedPaths = json_decode($path);
-    $toBeExportedData = array();
-
-    foreach ($decodedPaths as $item) {
-        $lastChar = substr($item, -1);
-        if ($lastChar == '/') {
-            $toBeExportedData[$item] = null;
-        } else {
-            $sourceUrl = $consul . $item . "?raw";
-            $toBeExportedData[$item] = getFromConsul($sourceUrl)['data'];
-        }
-    }
-
-    $filename = sys_get_temp_dir() . '/consul-tree.json';
-    $fp = fopen($filename, 'w');
-    fwrite($fp, json_encode($toBeExportedData));
-    fclose($fp);
-
-    if (file_exists($filename)) {
-        header("Content-disposition: attachment; filename=" . $filename);
-        header("Content-type: application/json");
-        header('Pragma: no-cache');
-        readfile($filename);
-        unlink($filename);
     }
 }
 
