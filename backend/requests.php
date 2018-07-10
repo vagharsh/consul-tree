@@ -47,8 +47,8 @@ if (isset($_POST['method'])) {
         if ($userRights[0] == 1) {
             if (isset($_POST['path']) && isset($_POST['consul'])) {
                 $consul = $_POST['consul'];
-                $path = isset($_POST['path']) ? $_POST['path'] : getFromConsul($consul . "?keys")['data'];
-                exportFn($path, $consul);
+                $paths = isset($_POST['path']) ? $_POST['path'] : getFromConsul($consul . "?keys")['data'];
+                echo bulkExportFn($consul, $paths);
             }
         } else {
             echo "You are not Authorized to perform the EXPORT action";

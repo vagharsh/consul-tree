@@ -1,5 +1,8 @@
 Release Notes
 ---------
+[v7.5](https://github.com/vagharsh/consul-tree/pull/23/commits/6d6489fadafb6b2a0d2faed67f4b4807f85766a1)
+- Updated : instead of using the standard CURL for export now it uses the consul binary which is very fast. 
+
 [v7.4](https://github.com/vagharsh/consul-tree/commit/64e7363f5ca914984a7fc826122e2fd5e35bc188)
 - Updated : Send the exported data to the backend using chunks, instead of a huge object, which was preventing the export when the keys count was more than 64000. 
 - Added : Export function progress bar which indicates the percentage of the received data.
@@ -17,7 +20,6 @@ Release Notes
 - Added : Content-Length, which indicator below the value box.
 - Added : Data is being sent to the backend as Base64 encoded format.
 - Added : External API for importing JSON file into Consul, more is mentioned [here](#https://github.com/vagharsh/consul-tree#external-api-for-importing-json-file-into-consul).
-
 
 [v7.0](https://github.com/vagharsh/consul-tree/commit/477d85711b8051d8ba7d70772f50765c64ee3b79)
 - Added the ability to configure (containerized) consul-tree to be accessible from under virtual-directory e.g. `http://test.domain.com/consuldirectory`.
