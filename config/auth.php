@@ -9,7 +9,7 @@ $list = [
     ], [
         "user" => "dev",
         "pass" => "dev",
-        "auto" => true,
+        "auto" => false,
         "rights" => "write"
     ], [
         "user" => "admin",
