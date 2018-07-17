@@ -1,7 +1,7 @@
 Release Notes
 ---------
-[v7.5](https://github.com/vagharsh/consul-tree/pull/23/commits/6d6489fadafb6b2a0d2faed67f4b4807f85766a1)
-- Updated : instead of using the standard CURL for export now it uses the consul binary which is very fast. 
+[v7.5.1]()
+- Fixed : Consul client not executing under linux.
 
 [v7.4](https://github.com/vagharsh/consul-tree/commit/64e7363f5ca914984a7fc826122e2fd5e35bc188)
 - Updated : Send the exported data to the backend using chunks, instead of a huge object, which was preventing the export when the keys count was more than 64000. 
