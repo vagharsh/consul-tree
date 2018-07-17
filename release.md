@@ -1,5 +1,8 @@
 Release Notes
 ---------
+[v7.5.1]()
+- Fixed : Consul client not executing under linux.
+
 [v7.5](https://github.com/vagharsh/consul-tree/pull/23/commits/6d6489fadafb6b2a0d2faed67f4b4807f85766a1)
 - Updated : instead of using the standard CURL for export now it uses the consul binary which is very fast. 
 

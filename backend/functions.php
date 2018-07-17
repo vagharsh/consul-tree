@@ -37,7 +37,7 @@ function bulkExportFn($consul, $paths){
     $decodedPaths = json_decode($paths);
     $newArray = [];
 
-    $res = shell_exec("consul kv export -http-addr=" . $consul . " /");
+    $res = shell_exec("./consul kv export -http-addr=" . $consul . " /");
     $array = json_decode($res);
 
     foreach ($array as $item){
