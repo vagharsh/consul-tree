@@ -154,8 +154,8 @@ a simple basic `token` is used to authenticate to import the data through `backe
 
 Release Notes
 ---------
-[v7.5]()
-- Updated : instead of using the standard CURL for export now it uses the consul binary which is very fast. 
+[v7.5.1]()
+- Fixed : Consul client not executing under linux.
 
 Release notes are available [here](release.md).
 
