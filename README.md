@@ -4,7 +4,7 @@ Tree representation of hashicorp/consul https://www.consul.io/, https://github.c
 
 **Used Technologies:** JS, HTML, CSS, PHP, JsTree, JQuery, Twitter Bootstrap.
 
-**UI/UX:** : (Desktop, Tablet, Mobile) friendly - responsive (80+%).
+**UI/UX:** (Desktop, Tablet, Mobile) friendly - responsive (80+%).
 
 -----------------
 
