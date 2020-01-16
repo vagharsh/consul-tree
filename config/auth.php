@@ -1,5 +1,6 @@
 <?php
 $mainTitle = "Consul-Tree";
+$consulToken = "AbraKadabra";
 $list = [
     [
         "user" => "qa",

@@ -12,7 +12,7 @@ Tree representation of hashicorp/consul https://www.consul.io/, https://github.c
 
 **Available Features:** Search, Import, Export, Copy - CUT - PASTE between Consuls.
 
-***Latest Features:*** ACL (Access Control List) with authentication and authorization, based on a php file.
+***Latest Features:*** [Click Here](#release-notes).
 
 Demo
 ------
@@ -56,6 +56,7 @@ ACL Configuration *`config/auth.php`*
 ```php
 <?php
 $mainTitle = "Consul-Tree";
+$consulToken = "AbraKadabra";
 $list = [
     [
         "user" => "qa",
@@ -154,8 +155,8 @@ a simple basic `token` is used to authenticate to import the data through `backe
 
 Release Notes
 ---------
-[v7.5.1]()
-- Fixed : Consul client not executing under linux.
+[v7.5.2]()
+- Added : Consul api calls are not authorized with a token, if it's provided. 
 
 Release notes are available [here](release.md).
 

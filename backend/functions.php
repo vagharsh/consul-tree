@@ -1,5 +1,13 @@
 <?php
 
+require_once('../config/auth.php');
+
+if (isset($consulToken)) {
+    $authHeader = array(
+        'X-Consul-Token: ' . $consulToken
+    );
+}
+
 function putInConsul($path, $value, $cas) {
     if ($cas == 0){$path = $path."?cas=0";}
     $ch = curl_init();
@@ -7,6 +15,9 @@ function putInConsul($path, $value, $cas) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL,$path);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+    if (isset($consulToken)){
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $authHeader);
+    }
     if ($value != false){
         curl_setopt($ch, CURLOPT_POSTFIELDS, $value);
     }
@@ -20,6 +31,9 @@ function getFromConsul($path, $encode=false) {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL, $path);
+    if (isset($consulToken)){
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $authHeader);
+    }
     $result = curl_exec($ch);
     $info = curl_getinfo($ch);
     curl_close($ch);
@@ -37,7 +51,12 @@ function bulkExportFn($consul, $paths){
     $decodedPaths = json_decode($paths);
     $newArray = [];
 
-    $res = shell_exec("./consul kv export -http-addr=" . $consul . " /");
+    if (isset($consulToken)){
+        $res = shell_exec("./consul kv export -token=" . $consulToken . " -http-addr=" . $consul . " /");
+    } else {
+        $res = shell_exec("./consul kv export -http-addr=" . $consul . " /");
+    }
+
     $array = json_decode($res);
 
     foreach ($array as $item){
@@ -59,6 +78,9 @@ function deleteFromConsul($path){
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_URL, $path);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    if (isset($consulToken)){
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $authHeader);
+    }
     $result = curl_exec($ch);
     curl_close($ch);
     return ($result);
