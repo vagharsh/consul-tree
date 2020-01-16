@@ -1,7 +1,7 @@
 Release Notes
 ---------
-[v7.5.2]()
-- Added : Consul api calls are not authorized with a token, if it's provided. 
+[v7.5.2](https://github.com/vagharsh/consul-tree/commit/7a305df4e549768210e55e76d6bdf883a76f584d)
+- Added : Consul api calls are now authorized with a token, if it's provided. 
 
 [v7.5.1]()
 - Fixed : Consul client not executing under linux.
