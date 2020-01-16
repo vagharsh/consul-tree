@@ -1,0 +1,10 @@
+FROM php:7.2.6-apache
+
+RUN set -ex; \
+apt-get update ;\
+apt-get install -y git wget ;\
+git clone https://github.com/vagharsh/consul-tree.git ;\
+mv consul-tree/* /var/www/html/;\
+rm -rf consul-tree/;
+
+CMD ["apache2-foreground"]
