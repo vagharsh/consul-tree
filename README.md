@@ -25,7 +25,7 @@ To use the Consul-tree you need PHP and a web server.
 - Clone the repo into your web directory.
 - Configure the `config/config.json` as mentioned [here](#consul-configuration-configconfigjson).
 - Configure the `config/auth.php` as mentioned [here](#acl-configuration-configauthphp).
-- Access the consul-tree e.g. http://yourserver/consuldirectory
+- Access the consul-tree e.g. http://yourserver/consuldirectory.
 - To create a folder or a key, Right click inside the tree where you want the folder/key to be created. and then click on the create.
 
 Consul Configuration *`config/config.json`*
