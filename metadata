@@ -1,0 +1,35 @@
+{
+    "name": {
+        "title": "Full Name",
+        "type": "string",
+        "githubKey": "name"
+    },
+    "email": {
+        "title": "E-Mail",
+        "type": "string",
+        "githubKey": "email",
+        "required": true
+    },
+    "age": {
+        "title": "Age",
+        "description": "Age in years",
+        "type": "number",
+        "minimum": 18,
+        "maximum": 99
+    },
+    "agreement": {
+        "title": "I have read and agree to the CLA",
+        "type": "boolean",
+        "required": true
+    },
+    "category": {
+        "title": "How do you sign?",
+        "type": {
+            "enum": [
+                "I am signing on behalf of myself.",
+                "I am signing on behalf of my employer."
+            ]
+        },
+        "required": true
+    }
+}
