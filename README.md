@@ -16,7 +16,7 @@ Tree representation of hashicorp/consul https://www.consul.io/, https://github.c
 
 Demo
 ------
-Screen-shots of the application are [here](demo.md).
+Screen-shots of the application are [here](demo.md). 
 
 Quick Start
 -----------
