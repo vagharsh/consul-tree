@@ -105,7 +105,7 @@ if ($acl->autoCheck){
         <h6 class="text-center" style="">Consul-tree <?php echo $consulTreeVersion; ?></h6>
     </div>
 </div>
-<script src="../lib/js/jquery-3.2.1.min.js"></script>
+<script src="../lib/js/jquery-3.7.0.min.js"></script>
 <script src="../lib/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
