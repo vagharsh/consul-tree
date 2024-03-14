@@ -21,7 +21,7 @@ $consulTreeVersion = trim(file_get_contents('backend/version'));
     <link rel="stylesheet" href="lib/themes/default/style.min.css"/>
     <link rel="stylesheet" href="lib/css/bootstrap.min.css">
     <link rel="shortcut icon" type="image/png" href="lib/favicon.png"/>
-    <script src="lib/js/jquery-3.2.1.min.js"></script>
+    <script src="lib/js/jquery-3.7.0.min.js"></script>
     <script src="lib/js/bootstrap.min.js"></script>
     <script src="lib/js/jstree.js"></script>
 </head>
