@@ -1,5 +1,8 @@
 Release Notes
 ---------
+[v7.5.3](https://github.com/vagharsh/consul-tree/commit/eaa29d1ba603a69a6859121bf8354e6c1ba43e70)
+- Updated : jquery version and php version in dockerfiles.
+
 [v7.5.2](https://github.com/vagharsh/consul-tree/commit/7a305df4e549768210e55e76d6bdf883a76f584d)
 - Added : Consul api calls are now authorized with a token, if it's provided. 
 
