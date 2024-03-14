@@ -1,4 +1,4 @@
-FROM php:7.2.6-apache
+FROM php:8.3.4RC1-alpine
 
 RUN set -ex; \
 apt-get update ;\
