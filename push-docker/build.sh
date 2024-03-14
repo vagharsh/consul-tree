@@ -9,6 +9,7 @@ web_image_tag="vagharsh/consul-tree:$VERSION-web"
 
 docker build -t "$local_image_tag" - < "Dockerfile-local"
 docker build -t "$web_image_tag" .
+docker build -t "$latest_image_tag" .
 
 docker login --username=vagharsh
 
